@@ -48,7 +48,6 @@
   * @author Thomas Baumgart
   */
 
-static QString m_lastNumberUsed;
 class QWizard;
 class KMyMoneyUtils
 {
@@ -362,23 +361,17 @@ public:
   /**
     * Return next check number for account @a acc.
     */
-  static QString nextCheckNumber(const MyMoneyAccount& acc);
+  static QString nextCheckNumber(const QString &num);
 
   /**
     * Return next bank statement number for account @a acc.
     */
-  static QString nextStatementNumber(const MyMoneyAccount &acc);
+  static QString nextStatementNumber(const QString &num);
 
   /**
     * Return next bank statement page number for account @a acc.
     */
-  static QString nextStatementPageNumber(const MyMoneyAccount &acc);
-
-  static void updateLastNumberUsed(const MyMoneyAccount& acc, const QString& number);
-
-  static void setLastNumberUsed(const QString& num);
-
-  static QString lastNumberUsed();
+  static QString nextStatementPageNumber(const QString &num);
 
   /**
     * Returns previous number if offset is -1 or

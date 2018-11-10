@@ -1215,7 +1215,7 @@ TransactionEditor* KGlobalLedgerView::startEdit(const KMyMoneyRegister::Selected
       connect(editor, SIGNAL(createTag(QString,QString&)), kmymoney, SLOT(slotTagNew(QString,QString&)));
       connect(editor, SIGNAL(createCategory(MyMoneyAccount&,MyMoneyAccount)), kmymoney, SLOT(slotCategoryNew(MyMoneyAccount&,MyMoneyAccount)));
       connect(editor, SIGNAL(createSecurity(MyMoneyAccount&,MyMoneyAccount)), kmymoney, SLOT(slotInvestmentNew(MyMoneyAccount&,MyMoneyAccount)));
-      connect(editor, SIGNAL(assignNumber()), kmymoney, SLOT(slotTransactionAssignNumber()));
+      connect(editor, SIGNAL(assignNumber()), kmymoney, SLOT(slotTransactionAssignCheckNumber()));
       connect(editor, SIGNAL(lastPostDateUsed(QDate)), this, SLOT(slotKeepPostDate(QDate)));
 
       // create the widgets, place them in the parent and load them with data

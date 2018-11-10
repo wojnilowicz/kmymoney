@@ -126,6 +126,7 @@ public:
 
   virtual bool fixTransactionCommodity(const MyMoneyAccount& account);
 
+  QString lastNumberUsed() const;
   virtual bool canAssignNumber() const;
   virtual void assignNextCheckNumber();
   virtual void assignStatementNumber();

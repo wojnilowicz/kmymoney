@@ -258,17 +258,14 @@ TransactionEditor* KEnterScheduleDlg::startEdit()
         //  increment and try again
         num = KMyMoneyUtils::getAdjacentNumber(num);
       }
-      num = KMyMoneyUtils::nextCheckNumber(d->m_schedule.account());
-      KMyMoneyUtils::updateLastNumberUsed(d->m_schedule.account(), num);
-      d->m_schedule.account().setValue("lastNumberUsed", num);
+      num = KMyMoneyUtils::nextCheckNumber(d->m_schedule.account().value("lastNumberUsed"));
       if (w) {
         dynamic_cast<kMyMoneyLineEdit*>(w)->loadText(num);
       }
     } else {
-      // if it's not a check, then we need to clear
-      // a possibly assigned check number
+      num = d->m_schedule.account().value("lastNumberUsed");
       if (w)
-        dynamic_cast<kMyMoneyLineEdit*>(w)->loadText(QString());
+        dynamic_cast<kMyMoneyLineEdit*>(w)->loadText(num);
     }
 
     Q_ASSERT(!d->m_tabOrderWidgets.isEmpty());

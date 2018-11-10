@@ -271,6 +271,12 @@ bool TransactionEditor::eventFilter(QObject* o, QEvent* e)
   return rc;
 }
 
+QString TransactionEditor::lastNumberUsed() const
+{
+  kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
+  return number && !number->text().isEmpty() ? number->text() : m_account.value("lastNumberUsed");
+}
+
 void TransactionEditor::slotNumberChanged(const QString& txt)
 {
   QString next = txt;
@@ -288,7 +294,7 @@ void TransactionEditor::slotNumberChanged(const QString& txt)
                                  "<center>Do you want to replace it with the next available number?</center>", next, m_account.name()) + QLatin1String("</qt>"), i18n("Duplicate number"),
                                  KStandardGuiItem::yes(), KStandardGuiItem::no(), dontShowAgain) == KMessageBox::Yes) {
       assignNextCheckNumber();
-      next = KMyMoneyUtils::nextCheckNumber(m_account);
+      next = KMyMoneyUtils::nextCheckNumber(lastNumberUsed());
     } else {
       number->loadText(txt);
       break;
@@ -466,7 +472,8 @@ void TransactionEditor::assignNextCheckNumber()
 {
   if (canAssignNumber()) {
     kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
-    QString num = KMyMoneyUtils::nextCheckNumber(m_account);
+    QString n = lastNumberUsed();
+    QString num = KMyMoneyUtils::nextCheckNumber(n);
     bool showMessage = true;
     int rc = KMessageBox::No;
     QString schedInfo;
@@ -480,9 +487,7 @@ void TransactionEditor::assignNextCheckNumber()
         showMessage = false;
       }
       if (rc == KMessageBox::Yes) {
-        num = KMyMoneyUtils::nextCheckNumber(m_account);
-        KMyMoneyUtils::updateLastNumberUsed(m_account, num);
-        m_account.setValue("lastNumberUsed", num);
+        num = KMyMoneyUtils::nextCheckNumber(num);
         number->loadText(num);
       } else {
         number->loadText(num);
@@ -506,9 +511,7 @@ void TransactionEditor::assignNextStatementNumber()
 {
   if (canAssignNumber()) {
     kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
-    QString num = KMyMoneyUtils::nextStatementNumber(m_account);
-    KMyMoneyUtils::updateLastNumberUsed(m_account, num);
-    m_account.setValue("lastNumberUsed", num);
+    QString num = KMyMoneyUtils::nextStatementNumber(lastNumberUsed());
     number->loadText(num);
   }
 }
@@ -517,9 +520,7 @@ void TransactionEditor::assignNextStatementPageNumber()
 {
   if (canAssignNumber()) {
     kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
-    QString num = KMyMoneyUtils::nextStatementPageNumber(m_account);
-    KMyMoneyUtils::updateLastNumberUsed(m_account, num);
-    m_account.setValue("lastNumberUsed", num);
+    QString num = KMyMoneyUtils::nextStatementPageNumber(lastNumberUsed());
     number->loadText(num);
   }
 }
@@ -575,6 +576,10 @@ bool TransactionEditor::enterTransactions(QString& newId, bool askForSchedule, b
 {
   newId.clear();
   MyMoneyFile* file = MyMoneyFile::instance();
+
+  kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
+  if (number && !number->text().isEmpty())
+      m_account.setValue("lastNumberUsed", number->text());
 
   // make sure to run through all stuff that is tied to 'focusout events'.
   m_regForm->parentWidget()->setFocus();
@@ -1502,7 +1507,7 @@ void StdTransactionEditor::autoFill(const QString& payeeId)
         if (editNr && !editNr->text().isEmpty()) {
           s.setNumber(editNr->text());
         } else if (!s.number().isEmpty()) {
-          s.setNumber(KMyMoneyUtils::nextCheckNumber(m_account));
+          s.setNumber(KMyMoneyUtils::nextCheckNumber(m_account.value("lastNumberUsed")));
         }
 
         // if the memos should not be used with autofill or

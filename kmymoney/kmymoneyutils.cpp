@@ -350,13 +350,12 @@ void KMyMoneyUtils::calculateAutoLoan(const MyMoneySchedule& schedule, MyMoneyTr
   }
 }
 
-QString KMyMoneyUtils::nextCheckNumber(const MyMoneyAccount& acc)
+QString KMyMoneyUtils::nextCheckNumber(const QString &num)
 {
   QString number;
   //                   +-#1--+ +#2++-#3-++-#4--+
   QRegExp exp(QString("(.*\\D)?(0*)(\\d+)(\\D.*)?"));
-  if (exp.indexIn(acc.value("lastNumberUsed")) != -1) {
-    setLastNumberUsed(acc.value("lastNumberUsed"));
+  if (exp.indexIn(num) != -1) {
     QString arg1 = exp.cap(1);
     QString arg2 = exp.cap(2);
     QString arg3 = QString::number(exp.cap(3).toULong() + 1);
@@ -365,7 +364,7 @@ QString KMyMoneyUtils::nextCheckNumber(const MyMoneyAccount& acc)
 
     // if new number is longer than previous one and we identified
     // preceding 0s, then remove one of the preceding zeros
-    if (arg2.length() > 0 && (number.length() != acc.value("lastNumberUsed").length())) {
+    if (arg2.length() > 0 && (number.length() != num.length())) {
       arg2 = arg2.mid(1);
       number = QString("%1%2%3%4").arg(arg1).arg(arg2).arg(arg3).arg(arg4);
     }
@@ -375,7 +374,7 @@ QString KMyMoneyUtils::nextCheckNumber(const MyMoneyAccount& acc)
   return number;
 }
 
-QString KMyMoneyUtils::nextStatementNumber(const MyMoneyAccount& acc)
+QString KMyMoneyUtils::nextStatementNumber(const QString &num)
 {
   QString number;
   //                   1.1
@@ -386,15 +385,13 @@ QString KMyMoneyUtils::nextStatementNumber(const MyMoneyAccount& acc)
   //                   4/2018,1
   QRegExp exp(QString("(\\d+)/(\\d+)([.,])(\\d+)"));
   QRegExp exp2(QString("(\\d+)([.,])(\\d+)"));
-  if (exp.indexIn(acc.value("lastNumberUsed")) != -1) {
-    setLastNumberUsed(acc.value("lastNumberUsed"));
+  if (exp.indexIn(num) != -1) {
     QString arg1 = QString::number(exp.cap(1).toULong() + 1);
     QString arg2 = exp.cap(2);
     QString arg3 = exp.cap(3);
     QString arg4 = exp.cap(4);
     number = QString("%1/%2%3%4").arg(arg1).arg(arg2).arg(arg3).arg(arg4);
-  } else if (exp2.indexIn(acc.value("lastNumberUsed")) != -1) {
-      setLastNumberUsed(acc.value("lastNumberUsed"));
+  } else if (exp2.indexIn(num) != -1) {
       QString arg1 = QString::number(exp2.cap(1).toULong() + 1);
       QString arg2 = exp2.cap(2);
       QString arg3 = exp2.cap(3);
@@ -405,7 +402,7 @@ QString KMyMoneyUtils::nextStatementNumber(const MyMoneyAccount& acc)
   return number;
 }
 
-QString KMyMoneyUtils::nextStatementPageNumber(const MyMoneyAccount &acc)
+QString KMyMoneyUtils::nextStatementPageNumber(const QString &num)
 {
   QString number;
   //                   1.1
@@ -416,15 +413,13 @@ QString KMyMoneyUtils::nextStatementPageNumber(const MyMoneyAccount &acc)
   //                   4/2018,1
   QRegExp exp(QString("(\\d+)/(\\d+)([.,])(\\d+)"));
   QRegExp exp2(QString("^(\\d+)([.,])(\\d+)$"));
-  if (exp.indexIn(acc.value("lastNumberUsed")) != -1) {
-    setLastNumberUsed(acc.value("lastNumberUsed"));
+  if (exp.indexIn(num) != -1) {
     QString arg1 = exp.cap(1);
     QString arg2 = exp.cap(2);
     QString arg3 = exp.cap(3);
     QString arg4 = QString::number(exp.cap(4).toULong() + 1);
     number = QString("%1/%2%3%4").arg(arg1).arg(arg2).arg(arg4);
-  } else if (exp2.indexIn(acc.value("lastNumberUsed")) != -1) {
-      setLastNumberUsed(acc.value("lastNumberUsed"));
+  } else if (exp2.indexIn(num) != -1) {
       QString arg1 = exp2.cap(1);
       QString arg2 = exp2.cap(2);
       QString arg3 = QString::number(exp2.cap(3).toULong() + 1);
@@ -433,46 +428,6 @@ QString KMyMoneyUtils::nextStatementPageNumber(const MyMoneyAccount &acc)
     number = "1.1";
   }
   return number;
-}
-
-void KMyMoneyUtils::updateLastNumberUsed(const MyMoneyAccount& acc, const QString& number)
-{
-  MyMoneyAccount accnt = acc;
-  QString num = number;
-  // now check if this number has been used already
-  MyMoneyFile* file = MyMoneyFile::instance();
-  if (file->checkNoUsed(accnt.id(), num)) {
-    // if a number has been entered which is immediately prior to
-    // an existing number, the next new number produced would clash
-    // so need to look ahead for free next number
-    bool free = false;
-    for (int i = 0; i < 10; i++) {
-      // find next unused number - 10 tries (arbitrary)
-      if (file->checkNoUsed(accnt.id(), num)) {
-        //  increment and try again
-        num = getAdjacentNumber(num);
-      } else {
-        //  found a free number
-        free = true;
-        break;
-      }
-    }
-    if (!free) {
-      qDebug() << "No free number found - set to '1'";
-      num = '1';
-    }
-    setLastNumberUsed(getAdjacentNumber(num, - 1));
-  }
-}
-
-void KMyMoneyUtils::setLastNumberUsed(const QString& num)
-{
-  m_lastNumberUsed = num;
-}
-
-QString KMyMoneyUtils::lastNumberUsed()
-{
-  return m_lastNumberUsed;
 }
 
 QString KMyMoneyUtils::getAdjacentNumber(const QString& number, int offset)
