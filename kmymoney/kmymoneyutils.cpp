@@ -375,6 +375,66 @@ QString KMyMoneyUtils::nextCheckNumber(const MyMoneyAccount& acc)
   return number;
 }
 
+QString KMyMoneyUtils::nextStatementNumber(const MyMoneyAccount& acc)
+{
+  QString number;
+  //                   1.1
+  //                   4.5
+  //                   4/2018.1
+  //                   1,1
+  //                   4,5
+  //                   4/2018,1
+  QRegExp exp(QString("(\\d+)/(\\d+)([.,])(\\d+)"));
+  QRegExp exp2(QString("(\\d+)([.,])(\\d+)"));
+  if (exp.indexIn(acc.value("lastNumberUsed")) != -1) {
+    setLastNumberUsed(acc.value("lastNumberUsed"));
+    QString arg1 = QString::number(exp.cap(1).toULong() + 1);
+    QString arg2 = exp.cap(2);
+    QString arg3 = exp.cap(3);
+    QString arg4 = exp.cap(4);
+    number = QString("%1/%2%3%4").arg(arg1).arg(arg2).arg(arg3).arg(arg4);
+  } else if (exp2.indexIn(acc.value("lastNumberUsed")) != -1) {
+      setLastNumberUsed(acc.value("lastNumberUsed"));
+      QString arg1 = QString::number(exp2.cap(1).toULong() + 1);
+      QString arg2 = exp2.cap(2);
+      QString arg3 = exp2.cap(3);
+      number = QString("%1%2%3").arg(arg1).arg(arg2).arg(arg3);
+  } else {
+    number = "1.1";
+  }
+  return number;
+}
+
+QString KMyMoneyUtils::nextStatementPageNumber(const MyMoneyAccount &acc)
+{
+  QString number;
+  //                   1.1
+  //                   4.5
+  //                   4/2018.1
+  //                   1,1
+  //                   4,5
+  //                   4/2018,1
+  QRegExp exp(QString("(\\d+)/(\\d+)([.,])(\\d+)"));
+  QRegExp exp2(QString("^(\\d+)([.,])(\\d+)$"));
+  if (exp.indexIn(acc.value("lastNumberUsed")) != -1) {
+    setLastNumberUsed(acc.value("lastNumberUsed"));
+    QString arg1 = exp.cap(1);
+    QString arg2 = exp.cap(2);
+    QString arg3 = exp.cap(3);
+    QString arg4 = QString::number(exp.cap(4).toULong() + 1);
+    number = QString("%1/%2%3%4").arg(arg1).arg(arg2).arg(arg4);
+  } else if (exp2.indexIn(acc.value("lastNumberUsed")) != -1) {
+      setLastNumberUsed(acc.value("lastNumberUsed"));
+      QString arg1 = exp2.cap(1);
+      QString arg2 = exp2.cap(2);
+      QString arg3 = QString::number(exp2.cap(3).toULong() + 1);
+      number = QString("%1%2%3").arg(arg1).arg(arg2).arg(arg3);
+  } else {
+    number = "1.1";
+  }
+  return number;
+}
+
 void KMyMoneyUtils::updateLastNumberUsed(const MyMoneyAccount& acc, const QString& number)
 {
   MyMoneyAccount accnt = acc;

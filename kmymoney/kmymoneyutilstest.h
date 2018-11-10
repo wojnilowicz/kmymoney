@@ -37,6 +37,8 @@ private slots:
   void init();
   void cleanup();
   void testNextCheckNumber();
+  void testNextStatementNumber();
+  void testNextStatementPageNumber();
 };
 
 #endif

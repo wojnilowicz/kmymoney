@@ -287,7 +287,7 @@ void TransactionEditor::slotNumberChanged(const QString& txt)
       KMessageBox::questionYesNo(m_regForm, QLatin1String("<qt>") + schedInfo + i18n("<center>Check number <b>%1</b> has already been used in account <b>%2</b>.</center>"
                                  "<center>Do you want to replace it with the next available number?</center>", next, m_account.name()) + QLatin1String("</qt>"), i18n("Duplicate number"),
                                  KStandardGuiItem::yes(), KStandardGuiItem::no(), dontShowAgain) == KMessageBox::Yes) {
-      assignNextNumber();
+      assignNextCheckNumber();
       next = KMyMoneyUtils::nextCheckNumber(m_account);
     } else {
       number->loadText(txt);
@@ -462,7 +462,7 @@ bool TransactionEditor::fixTransactionCommodity(const MyMoneyAccount& account)
   return rc;
 }
 
-void TransactionEditor::assignNextNumber()
+void TransactionEditor::assignNextCheckNumber()
 {
   if (canAssignNumber()) {
     kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
@@ -490,6 +490,37 @@ void TransactionEditor::assignNextNumber()
       }
     }
     number->setText(num);
+  }
+}
+
+void TransactionEditor::assignStatementNumber()
+{
+  if (canAssignNumber()) {
+    kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
+    QString num = m_account.value("lastNumberUsed");
+    number->loadText(num);
+  }
+}
+
+void TransactionEditor::assignNextStatementNumber()
+{
+  if (canAssignNumber()) {
+    kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
+    QString num = KMyMoneyUtils::nextStatementNumber(m_account);
+    KMyMoneyUtils::updateLastNumberUsed(m_account, num);
+    m_account.setValue("lastNumberUsed", num);
+    number->loadText(num);
+  }
+}
+
+void TransactionEditor::assignNextStatementPageNumber()
+{
+  if (canAssignNumber()) {
+    kMyMoneyLineEdit* number = dynamic_cast<kMyMoneyLineEdit*>(haveWidget("number"));
+    QString num = KMyMoneyUtils::nextStatementPageNumber(m_account);
+    KMyMoneyUtils::updateLastNumberUsed(m_account, num);
+    m_account.setValue("lastNumberUsed", num);
+    number->loadText(num);
   }
 }
 
@@ -1080,7 +1111,7 @@ void StdTransactionEditor::loadEditWidgets(KMyMoneyRegister::Action action)
           && action != KMyMoneyRegister::ActionDeposit              // only transfers or withdrawals
           && (m_scheduleInfo.isEmpty()                              // normal transactions
               || m_paymentMethod == MyMoneySchedule::STYPE_WRITECHEQUE)) {// only for STYPE_WRITECHEQUE schedule transaction
-        assignNextNumber();
+        assignNextCheckNumber();
       }
     }
     dynamic_cast<KMyMoneyReconcileCombo*>(m_editWidgets["status"])->setState(m_split.reconcileFlag());

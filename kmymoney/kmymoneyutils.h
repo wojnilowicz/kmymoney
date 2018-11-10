@@ -364,6 +364,16 @@ public:
     */
   static QString nextCheckNumber(const MyMoneyAccount& acc);
 
+  /**
+    * Return next bank statement number for account @a acc.
+    */
+  static QString nextStatementNumber(const MyMoneyAccount &acc);
+
+  /**
+    * Return next bank statement page number for account @a acc.
+    */
+  static QString nextStatementPageNumber(const MyMoneyAccount &acc);
+
   static void updateLastNumberUsed(const MyMoneyAccount& acc, const QString& number);
 
   static void setLastNumberUsed(const QString& num);

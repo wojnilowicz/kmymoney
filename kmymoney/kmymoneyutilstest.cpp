@@ -68,3 +68,40 @@ void KMyMoneyUtilsTest::testNextCheckNumber()
   QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("2012.002"));
 
 }
+
+void KMyMoneyUtilsTest::testNextStatementNumber()
+{
+  MyMoneyAccount acc;
+
+  // make sure first check number is 1
+  acc.setValue("lastNumberUsed", QString(""));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("1.1"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("1.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("2.1"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("2.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("3.1"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("4/2018.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("5/2018.1"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("5/2018.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("6/2018.1"));
+}
+
+void KMyMoneyUtilsTest::testNextStatementPageNumber()
+{
+  MyMoneyAccount acc;
+  acc.setValue("lastNumberUsed", QLatin1String("1.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.2"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("1.2"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.3"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("1.3"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.4"));
+
+  acc.setValue("lastNumberUsed", QLatin1String("4/2018.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("4/2018.2"));
+}
