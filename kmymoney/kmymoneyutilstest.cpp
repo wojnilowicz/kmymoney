@@ -40,33 +40,25 @@ void KMyMoneyUtilsTest::testNextCheckNumber()
   MyMoneyAccount acc;
 
   // make sure first check number is 1
-  acc.setValue("lastNumberUsed", QString());
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("1"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QString()) == QLatin1String("1"));
 
   // a simple increment of a plain value
-  acc.setValue("lastNumberUsed", QLatin1String("123"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("124"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("123")) == QLatin1String("124"));
 
   // a number preceded by text
-  acc.setValue("lastNumberUsed", QLatin1String("No 123"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("No 124"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("No 123")) == QLatin1String("No 124"));
 
   // a number followed by text
-  acc.setValue("lastNumberUsed", QLatin1String("123 ABC"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("124 ABC"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("123 ABC")) == QLatin1String("124 ABC"));
 
   // a number enclosed by text
-  acc.setValue("lastNumberUsed", QLatin1String("No 123 ABC"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("No 124 ABC"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("No 123 ABC")) == QLatin1String("No 124 ABC"));
 
   // a number containig a dash (e.g. invoice number)
-  acc.setValue("lastNumberUsed", QLatin1String("No 123-001 ABC"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("No 123-002 ABC"));
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("No 123-001 ABC")) == QLatin1String("No 123-002 ABC"));
 
   // a number containing a dot (e.g. invoice number)
-  acc.setValue("lastNumberUsed", QLatin1String("2012.001"));
-  QVERIFY(KMyMoneyUtils::nextCheckNumber(acc) == QLatin1String("2012.002"));
-
+  QVERIFY(KMyMoneyUtils::nextCheckNumber(QLatin1String("2012.001")) == QLatin1String("2012.002"));
 }
 
 void KMyMoneyUtilsTest::testNextStatementNumber()
@@ -74,34 +66,25 @@ void KMyMoneyUtilsTest::testNextStatementNumber()
   MyMoneyAccount acc;
 
   // make sure first check number is 1
-  acc.setValue("lastNumberUsed", QString(""));
-  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("1.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(QLatin1String("")), QLatin1String("1.1"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("1.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("2.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(QLatin1String("1.1")), QLatin1String("2.1"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("2.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("3.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(QLatin1String("2.1")), QLatin1String("3.1"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("4/2018.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("5/2018.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(QLatin1String("4/2018.1")), QLatin1String("5/2018.1"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("5/2018.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementNumber(acc), QLatin1String("6/2018.1"));
+  QCOMPARE(KMyMoneyUtils::nextStatementNumber(QLatin1String("5/2018.1")), QLatin1String("6/2018.1"));
 }
 
 void KMyMoneyUtilsTest::testNextStatementPageNumber()
 {
   MyMoneyAccount acc;
-  acc.setValue("lastNumberUsed", QLatin1String("1.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.2"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(QLatin1String("1.1")), QLatin1String("1.2"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("1.2"));
-  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.3"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(QLatin1String("1.2")), QLatin1String("1.3"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("1.3"));
-  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("1.4"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(QLatin1String("1.3")), QLatin1String("1.4"));
 
-  acc.setValue("lastNumberUsed", QLatin1String("4/2018.1"));
-  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(acc), QLatin1String("4/2018.2"));
+  QCOMPARE(KMyMoneyUtils::nextStatementPageNumber(QLatin1String("4/2018.1")), QLatin1String("4/2018.2"));
 }
