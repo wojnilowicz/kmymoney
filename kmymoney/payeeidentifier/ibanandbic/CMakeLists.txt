@@ -1,6 +1,7 @@
 configure_file(ibanbicdata.desktop.in ibanbicdata.desktop)
 
 set ( PAYEEIDENTIFIER_IBAN_BIC_SCRS
+  bankcodemodel.cpp
   bicmodel.cpp
   ibanbicdata.cpp
   ibanbic.cpp

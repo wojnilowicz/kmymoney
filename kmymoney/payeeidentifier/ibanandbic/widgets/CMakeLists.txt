@@ -1,8 +1,11 @@
 ## Shared library for widgets
 
 set ( IBAN_BIC_WIDGETS_SCRS
+  bankcodevalidator.cpp
+  kbankcodeedit.cpp
   kibanlineedit.cpp
   kbicedit.cpp
+  ibanbicitemedit.cpp
   ibanvalidator.cpp
   bicvalidator.cpp
   ibanbicitemdelegate.cpp
@@ -13,6 +16,7 @@ set( IBAN_BIC_WIDGETS_HEADERS
   kibanlineedit.h
   kbicedit.h
   ibanvalidator.h
+  ibanbicitemedit.h
   bicvalidator.h
   ibanbicitemdelegate.h
   ${CMAKE_CURRENT_BINARY_DIR}/payeeidentifier_iban_bic_widgets_export.h

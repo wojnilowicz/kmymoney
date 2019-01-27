@@ -20,19 +20,21 @@
 #define IBANBICITEMEDIT_H
 
 #include <QWidget>
+
 #include <payeeidentifier/payeeidentifier.h>
+#include "payeeidentifier_iban_bic_widgets_export.h"
 
 namespace Ui
 {
 class ibanBicItemEdit;
 }
 
-class ibanBicItemEdit : public QWidget
+class PAYEEIDENTIFIER_IBAN_BIC_WIDGETS_EXPORT ibanBicItemEdit : public QWidget
 {
   Q_OBJECT
-  Q_PROPERTY(payeeIdentifier identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged STORED true)
-  Q_PROPERTY(QString iban READ iban WRITE setIban NOTIFY ibanChanged STORED false DESIGNABLE true)
-  Q_PROPERTY(QString bic READ bic WRITE setBic NOTIFY bicChanged STORED false DESIGNABLE true)
+//  Q_PROPERTY(payeeIdentifier identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged STORED true)
+//  Q_PROPERTY(QString iban READ iban WRITE setIban NOTIFY ibanChanged STORED false DESIGNABLE true)
+//  Q_PROPERTY(QString bic READ bic WRITE setBic NOTIFY bicChanged STORED false DESIGNABLE true)
 
 public:
   ibanBicItemEdit(QWidget* parent = 0);
