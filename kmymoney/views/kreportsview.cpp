@@ -53,6 +53,7 @@
 #include <mymoneyfile.h>
 #include <mymoneyreport.h>
 #include <kmymoneyglobalsettings.h>
+#include "kmymoney.h"
 #include "querytable.h"
 #include "objectinfotable.h"
 #include "kreportconfigurationfilterdlg.h"
@@ -117,10 +118,9 @@ KReportsView::KReportTab::~KReportTab()
 void KReportsView::KReportTab::print()
 {
   if (!m_chartView->isHidden()) {
-    QPrinter printer;
-    QPointer<QPrintDialog> dlg = new QPrintDialog(&printer, this);
+    QPointer<QPrintDialog> dlg = new QPrintDialog(kmymoney->printer(), this);
     if (dlg->exec()) {
-      QPainter painter(&printer);
+      QPainter painter(kmymoney->printer());
       m_chartView->paint(&painter, painter.window());
     }
   } else if (m_part && m_part->view())
