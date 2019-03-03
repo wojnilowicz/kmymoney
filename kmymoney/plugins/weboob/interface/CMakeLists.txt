@@ -15,7 +15,7 @@ target_link_libraries (
   weboob_interface
   PUBLIC
   Qt5::Core
-  Alkimia::alkimia
+  alkimia
   PRIVATE
   ${PYTHON_LIBRARIES}
   )

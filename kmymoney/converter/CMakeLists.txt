@@ -23,7 +23,7 @@ target_link_libraries(converter
     KF5::TextWidgets
     KF5::WidgetsAddons
     KF5::ConfigCore
-    Alkimia::alkimia
+    alkimia
     KF5::KIOWidgets
     kmm_csvimportercore
   PRIVATE

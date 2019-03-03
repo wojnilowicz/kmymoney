@@ -26,7 +26,7 @@ set_target_properties(csvexporter
 target_link_libraries(csvexporter
   PUBLIC
     kmm_mymoney
-    Alkimia::alkimia
+    alkimia
   PRIVATE
     KF5::Completion
     KF5::KIOWidgets

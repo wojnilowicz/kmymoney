@@ -69,16 +69,29 @@ find_package(KF5 5.2 REQUIRED
   OPTIONAL_COMPONENTS ${OPT_KF5_COMPONENTS}
 )
 
-if(LibAlkimia5_DIR)
-  set(_LibAlkimia5_DIR ${LibAlkimia5_DIR})
-endif()
-find_package(LibAlkimia5 8.0)
-if (NOT LibAlkimia5_FOUND)
-  # restore LibAlkimia5_DIR set to NOTFOUND by first find_package call
-  if(_LibAlkimia5_DIR)
-    set(LibAlkimia5_DIR ${_LibAlkimia5_DIR})
+option(ENABLE_ALKIMIA "Enable Alkimia" OFF)
+if(ENABLE_ALKIMIA)
+  if(LibAlkimia5_DIR)
+    set(_LibAlkimia5_DIR ${LibAlkimia5_DIR})
   endif()
-  find_package(LibAlkimia5 7.0 REQUIRED)
+  find_package(LibAlkimia5 8.0)
+  if (NOT LibAlkimia5_FOUND)
+    # restore LibAlkimia5_DIR set to NOTFOUND by first find_package call
+    if(_LibAlkimia5_DIR)
+      set(LibAlkimia5_DIR ${_LibAlkimia5_DIR})
+    endif()
+    find_package(LibAlkimia5 7.0 REQUIRED)
+  endif()
+endif()
+
+# figure out which multi-precision library to use
+# MPIR is preferred over GMP
+find_package(MPIR)
+if(NOT MPIR_FOUND)
+  find_package(GMP REQUIRED)
+  set(MP_LIBRARIES ${GMP_LIBRARIES})
+else()
+  set(MP_LIBRARIES ${MPIR_LIBRARIES})
 endif()
 
 # Recent changes to LibAlkimia should allow us to remove this construct

@@ -32,7 +32,7 @@ target_link_libraries(qifimporter
   PRIVATE
     KF5::Completion
     KF5::KIOWidgets
-    Alkimia::alkimia
+    alkimia
     kmm_settings
 )
 

@@ -22,7 +22,7 @@ target_link_libraries( onlinetask_interfaces
   PUBLIC
     kmm_payeeidentifier
     Qt5::Widgets
-    Alkimia::alkimia
+    alkimia
 )
 
 install(FILES ${onlinetask_interfaces_HEADER}

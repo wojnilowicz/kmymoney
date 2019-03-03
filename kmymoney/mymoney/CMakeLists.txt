@@ -88,7 +88,7 @@ target_link_libraries(kmm_mymoney
                       Qt5::Gui
                       KF5::Service
                       KF5::I18n
-                      Alkimia::alkimia
+                      alkimia
                       kmm_payeeidentifier
                       kmm_plugin
                       # TODO: fix this

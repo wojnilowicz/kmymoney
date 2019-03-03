@@ -4,6 +4,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}
                     ${CMAKE_CURRENT_SOURCE_DIR}/settings/
                     ${CMAKE_CURRENT_BINARY_DIR}/settings/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/alkimia/
+                    ${CMAKE_CURRENT_BINARY_DIR}/alkimia/
                     ${CMAKE_CURRENT_BINARY_DIR}/dialogs/
                     ${CMAKE_CURRENT_SOURCE_DIR}/widgets/
                     ${CMAKE_CURRENT_BINARY_DIR}/widgets/
@@ -32,6 +34,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/menus/
                     )
 
+add_subdirectory( alkimia )
 add_subdirectory( mymoney )
 add_subdirectory( settings )
 add_subdirectory( models  )
@@ -68,7 +71,7 @@ target_link_libraries(kmymoney_common
     KF5::KIOFileWidgets
     KF5::KIOWidgets
     KF5::KIONTLM
-    Alkimia::alkimia
+    alkimia
     kmm_mymoney
     kmm_utils_webconnect
     kmm_utils_platformtools
