@@ -121,6 +121,7 @@ void KReportsView::KReportTab::print()
     QPointer<QPrintDialog> dlg = new QPrintDialog(kmymoney->printer(), this);
     if (dlg->exec()) {
       QPainter painter(kmymoney->printer());
+      painter.drawText(0, 0, QDateTime::currentDateTime().toString(Qt::SystemLocaleLongDate));
       m_chartView->paint(&painter, painter.window());
     }
   } else if (m_part && m_part->view())
