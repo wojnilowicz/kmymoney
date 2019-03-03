@@ -125,7 +125,7 @@ void KReportsView::KReportTab::print()
       m_chartView->paint(&painter, painter.window());
     }
   } else if (m_part && m_part->view())
-#if Q_OS_WIN
+#ifdef Q_OS_WIN
     m_part->view()->print(kmymoney->printer());
 #else
     m_part->view()->print();
