@@ -699,6 +699,10 @@ void MyMoneyFile::removeTransaction(const MyMoneyTransaction& transaction)
       throw MYMONEYEXCEPTION(QString::fromLatin1("Cannot remove transaction that references a closed account."));
     d->addCacheNotification(split.accountId(), tr.postDate());
     //FIXME-ALEX Do I need to add d->addCacheNotification(split.tagList()); ??
+
+    if (split.isMatched())
+      for (const auto &transactionID : split.matchedTransactionIDs())
+        removeTransaction(MyMoneyFile::transaction(transactionID));
   }
 
   d->m_storage->removeTransaction(transaction);

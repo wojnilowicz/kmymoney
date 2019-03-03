@@ -27,6 +27,8 @@
 #include <QFile>
 #include <QTemporaryFile>
 #include <QFileDialog>
+#include <QRegularExpression>
+#include <QBuffer>
 
 // ----------------------------------------------------------------------------
 // KDE Includes
@@ -55,6 +57,7 @@
 #include "kmymoneyutils.h"
 #include "kgpgfile.h"
 #include "kgpgkeyselectiondlg.h"
+#include "xmlstorageupdater.h"
 #include "kmymoneyenums.h"
 
 using namespace Icons;
@@ -187,19 +190,61 @@ MyMoneyStorageMgr *XMLStorage::open(const QUrl &url)
   // we know. For now, we support our own XML format and
   // GNUCash XML format. If the file is smaller, then it
   // contains no valid data and we reject it anyway.
-  qbaFileHeader.resize(70);
-  if (qfile->read(qbaFileHeader.data(), 70) != 70)
+  qbaFileHeader.resize(220);
+  if (qfile->read(qbaFileHeader.data(), 220) != 220)
     throw MYMONEYEXCEPTION(sFileToShort);
 
   if (haveAt)
     qfile->seek(0);
   else
-    ungetString(qfile, qbaFileHeader.data(), 70);
+    ungetString(qfile, qbaFileHeader.data(), 220);
 
-  QRegExp kmyexp("<!DOCTYPE KMYMONEY-FILE>");
-  QByteArray txt(qbaFileHeader, 70);
-  if (kmyexp.indexIn(txt) == -1)
+  auto re = QRegularExpression(QStringLiteral("<!DOCTYPE KMYMONEY-FILE>"));
+  auto match = re.match(qbaFileHeader);
+  if (!match.hasMatch())
     return nullptr;
+
+  auto fileVersion = 0;
+  auto fileFixVersion = 0;
+  re = QRegularExpression(QStringLiteral("VERSION id=\"(?<version>\\d+)\""));
+  match = re.match(qbaFileHeader);
+  if (match.hasMatch())
+    fileVersion = match.captured(1).toInt();
+
+  re = QRegularExpression(QStringLiteral("FIXVERSION id=\"(?<version>\\d+)\""));
+  match = re.match(qbaFileHeader);
+  if (match.hasMatch())
+    fileFixVersion = match.captured(1).toInt();
+
+  QByteArray XMLByteArray;
+  if (fileVersion <= 1 && fileFixVersion < 5) {
+    KMessageBox::information(nullptr, i18n("Your storage version is %1 and fix version is %2.\n"
+                                           "It will be upgraded to version %3 and fix version %4.\n"
+                                           "That means you won't be able to use it in previous versions of KMyMoney.\n"
+                                           "This operation won't modify your storage until you save it.", fileVersion, fileFixVersion, 1, 5),
+                             i18n("Storage version upgrade"));
+    XMLByteArray = qfile->readAll();
+    qfile->close();
+    delete qfile;
+    qfile = new QBuffer(&XMLByteArray);
+    qfile->open(QIODevice::ReadWrite);
+
+    if (!XMLStorageUpdater::updateFile(qfile)) {
+      qfile->close();
+      delete qfile;
+      return nullptr;
+    }
+    qfile->seek(0);
+  } else if (fileVersion >= 1 && fileFixVersion > 5) {
+    KMessageBox::information(nullptr, i18n("Your storage version is %1 and fix version is %2.\n"
+                                           "The highest supported version is %3 and fix version %4.\n"
+                                           "That means your storage has been saved in newer KMyMoney version.\n"
+                                           "It's incompativle with with this version of KMyMoney.", fileVersion, fileFixVersion, 1, 5),
+                             i18n("Incopatible storage version"));
+    qfile->close();
+    delete qfile;
+    return nullptr;
+  }
 
   // attach the storage before reading the file, since the online
   // onlineJobAdministration object queries the engine during

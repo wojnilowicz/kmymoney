@@ -322,10 +322,7 @@ bool MyMoneyXmlContentHandler::endElement(const QString& /* namespaceURI */, con
       try {
         if (s == nodeName(Node::Transaction)) {
           auto t0 = readTransaction(m_baseNode);
-          if (!t0.id().isEmpty()) {
-            MyMoneyTransaction t1(m_reader->d->nextTransactionID(), t0);
-            m_reader->d->tList[t1.uniqueSortKey()] = t1;
-          }
+          m_reader->d->tList[t0.uniqueSortKey()] = t0;
           m_reader->signalProgress(++m_elementCount, 0);
         } else if (s == nodeName(Node::Account)) {
           auto a = readAccount(m_baseNode);
@@ -543,6 +540,7 @@ MyMoneyTransaction MyMoneyXmlContentHandler::readTransaction(const QDomElement &
   transaction.setBankID(node.attribute(attributeName(Attribute::Transaction::BankID)));
   transaction.setMemo(node.attribute(attributeName(Attribute::Transaction::Memo)));
   transaction.setCommodity(node.attribute(attributeName(Attribute::Transaction::Commodity)));
+  transaction.setOrigin(static_cast<eMyMoney::Transaction::Origin>(node.attribute(attributeName(Attribute::Transaction::Origin)).toInt()));
 
   QDomNode child = node.firstChild();
   auto transactionID = transaction.id();
@@ -585,6 +583,7 @@ void MyMoneyXmlContentHandler::writeTransaction(const MyMoneyTransaction &transa
   el.setAttribute(attributeName(Attribute::Transaction::Memo), transaction.memo());
   el.setAttribute(attributeName(Attribute::Transaction::EntryDate), transaction.entryDate().toString(Qt::ISODate));
   el.setAttribute(attributeName(Attribute::Transaction::Commodity), transaction.commodity());
+  el.setAttribute(attributeName(Attribute::Transaction::Origin), transaction.origin());
 
   auto splitsElement = document.createElement(elementName(Element::Transaction::Splits));
 
@@ -626,16 +625,20 @@ MyMoneySplit MyMoneyXmlContentHandler::readSplit(const QDomElement &node)
   split.setNumber(node.attribute(attributeName(Attribute::Split::Number)));
   split.setBankID(node.attribute(attributeName(Attribute::Split::BankID)));
 
-  auto xml = split.value(attributeName(Attribute::Split::KMMatchedTx));
-  if (!xml.isEmpty()) {
-    xml.replace(QLatin1String("&lt;"), QLatin1String("<"));
-    QDomDocument docMatchedTransaction;
-    QDomElement nodeMatchedTransaction;
-    docMatchedTransaction.setContent(xml);
-    nodeMatchedTransaction = docMatchedTransaction.documentElement().firstChild().toElement();
-    auto t = MyMoneyXmlContentHandler::readTransaction(nodeMatchedTransaction);
-    split.addMatch(t);
-  }
+  auto matchedTransactionID = split.MyMoneyKeyValueContainer::value("kmm-match-transaction");
+  auto matchedSplitID = split.MyMoneyKeyValueContainer::value("kmm-match-split");
+  if (!matchedTransactionID.isEmpty() && !matchedSplitID.isEmpty())
+    split.addMatch();
+//  auto xml = split.value(attributeName(Attribute::Split::KMMatchedTx));
+//  if (!xml.isEmpty()) {
+//    xml.replace(QLatin1String("&lt;"), QLatin1String("<"));
+//    QDomDocument docMatchedTransaction;
+//    QDomElement nodeMatchedTransaction;
+//    docMatchedTransaction.setContent(xml);
+//    nodeMatchedTransaction = docMatchedTransaction.documentElement().firstChild().toElement();
+//    auto t = MyMoneyXmlContentHandler::readTransaction(nodeMatchedTransaction);
+//    split.addMatch(t);
+//  }
 
   return split;
 }
@@ -671,17 +674,17 @@ void MyMoneyXmlContentHandler::writeSplit(const MyMoneySplit &_split, QDomDocume
     el.appendChild(sel);
   }
 
-  if (split.isMatched()) {
-    QDomDocument docMatchedTransaction(elementName(Element::Split::Match));
-    QDomElement elMatchedTransaction = docMatchedTransaction.createElement(elementName(Element::Split::Container));
-    docMatchedTransaction.appendChild(elMatchedTransaction);
-    writeTransaction(split.matchedTransaction(), docMatchedTransaction, elMatchedTransaction);
-    auto xml = docMatchedTransaction.toString();
-    xml.replace(QLatin1String("<"), QLatin1String("&lt;"));
-    split.setValue(attributeName(Attribute::Split::KMMatchedTx), xml);
-  } else {
-    split.deletePair(attributeName(Attribute::Split::KMMatchedTx));
-  }
+//  if (split.isMatched()) {
+//    QDomDocument docMatchedTransaction(elementName(Element::Split::Match));
+//    QDomElement elMatchedTransaction = docMatchedTransaction.createElement(elementName(Element::Split::Container));
+//    docMatchedTransaction.appendChild(elMatchedTransaction);
+//    writeTransaction(split.matchedTransaction(), docMatchedTransaction, elMatchedTransaction);
+//    auto xml = docMatchedTransaction.toString();
+//    xml.replace(QLatin1String("<"), QLatin1String("&lt;"));
+//    split.setValue(attributeName(Attribute::Split::KMMatchedTx), xml);
+//  } else {
+//    split.deletePair(attributeName(Attribute::Split::KMMatchedTx));
+//  }
 
   writeKeyValueContainer(split, document, el);
 
@@ -1689,6 +1692,7 @@ void MyMoneyStorageXML::writeAccount(QDomElement& account, const MyMoneyAccount&
 void MyMoneyStorageXML::writeTransactions(QDomElement& transactions)
 {
   MyMoneyTransactionFilter filter;
+  filter.clear(); // to get rid of default origin filter
   filter.setReportAllSplits(false);
   const auto list = m_storage->transactionList(filter);
   transactions.setAttribute(attributeName(Attribute::General::Count), list.count());

@@ -332,8 +332,12 @@ void KCategoriesView::slotDeleteCategory()
             and replace that with categoryId.
           */
           // get the list of all transactions that reference the old account
-          MyMoneyTransactionFilter filter(d->m_currentCategory.id());
+          MyMoneyTransactionFilter filter;
+          filter.clear(); // to get rid of default origin filter
+          filter.setConsiderCategory(false);
           filter.setReportAllSplits(false);
+          filter.addAccount(d->m_currentCategory.id());
+
           QList<MyMoneyTransaction> tlist;
           QList<MyMoneyTransaction>::iterator it_t;
           file->transactionList(tlist, filter);

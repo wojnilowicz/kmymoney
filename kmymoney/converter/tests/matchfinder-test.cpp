@@ -23,6 +23,7 @@
 #include "mymoneysecurity.h"
 #include "mymoneymoney.h"
 #include "mymoneyenums.h"
+#include "transactionmatcher.h"
 
 QTEST_GUILESS_MAIN(MatchFinderTest)
 
@@ -125,7 +126,15 @@ MyMoneyTransaction MatchFinderTest::buildMatchedTransaction(MyMoneyTransaction t
 {
   transaction.clearId();
   MyMoneyTransaction matchingTransaction = transaction;
-  transaction.splits().first().addMatch(matchingTransaction);
+
+  MyMoneyFileTransaction ft;
+  file->addTransaction(matchingTransaction);
+  ft.commit();
+
+  ft.restart();
+  TransactionMatcher matcher(*account.data());
+  matcher.match(transaction, transaction.splits().first(), matchingTransaction, matchingTransaction.splits().first(), true);
+  ft.commit();
 
   return transaction;
 }

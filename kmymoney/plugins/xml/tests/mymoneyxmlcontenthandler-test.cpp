@@ -29,6 +29,7 @@
 #include "mymoneyobject_p.h"
 #include "mymoneyobject.h"
 #include "mymoneyexception.h"
+#include "mymoneyfile.h"
 
 QTEST_GUILESS_MAIN(MyMoneyXmlContentHandlerTest)
 
@@ -367,8 +368,8 @@ void MyMoneyXmlContentHandlerTest::readTransactionEx()
     QVERIFY(t.splits()[0].pairs().count() == 3);
     QVERIFY(t.splits()[1].pairs().count() == 0);
     QVERIFY(t.splits()[0].isMatched());
-
-    MyMoneyTransaction ti = t.splits()[0].matchedTransaction();
+    const auto& file = MyMoneyFile::instance();
+    const auto& ti = file->transaction(t.splits()[0].matchedTransaction());
     QVERIFY(ti.pairs().count() == 1);
     QVERIFY(ti.isImported());
     QVERIFY(ti.splits().count() == 2);
@@ -635,16 +636,18 @@ void MyMoneyXmlContentHandlerTest::testReplaceIDinSplit()
 
   try {
     s = MyMoneyXmlContentHandler::readSplit(node);
+    const auto& file = MyMoneyFile::instance();
+    const auto& matchedTransaction = file->transaction(s.matchedTransaction());
     QCOMPARE(s.payeeId(), QLatin1String("P000001"));
     QCOMPARE(s.replaceId("P2", "P1"), false);
-    QCOMPARE(s.matchedTransaction().splits()[0].payeeId(), QLatin1String("P000010"));
-    QCOMPARE(s.matchedTransaction().splits()[1].payeeId(), QLatin1String("P000011"));
+    QCOMPARE(matchedTransaction.splits()[0].payeeId(), QLatin1String("P000010"));
+    QCOMPARE(matchedTransaction.splits()[1].payeeId(), QLatin1String("P000011"));
     QCOMPARE(s.replaceId("P0010", "P000010"), true);
-    QCOMPARE(s.matchedTransaction().splits()[0].payeeId(), QLatin1String("P0010"));
-    QCOMPARE(s.matchedTransaction().splits()[1].payeeId(), QLatin1String("P000011"));
+    QCOMPARE(matchedTransaction.splits()[0].payeeId(), QLatin1String("P0010"));
+    QCOMPARE(matchedTransaction.splits()[1].payeeId(), QLatin1String("P000011"));
     QCOMPARE(s.replaceId("P0011", "P000011"), true);
-    QCOMPARE(s.matchedTransaction().splits()[0].payeeId(), QLatin1String("P0010"));
-    QCOMPARE(s.matchedTransaction().splits()[1].payeeId(), QLatin1String("P0011"));
+    QCOMPARE(matchedTransaction.splits()[0].payeeId(), QLatin1String("P0010"));
+    QCOMPARE(matchedTransaction.splits()[1].payeeId(), QLatin1String("P0011"));
 
   } catch (const MyMoneyException &) {
     QFAIL("Unexpected exception");

@@ -151,6 +151,7 @@ QString attributeName(Attribute::Transaction attributeID)
     {Attribute::Transaction::EntryDate,  QStringLiteral("entrydate")},
     {Attribute::Transaction::Commodity,  QStringLiteral("commodity")},
     {Attribute::Transaction::BankID,     QStringLiteral("bankid")},
+    {Attribute::Transaction::Origin,     QStringLiteral("origin")},
   };
   return attributeNames.value(attributeID);
 }

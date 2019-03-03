@@ -45,6 +45,8 @@ class QStringList;
 
 template <typename T> class QList;
 
+namespace eMyMoney { namespace Transaction { enum Origin : int; } }
+
 /**
   * This class represents a transaction within the MyMoneyEngine. A transaction
   * contains none, one or more splits of type MyMoneySplit. They are stored in
@@ -97,6 +99,9 @@ public:
 
   QString bankID() const;
   void setBankID(const QString& bankID);
+
+  eMyMoney::Transaction::Origin origin() const;
+  void setOrigin(eMyMoney::Transaction::Origin origin);
 
   bool operator ==  (const MyMoneyTransaction& right) const;
   bool operator !=  (const MyMoneyTransaction& r) const;
@@ -230,6 +235,12 @@ public:
    * @p state defaults to @p true.
    */
   void setImported(bool state = true);
+
+  /**
+  * returns @a true if this is a transaction matched against an imported
+  * transaction.
+  */
+  bool isMatched() const;
 
   /**
     * This static method returns the id which will be assigned to the

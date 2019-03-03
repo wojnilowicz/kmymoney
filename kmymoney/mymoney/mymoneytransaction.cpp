@@ -161,6 +161,18 @@ void MyMoneyTransaction::setBankID(const QString& bankID)
   d->m_bankID = bankID;
 }
 
+eMyMoney::Transaction::Origin MyMoneyTransaction::origin() const
+{
+  Q_D(const MyMoneyTransaction);
+  return d->m_origin;
+}
+
+void MyMoneyTransaction::setOrigin(eMyMoney::Transaction::Origin origin)
+{
+  Q_D(MyMoneyTransaction);
+  d->m_origin = origin;
+}
+
 bool MyMoneyTransaction::operator == (const MyMoneyTransaction& right) const
 {
   Q_D(const MyMoneyTransaction);
@@ -384,15 +396,23 @@ bool MyMoneyTransaction::isStockSplit() const
 
 bool MyMoneyTransaction::isImported() const
 {
-  return value("Imported").toLower() == QString("true");
+  Q_D(const MyMoneyTransaction);
+  return d->m_origin & eMyMoney::Transaction::Origin::Imported;
 }
 
 void MyMoneyTransaction::setImported(bool state)
 {
+  Q_D(MyMoneyTransaction);
   if (state)
-    setValue("Imported", "true");
+    d->m_origin = static_cast<eMyMoney::Transaction::Origin>(d->m_origin | eMyMoney::Transaction::Origin::Imported);
   else
-    deletePair("Imported");
+    d->m_origin = static_cast<eMyMoney::Transaction::Origin>(d->m_origin ^ eMyMoney::Transaction::Origin::Imported);
+}
+
+bool MyMoneyTransaction::isMatched() const
+{
+  Q_D(const MyMoneyTransaction);
+  return d->m_origin & eMyMoney::Transaction::Origin::MatchingOutput;
 }
 
 bool MyMoneyTransaction::hasReferenceTo(const QString& id) const

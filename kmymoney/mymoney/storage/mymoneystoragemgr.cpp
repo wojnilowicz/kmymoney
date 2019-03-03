@@ -669,15 +669,18 @@ void MyMoneyStorageMgr::modifyTransaction(const MyMoneyTransaction& transaction)
   if (it_t == d->m_transactionList.end())
     throw MYMONEYEXCEPTION_CSTRING("invalid transaction key");
 
-  foreach (const auto split, (*it_t).splits()) {
-    auto acc = d->m_accountList[split.accountId()];
-    // we only need to adjust non-investment accounts here
-    // as for investment accounts the balance will be recalculated
-    // after the transaction has been added.
-    if (!acc.isInvest()) {
-      d->adjustBalance(acc, split, true);
-      acc.touch();
-      d->m_accountList.modify(acc.id(), acc);
+  // don't count transactions that served as input for matching
+  if (!((*it_t).origin() & eMyMoney::Transaction::Origin::MatchingInput)) {
+    foreach (const auto split, (*it_t).splits()) {
+      auto acc = d->m_accountList[split.accountId()];
+      // we only need to adjust non-investment accounts here
+      // as for investment accounts the balance will be recalculated
+      // after the transaction has been added.
+      if (!acc.isInvest()) {
+        d->adjustBalance(acc, split, true);
+        acc.touch();
+        d->m_accountList.modify(acc.id(), acc);
+      }
     }
   }
 
@@ -689,12 +692,15 @@ void MyMoneyStorageMgr::modifyTransaction(const MyMoneyTransaction& transaction)
   d->m_transactionList.insert(newKey, transaction);
   d->m_transactionKeys.modify(transaction.id(), newKey);
 
-  // adjust account balances
-  foreach (const auto split, transaction.splits()) {
-    auto acc = d->m_accountList[split.accountId()];
-    d->adjustBalance(acc, split, false);
-    acc.touch();
-    d->m_accountList.modify(acc.id(), acc);
+  // don't count transactions that served as input for matching
+  if (!(transaction.origin() & eMyMoney::Transaction::Origin::MatchingInput)) {
+    // adjust account balances
+    foreach (const auto split, transaction.splits()) {
+      auto acc = d->m_accountList[split.accountId()];
+      d->adjustBalance(acc, split, false);
+      acc.touch();
+      d->m_accountList.modify(acc.id(), acc);
+    }
   }
 }
 
@@ -1748,6 +1754,8 @@ void MyMoneyStorageMgr::rebuildAccountBalances()
 
   // now scan over all transactions and all splits and setup the balances
   foreach (const auto transaction, d->m_transactionList) {
+    if (transaction.origin() & eMyMoney::Transaction::Origin::MatchingInput)
+      continue;
     foreach (const auto split, transaction.splits()) {
       if (!split.shares().isZero()) {
         const QString& id = split.accountId();

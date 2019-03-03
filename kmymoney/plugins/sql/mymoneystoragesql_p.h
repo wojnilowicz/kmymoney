@@ -45,6 +45,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QStack>
+#include <QXmlStreamReader>
 
 // ----------------------------------------------------------------------------
 // KDE Includes
@@ -516,6 +517,7 @@ public:
     while (query.next()) dbList.append(query.value(0).toString());
 
     MyMoneyTransactionFilter filter;
+    filter.clear(); // to get rid of default origin filter
     filter.setReportAllSplits(false);
     QList<MyMoneyTransaction> list;
     m_storage->transactionList(list, filter);
@@ -1131,6 +1133,7 @@ public:
     query.bindValue(":entryDate", tx.entryDate().toString(Qt::ISODate));
     query.bindValue(":currencyId", tx.commodity());
     query.bindValue(":bankId", tx.bankID());
+    query.bindValue(":origin", tx.origin());
 
     if (!query.exec()) // krazy:exclude=crashy
       throw MYMONEYEXCEPTIONSQL("writing Transaction"); // krazy:exclude=crashy
@@ -1707,6 +1710,19 @@ public:
     //s.setPostDate(GETDATETIME(postDateCol)); // FIXME - when Tom puts date into split object
     s.setBankID(GETSTRING(bankIdCol));
 
+    QStringList kvpIdList {QString::fromLatin1("%1%2").arg(GETSTRING(transactionIdCol),
+                                                           GETSTRING(splitIdCol))};
+
+    // get the kvps
+    auto kvpMap = readKeyValuePairs("SPLIT", kvpIdList);
+    s.setPairs(kvpMap.value(kvpIdList.first()).pairs());
+    const auto hasMatchTransaction = !s.MyMoneyKeyValueContainer::value("kmm-match-transaction").isEmpty();
+    const auto hasMatchSplit = !s.MyMoneyKeyValueContainer::value("kmm-match-split").isEmpty();
+    if (hasMatchTransaction && hasMatchSplit)
+      s.addMatch();
+    else
+      s.removeMatch(); // MyMoneyStorageSql::fetchTransactions enter this method multiple times with old split argument, so we must remove match explicitly
+
     return s;
   }
 
@@ -2166,6 +2182,10 @@ public:
           if ((rc = upgradeToV12()) != 0) return (1);
           ++m_dbVersion;
           break;
+        case 12:
+          if ((rc = upgradeToV13()) != 0) return (1);
+          ++m_dbVersion;
+          break;
         default:
           qWarning("Unknown version number in database - %d", m_dbVersion);
       }
@@ -2522,6 +2542,390 @@ public:
     }
     return 0;
   }
+
+  /**
+   * @brief upgradeToV13
+   * Changes (2018-08-19):
+   * 1) make two separate transactions out of two matched transactions
+   * 2) create a new tramsaction as a result of matching
+   * 3) add origin (imported, typed, matched) of transaction
+   * 4) add kmm-match-transaction containing two matched transaction IDs to every matched split
+   * 5) add kmm-match-split containing two matched split IDs to every matched split
+   * @return 0 if successful, 1 if not successful
+   */
+  int upgradeToV13()
+  {
+    Q_Q(MyMoneyStorageSql);
+    MyMoneyDbTransaction dbtrans(*q, Q_FUNC_INFO);
+
+    switch(haveColumnInTable(QLatin1String("kmmTransactions"), QLatin1String("origin"))) {
+      case -1:
+        return 1;
+      case 1:         // column exists, nothing to do
+        break;
+      case 0:         // need update of kmmTransactions
+        if (!alterTable(m_db.m_tables["kmmTransactions"], m_dbVersion))
+          return 1;
+        break;
+    }
+
+    QSqlQuery selectQuery(*q);
+    QSqlQuery updateQuery(*q);
+    QSqlQuery deleteQuery(*q);
+    QSqlQuery insertQuery(*q);
+
+    // we need to know the highest unoccupied ID to know what IDs can we assign to new (reorganized) transactions
+    selectQuery.prepare(QString::fromLatin1("SELECT id FROM kmmTransactions ORDER BY id DESC"));
+    if (!selectQuery.exec()) {
+      buildError(selectQuery, Q_FUNC_INFO, QString("Error retrieving highest transaction id."));
+      return 1;
+    }
+
+    // no transactions = no problem
+    if (!selectQuery.next())
+      return 0;
+    auto transactionRecord = selectQuery.record();
+    auto lastTransactionID = transactionRecord.value(0).toString().mid(1).toULong();
+
+    // set default transaction origin for every transaction
+    updateQuery.prepare(QString::fromLatin1("UPDATE kmmTransactions SET origin='%1'").arg(
+                          QString::number(static_cast<int>(eMyMoney::Transaction::Origin::Typed))));
+    if (!updateQuery.exec()) {
+      buildError(updateQuery, Q_FUNC_INFO, QString("Error updating transaction origins."));
+      return 1;
+    }
+
+    // correct transaction origin if it has been imported
+    selectQuery.prepare("SELECT * FROM kmmKeyValuePairs WHERE kvpType='TRANSACTION' AND kvpKey='Imported'");
+    if (!selectQuery.exec()) {
+      buildError(selectQuery, Q_FUNC_INFO, QString("Error retrieving key value pairs about imported transactions."));
+      return 1;
+    }
+
+    while (selectQuery.next()) {
+      auto record = selectQuery.record();
+      auto transactionID = record.value("kvpID").toString();
+
+      updateQuery.prepare(QString::fromLatin1("UPDATE kmmTransactions SET origin='%1' WHERE id='%2'").arg(
+                            QString::number(static_cast<int>(eMyMoney::Transaction::Origin::Imported)),
+                            transactionID));
+      if (!updateQuery.exec()) {
+        buildError(updateQuery, Q_FUNC_INFO, QString("Error assigning transaction's origin to imported."));
+        return 1;
+      }
+    }
+
+    deleteQuery.prepare("DELETE FROM kmmKeyValuePairs WHERE kvpKey='Imported'");
+    if (!deleteQuery.exec()) {
+      buildError(deleteQuery, Q_FUNC_INFO, QString("Error deleting key value pairs about imported transactions."));
+      return 1;
+    }
+
+    // search for embedded tranactions
+    QSqlQuery queryMatchedTX(*q);
+    queryMatchedTX.prepare("SELECT * FROM kmmKeyValuePairs WHERE kvpType='SPLIT' AND kvpKey='kmm-matched-tx'");
+    if (!queryMatchedTX.exec()) {
+      buildError(queryMatchedTX, Q_FUNC_INFO, QString("Error retrieving key value pairs about matched transactions."));
+      return 1;
+    }
+
+    while (queryMatchedTX.next()) {
+      auto record = queryMatchedTX.record();
+      auto transactionIDAndSplitID = record.value("kvpID").toString();
+      auto transactionID = transactionIDAndSplitID;
+      transactionID = transactionID.left(19); // transaction id size
+
+      // unembedd imported transaction
+      auto embeddedTransactionXML = record.value("kvpData").toString();
+      embeddedTransactionXML.replace(QLatin1String("&lt;"), QLatin1String("<"));
+
+      QXmlStreamReader reader(embeddedTransactionXML);
+      QXmlStreamAttributes embeddedTransactionAttributes;
+      QString embeddedTransactionID;
+
+      auto isEmbeddedTransactionImported = false;
+      // start parsing transaction in XML
+      reader.readNextStartElement(); // this reads container
+      while (reader.readNextStartElement()) {
+        if (reader.name() == "TRANSACTION") {
+          embeddedTransactionAttributes = reader.attributes();
+          embeddedTransactionID = QString::fromLatin1("T%1").arg(QString::number(++lastTransactionID).rightJustified(18 , '0'));
+
+          while (reader.readNextStartElement()) {
+            if (reader.name() == "SPLITS") {
+              while (reader.readNextStartElement()) {
+                if (reader.name() == "SPLIT") {
+                  auto embeddedTransactionSplitAttributes = reader.attributes();
+                  auto embeddedSplitIDConvertedToSQL = QString::number(embeddedTransactionSplitAttributes.value("id").toString().mid(1).toInt() - 1);
+
+                  // SPLIT node has only key-value pairs node as subnode, so read it before all
+                  while (reader.readNextStartElement()) {
+                    if (reader.name() == "KEYVALUEPAIRS") {
+                      while (reader.readNextStartElement()) {
+                        // inserting all key-value pairs of embedded transaction without filtering anything out might be dangerous
+                        if (reader.name() == "PAIR") {
+                          auto embeddedTransactionSplitKVPAttributes = reader.attributes();
+                          const QStringList columnValuesInKVP = {
+                            "SPLIT",
+                            QString::fromLatin1("%1%2").arg(embeddedTransactionID, embeddedSplitIDConvertedToSQL),
+                            embeddedTransactionSplitKVPAttributes.value("key").toString(),
+                            embeddedTransactionSplitKVPAttributes.value("value").toString()
+                          };
+                          insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmKeyValuePairs VALUES ('%1')").arg(columnValuesInKVP.join("','")));
+                          if (!insertQuery.exec()) {
+                            buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting key-value pairs of splits of embedded transaction."));
+                            return 1;
+                          }
+                        }
+                        reader.skipCurrentElement();
+                      }
+                    } else {
+                      reader.skipCurrentElement();
+                    }
+                  }
+
+                  // we use highest precision for formatted values because we don't know precise precision yet
+                  const auto valueFormatted = MyMoneyMoney(embeddedTransactionSplitAttributes.value("value").toString()).formatMoney(QString(), -1, false).replace(QChar(','), QChar('.'));
+                  const auto priceFormatted = MyMoneyMoney(embeddedTransactionSplitAttributes.value("price").toString()).formatMoney(QString(), 8, false).replace(QChar(','), QChar('.'));
+                  const auto sharesFormatted = MyMoneyMoney(embeddedTransactionSplitAttributes.value("shares").toString()).formatMoney(QString(), 8, false).replace(QChar(','), QChar('.'));
+
+                  // we unembedd split 1:1 except its ID an transaction ID
+                  const QStringList columnValuesInSplit = {
+                    embeddedTransactionID,
+                    "N",
+                    embeddedSplitIDConvertedToSQL,
+                    embeddedTransactionSplitAttributes.value("payee").toString(),
+                    embeddedTransactionSplitAttributes.value("reconciledate").toString(),
+                    embeddedTransactionSplitAttributes.value("action").toString(),
+                    embeddedTransactionSplitAttributes.value("reconcileflag").toString(),
+                    embeddedTransactionSplitAttributes.value("value").toString(),
+                    valueFormatted,
+                    embeddedTransactionSplitAttributes.value("shares").toString(),
+                    sharesFormatted,
+                    embeddedTransactionSplitAttributes.value("price").toString(),
+                    priceFormatted,
+                    embeddedTransactionSplitAttributes.value("memo").toString(),
+                    embeddedTransactionSplitAttributes.value("account").toString(),
+                    QString(),
+                    QString(),
+                    embeddedTransactionAttributes.value("postdate").toString(),
+                    embeddedTransactionAttributes.value("bankid").toString()
+                  };
+
+                  insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmSplits VALUES ('%1')").arg(columnValuesInSplit.join("','")));
+                  if (!insertQuery.exec()) {
+                    buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting splits of embedded transaction."));
+                    return 1;
+                  }
+                } else {
+                  reader.skipCurrentElement();
+                }
+              }
+
+              // key-value pairs node as a subnode of transaction
+            } else if (reader.name() == "KEYVALUEPAIRS") {
+              while (reader.readNextStartElement()) {
+                if (reader.name() == "PAIR") {
+                  auto embeddedTransactionKVPAttributes = reader.attributes();
+                  const QStringList columnValuesInKVP = {
+                    "TRANSACTION",
+                    embeddedTransactionID,
+                    embeddedTransactionKVPAttributes.value("key").toString(),
+                    embeddedTransactionKVPAttributes.value("value").toString()
+                  };
+
+                  // we don't want Imported key to be unembedded because it's replaced by origin attribute
+                  if (embeddedTransactionKVPAttributes.value("key") == "Imported") {
+                    isEmbeddedTransactionImported = true;
+                  } else {
+                    insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmKeyValuePairs VALUES ('%1')").arg(columnValuesInKVP.join("','")));
+                    if (!insertQuery.exec()) {
+                      buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting key-value pairs of embedded transaction."));
+                      return 1;
+                    }
+                  }
+                } else {
+                  reader.skipCurrentElement();
+                }
+
+              }
+            } else {
+              reader.skipCurrentElement();
+            }
+          }
+        } else {
+          reader.skipCurrentElement();
+        }
+      }
+
+      // inserting embedded transaction as 1:1 except its ID
+      QStringList columnValuesInTransaction = {
+        embeddedTransactionID,
+        "N",
+        embeddedTransactionAttributes.value("postdate").toString(),
+        embeddedTransactionAttributes.value("memo").toString(),
+        embeddedTransactionAttributes.value("entrydate").toString(),
+        embeddedTransactionAttributes.value("commodity").toString(),
+        QString(),
+        isEmbeddedTransactionImported ?
+        QString::number(static_cast<int>(eMyMoney::Transaction::Origin::Imported | eMyMoney::Transaction::Origin::MatchingInput)) :
+        QString::number(static_cast<int>(eMyMoney::Transaction::Origin::Typed | eMyMoney::Transaction::Origin::MatchingInput))
+      };
+
+      insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmTransactions VALUES ('%1')").arg(columnValuesInTransaction.join("','")));
+
+      if (!insertQuery.exec()) {
+        buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting embedded transaction."));
+        return 1;
+      }
+
+      // we already unembedded end transaction that served as input for matching
+      // and now we'll restore original stand of start transaction that also served as input for matching
+      // from matched transaction that is output from matching
+      selectQuery.prepare(QString::fromLatin1("SELECT * FROM kmmTransactions WHERE id='%1'").arg(transactionID));
+
+      if (!selectQuery.exec() || !selectQuery.next()) {
+        buildError(selectQuery, Q_FUNC_INFO, QString("Error retrieving matched transaction."));
+        return 1;
+      }
+      auto sourceTransactionRecord = selectQuery.record();
+      auto sourceTransactionID = QString::fromLatin1("T%1").arg(QString::number(++lastTransactionID).rightJustified(18 , '0'));
+      sourceTransactionRecord.setValue("id", QVariant(sourceTransactionID));
+      auto sourceTransactionOrigin = sourceTransactionRecord.value("origin").toInt();
+      sourceTransactionOrigin = sourceTransactionOrigin | eMyMoney::Transaction::Origin::MatchingInput;
+      sourceTransactionRecord.setValue("origin", QVariant(sourceTransactionOrigin));
+
+      // in matched transaction splits there are backup values of start transaction, so iterate over them
+      selectQuery.prepare(QString::fromLatin1("SELECT * FROM kmmSplits WHERE transactionId='%1'").arg(transactionID));
+      if (!selectQuery.exec()) {
+        buildError(selectQuery, Q_FUNC_INFO, QString("Error retrieving splits."));
+        return 1;
+      }
+
+      while (selectQuery.next()) {
+        auto sourceTransactionSplitRecord = selectQuery.record();
+        auto transactionSplitID = sourceTransactionSplitRecord.value("splitId").toInt();
+        sourceTransactionSplitRecord.setValue("transactionId", QVariant(sourceTransactionID));
+
+        // backup values of start transaction are stored in key-value pairs of split
+        QSqlQuery kvpQuery(*q);
+        kvpQuery.prepare(QString::fromLatin1("SELECT * FROM kmmKeyValuePairs WHERE kvpType='SPLIT' AND kvpId='%1%2'").arg(transactionID, QString::number(transactionSplitID)));
+        if (!kvpQuery.exec()) {
+          buildError(kvpQuery, Q_FUNC_INFO, QString("Error retrieving key-value pairs about matched transaction."));
+          return 1;
+        }
+
+        // store key-value pairs because we will deltete them from database now and will be filtering them out later on
+        QMap<QString, QVariant> keyValueMap;
+        while (kvpQuery.next()) {
+          auto kvpKey = kvpQuery.value("kvpKey").toString();
+          auto kvpData = kvpQuery.value("kvpData");
+          keyValueMap.insert(kvpKey, kvpData);
+        }
+
+        deleteQuery.prepare(QString::fromLatin1("DELETE FROM kmmKeyValuePairs WHERE kvpType='SPLIT' AND kvpId='%1%2'").arg(transactionID, QString::number(transactionSplitID)));
+        if (!deleteQuery.exec()) {
+          buildError(deleteQuery, Q_FUNC_INFO, QString("Error deleting key-value pairs."));
+          return 1;
+        }
+
+        // split containg kmm-match-split means that it was matched
+        // otherwise it's a generic split and will be written only with new transaction ID
+        if (keyValueMap.contains("kmm-match-split")) {
+
+          // restore all original values from backup for source transaction and its split
+          if (keyValueMap.contains("kmm-orig-postdate")) {
+            sourceTransactionRecord.setValue("postDate", keyValueMap.value("kmm-orig-postdate"));
+            keyValueMap.remove("kmm-orig-postdate");
+          }
+
+          auto sourceTransactionSplitID = keyValueMap.value("kmm-match-split").toString().mid(1).toInt() - 1;
+          if (transactionSplitID == sourceTransactionSplitID) {
+            if (keyValueMap.contains("kmm-orig-memo")) {
+              sourceTransactionSplitRecord.setValue("memo", keyValueMap.value("kmm-orig-memo"));
+              keyValueMap.remove("kmm-orig-memo");
+            }
+            if (keyValueMap.contains("kmm-orig-payee")) {
+              sourceTransactionSplitRecord.setValue("payee", keyValueMap.value("kmm-orig-payee"));
+              keyValueMap.remove("kmm-orig-payee");
+            }
+          }
+
+          // add key-value pairs according to new way of storing information about matched split
+          QStringList columnValuesInKVP = {
+                    "SPLIT",
+                    QString::fromLatin1("%1%2").arg(transactionID, QString::number(transactionSplitID)),
+                    "kmm-match-transaction",
+                    QString::fromLatin1("%1;%2").arg(sourceTransactionID, embeddedTransactionID)
+                  };
+
+
+          insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmKeyValuePairs VALUES ('%1')").arg(columnValuesInKVP.join("','")));
+          if (!insertQuery.exec()) {
+            buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting kmm-match-transaction information."));
+            return 1;
+          }
+
+          columnValuesInKVP = QStringList {
+                    "SPLIT",
+                    QString::fromLatin1("%1%2").arg(transactionID, QString::number(transactionSplitID)),
+                    "kmm-match-split",
+                    QString::fromLatin1("%1;%2").arg(QString::number(transactionSplitID), QString::number(sourceTransactionSplitID))
+                  };
+
+          insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmKeyValuePairs VALUES ('%1')").arg(columnValuesInKVP.join("','")));
+          if (!insertQuery.exec()) {
+            buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting kmm-match-split information."));
+            return 1;
+          }
+
+        }
+
+        QStringList columnValuesInSplit;
+        for (auto i = 0; i < sourceTransactionSplitRecord.count(); ++i)
+          columnValuesInSplit.append(sourceTransactionSplitRecord.value(i).toString());
+
+        insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmSplits VALUES ('%1')").arg(columnValuesInSplit.join("','")));
+        if (!insertQuery.exec()) {
+          buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting split."));
+          return 1;
+        }
+
+        // all key-value pairs were deleted from the database, so write only the usefull ones back
+        QStringList columnValuesInKVP {
+          "SPLIT",
+          QString::fromLatin1("%1%2").arg(sourceTransactionID, QString::number(transactionSplitID)),
+          QString(),
+          QString()
+        };
+
+        for (auto it = keyValueMap.cbegin(); it != keyValueMap.cend(); ++it) {
+          if (it.key() == "kmm-matched-tx" || it.key() == "kmm-match-split")
+            continue;
+          columnValuesInKVP.replace(2, it.key());
+          columnValuesInKVP.replace(3, it.value().toString());
+          insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmKeyValuePairs VALUES ('%1')").arg(columnValuesInKVP.join("','")));
+          if (!insertQuery.exec()) {
+            buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting key-value pair."));
+            return 1;
+          }
+        }
+      }
+
+      // inserting source transaction as it was just before matching
+      columnValuesInTransaction = QStringList();
+      for (auto i = 0; i < sourceTransactionRecord.count(); ++i)
+        columnValuesInTransaction.append(sourceTransactionRecord.value(i).toString());
+
+      insertQuery.prepare(QString::fromLatin1("INSERT INTO kmmTransactions VALUES ('%1')").arg(columnValuesInTransaction.join("','")));
+      if (!insertQuery.exec()) {
+        buildError(insertQuery, Q_FUNC_INFO, QString("Error inserting source transaction."));
+        return 1;
+      }
+    }
+    return 0;
+  }
+
 
   int createTables()
   {

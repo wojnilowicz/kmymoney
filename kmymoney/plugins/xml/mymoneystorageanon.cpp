@@ -198,14 +198,6 @@ void MyMoneyStorageANON::fakeTransaction(MyMoneyTransaction& tx)
       s.setShares((s.shares() * m_factor));
     }
     s.setNumber(hideString(s.number()));
-
-    // obfuscate a possibly matched transaction as well
-    if (s.isMatched()) {
-      MyMoneyTransaction t = s.matchedTransaction();
-      fakeTransaction(t);
-      s.removeMatch();
-      s.addMatch(t);
-    }
     tn.modifySplit(s);
   }
   tx = tn;
