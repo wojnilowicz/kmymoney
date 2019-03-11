@@ -66,10 +66,10 @@ cmake --build . --target ext_png
 # cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt
 cmake --build . --target ext_boost
-cmake --build . --target ext_kcmutils
-cmake --build . --target ext_kactivities
-cmake --build . --target ext_kitemmodels
-cmake --build . --target ext_kitemviews
+# cmake --build . --target ext_kcmutils
+# cmake --build . --target ext_kactivities
+# cmake --build . --target ext_kitemmodels
+# cmake --build . --target ext_kitemviews
 # cmake --build . --target ext_kholidays
 # cmake --build . --target ext_kidentitymanagement
 # cmake --build . --target ext_kcontacts
