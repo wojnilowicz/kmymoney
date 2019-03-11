@@ -58,9 +58,9 @@ cmake $KMYMONEY_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DE
 
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_iconv
-# cmake --build . --target ext_lzma
-# cmake --build . --target ext_xml
-# cmake --build . --target ext_gettext
+cmake --build . --target ext_lzma
+cmake --build . --target ext_xml
+cmake --build . --target ext_gettext
 # cmake --build . --target ext_xslt
 # cmake --build . --target ext_png
 # cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
