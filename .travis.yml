@@ -18,6 +18,8 @@ addons:
       - gcc-6
       - cmake
       - ninja-build
+      - libxml-parser-perl
+      - libaio-dev
       - qt510base
       - qt510webengine
       - qt510svg
