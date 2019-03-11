@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz
   URL_MD5 1fc72f98e98bf4443f1651165f3aa146
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --without-python --prefix=${EXT_INSTALL_DIR} ${AT_HOST}
   BUILD_COMMAND $(MAKE)
   INSTALL_COMMAND $(MAKE) install
 
