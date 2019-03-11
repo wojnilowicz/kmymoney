@@ -38,7 +38,7 @@ CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 cmake $KMYMONEY_SOURCES \
     -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/kmymoney.appdir/usr \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_TESTING=FALSE \
+    -DBUILD_TESTING=TRUE \
     -DENABLE_WEBENGINE=TRUE \
     -DIS_APPIMAGE=TRUE
 
