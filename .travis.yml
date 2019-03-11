@@ -22,6 +22,8 @@ addons:
       - libaio-dev
       - libxcb-keysyms1
       - libxcb-keysyms1-dev
+      - libudev1
+      - libudev-dev
       - gperf
       - qt510base
       - qt510webengine
