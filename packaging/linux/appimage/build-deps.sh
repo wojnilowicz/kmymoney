@@ -64,20 +64,20 @@ cmake --build . --target ext_gettext
 cmake --build . --target ext_xslt
 cmake --build . --target ext_png
 # cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
-cmake --build . --target ext_qt
+# cmake --build . --target ext_qt
 cmake --build . --target ext_boost
 cmake --build . --target ext_kcmutils
 cmake --build . --target ext_kactivities
 cmake --build . --target ext_kitemmodels
 cmake --build . --target ext_kitemviews
-cmake --build . --target ext_kholidays
-cmake --build . --target ext_kidentitymanagement
-cmake --build . --target ext_kcontacts
-cmake --build . --target ext_akonadi
-cmake --build . --target ext_alkimia
-cmake --build . --target ext_kdiagram
-cmake --build . --target ext_aqbanking
-cmake --build . --target ext_gpgme
-cmake --build . --target ext_sqlcipher
-cmake --build . --target ext_ofx
-cmake --build . --target ext_ical
+# cmake --build . --target ext_kholidays
+# cmake --build . --target ext_kidentitymanagement
+# cmake --build . --target ext_kcontacts
+# cmake --build . --target ext_akonadi
+# cmake --build . --target ext_alkimia
+# cmake --build . --target ext_kdiagram
+# cmake --build . --target ext_aqbanking
+# cmake --build . --target ext_gpgme
+# cmake --build . --target ext_sqlcipher
+# cmake --build . --target ext_ofx
+# cmake --build . --target ext_ical
