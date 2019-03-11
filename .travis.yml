@@ -20,6 +20,8 @@ addons:
       - ninja-build
       - libxml-parser-perl
       - libaio-dev
+      - libxcb-keysyms1
+      - libxcb-keysyms1-dev
       - qt510base
       - qt510webengine
       - qt510svg
