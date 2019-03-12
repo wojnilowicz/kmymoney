@@ -5,8 +5,8 @@ ExternalProject_Add(
   URL_MD5 1fc72f98e98bf4443f1651165f3aa146
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --without-python --prefix=${EXT_INSTALL_DIR} ${AT_HOST}
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 
   DEPENDS ext_xml
 )

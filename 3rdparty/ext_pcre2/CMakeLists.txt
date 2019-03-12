@@ -5,6 +5,6 @@ ExternalProject_Add(
   URL_MD5 e0e5b1f7e425b73dcdcea0e08a85da31
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --enable-unicode --enable-pcre2-16 --enable-pcre2-32 --enable-jit
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 )

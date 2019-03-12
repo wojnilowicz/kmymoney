@@ -5,8 +5,8 @@ ExternalProject_Add(
   URL_MD5 63363d1c00601f4d11a5cadc8b5e0799
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --disable-tests --disable-doc --enable-openssl-compatibility -disable-gtk-doc --enable-cxx --without-p11-kit CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 
   DEPENDS ext_assuan2 ext_gpgerror ext_nettle ext_tasn1 ext_unistring
 )

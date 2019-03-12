@@ -7,8 +7,8 @@ ExternalProject_Add(
   URL_MD5 0744255cae68adca6dff81d3a9f3932d
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_SHARED_ONLY} --with-guis=${gwenhywfar_guis} CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 
   DEPENDS ext_gnutls ext_gcrypt
 )

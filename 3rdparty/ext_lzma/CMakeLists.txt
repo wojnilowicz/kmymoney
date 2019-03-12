@@ -5,6 +5,6 @@ ExternalProject_Add(
   URL_MD5 003e4d0b1b1899fc6e3000b24feddf7c
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} --disable-doc
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 )

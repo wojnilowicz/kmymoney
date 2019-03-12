@@ -8,7 +8,7 @@ ExternalProject_Add(
   URL_MD5 6d1373dba3e8540c448c6a562f2e0a00
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --with-icu=yes --disable-gtk-doc-html
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
   DEPENDS ext_icu
 )

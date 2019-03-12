@@ -5,6 +5,6 @@ ExternalProject_Add(
   URL_MD5 8fd508d3d2216b9c75895d6141219eab
 
   CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --enable-threads --enable-64bit
-  BUILD_COMMAND $(MAKE)
-  INSTALL_COMMAND $(MAKE) install
+  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
+  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
 )
