@@ -8,6 +8,9 @@ cache:
   directories:
     - $HOME/workspace
 
+git:
+  depth: 3
+
 addons:
   apt:
     update: true
@@ -38,11 +41,6 @@ before_install:
   - source /opt/qt510/bin/qt510-env.sh
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
   - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
-
-git:
-  depth: 3
-
-before_install:
   - export -f travis_fold
 
 # cache-cold build (switch to this section if cache is not build up)
