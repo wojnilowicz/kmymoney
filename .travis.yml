@@ -45,7 +45,7 @@ install:
   - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
 script:
-  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
+  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps2.sh $HOME/workspace $TRAVIS_BUILD_DIR
   #- $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
 #after_success:
