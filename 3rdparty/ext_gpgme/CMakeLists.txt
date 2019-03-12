@@ -5,8 +5,8 @@ ExternalProject_Add(
   URL_MD5 902fca3a94907efe4e929b2ade545a7c
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --enable-languages=cpp,qt --disable-gpg-test
-  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
-  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
+  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
+  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
 
   DEPENDS ext_assuan2
 )

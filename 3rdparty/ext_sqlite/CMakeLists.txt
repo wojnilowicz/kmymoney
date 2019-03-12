@@ -7,6 +7,6 @@ ExternalProject_Add(
   URL_MD5 bfade31d59f58badc51aeaa6ae26a5de
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} --disable-static --enable-shared --enable-fts3 --disable-static-shell --enable-session --enable-json1 CFLAGS=${sqlite_cFlags}
-  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
-  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
+  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
+  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
 )

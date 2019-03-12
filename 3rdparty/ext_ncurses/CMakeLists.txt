@@ -5,6 +5,6 @@ ExternalProject_Add(
   URL_MD5 98c889aaf8d23910d2b92d65be2e737a
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} --enable-overwrite --enable-pc-files --without-tests --with-shared --with-cxx-shared --without-ada --with-pkg-config-libdir=${EXT_INSTALL_DIR}/lib/pkgconfig
-  BUILD_COMMAND ${CMAKE_BUILD_TOOL}
-  INSTALL_COMMAND ${CMAKE_BUILD_TOOL} install
+  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
+  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
 )
