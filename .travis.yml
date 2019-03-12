@@ -4,6 +4,7 @@ compiler: g++
 sudo: required
 cache:
   ccache: true
+  timeout: 1000
   directories:
     - $HOME/workspace
 
