@@ -45,12 +45,17 @@ git:
 before_install:
   - export -f travis_fold
 
+# cache-cold build (switch to this section if cache is not build up)
 install:
-  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
+  - timeout 1800 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+  - touch NOTEST
+
+# cache-hot build
+#install:
+  #- $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
 script:
-  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
-  #- $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+  - test -f NOTEST || $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
 #after_success:
   #- cd $HOME/workspace/kmymoney-build
