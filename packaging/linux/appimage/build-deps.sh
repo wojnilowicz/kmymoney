@@ -54,7 +54,7 @@ fi
 cd $BUILD_PREFIX/deps-build/
 
 # Configure the dependencies for building
-cmake $KMYMONEY_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DEXT_INSTALL_DIR=$DEPS_INSTALL_PREFIX -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
+cmake -GNinja $KMYMONEY_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DEXT_INSTALL_DIR=$DEPS_INSTALL_PREFIX -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
 travis_fold start "dependencies.basic"
