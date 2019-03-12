@@ -47,7 +47,7 @@ before_install:
 
 # cache-cold build (switch to this section if cache is not build up)
 install:
-  - timeout 1800 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+  - timeout 600 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
   - touch NOTEST
 
 # cache-hot build
