@@ -42,6 +42,9 @@ before_install:
 git:
   depth: 3
 
+before_install:
+  - export -f travis_fold
+
 install:
   - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
