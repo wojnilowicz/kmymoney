@@ -20,9 +20,9 @@ matrix:
           - $HOME/workspace
 
       env:
-        - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         global:
           - MAKEFLAGS="-j 2"
+          - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
 
       addons:
         apt:
@@ -59,7 +59,7 @@ matrix:
         - timeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
-        - echo "Nothing"
+        - echo "Nothing" || true
         #- if [ RUNTIME_TIMEOUT == 0 ]; then
             #$TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR;
             #$TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR;
@@ -68,7 +68,7 @@ matrix:
           #fi
 
       after_success:
-        - echo "Nothing"
+        - echo "Nothing" || true
         #- if [ RUNTIME_TIMEOUT == 0 ]; then
             #cd $HOME/workspace/kmymoney-build;
             #ctest -V;
@@ -89,8 +89,8 @@ matrix:
         directories:
           - $HOME/Library/Caches/Homebrew
 
-      env:
-        - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
+      #env:
+        #- RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
 
       before_cache:
         - brew cleanup
@@ -105,7 +105,7 @@ matrix:
         - gtimeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
 
       script:
-        - echo "Nothing"
+        - echo "Nothing" || true
         #- if [ RUNTIME_TIMEOUT == 0 ]; then
             #echo "Something.";
           #else
