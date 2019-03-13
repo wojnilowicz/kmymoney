@@ -106,7 +106,7 @@ matrix:
       script:
         - |
           if [ $RUNTIME_TIMEOUT_OSX == 0 ]; then
-            echo "Something.";
+            echo "Something."
           else
-            echo "Skipping after_success phase because warming cache only.";
+            echo "Skipping after_success phase because warming cache only."
           fi
