@@ -79,11 +79,15 @@ else
         export VERSION=$KMYMONEY_VERSION
 fi
 
+#Step 6: Download tool to create AppImage
+wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+
 # Finally transition back to the build directory so we can build the appimage
 cd $BUILD_PREFIX
 
-# Step 6: Build the image!!!
-linuxdeployqt $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
+# Step 7: Build the image!!!
+./linuxdeployqt-continuous-x86_64.AppImage $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
   -executable=$APPDIR/usr/bin/kmymoney \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
