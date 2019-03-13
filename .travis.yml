@@ -100,7 +100,6 @@ matrix:
         - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - brew install coreutils # for gtimeout functionality
         - gtimeout $RUNTIME_TIMEOUT_OSX $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
 
       script:
