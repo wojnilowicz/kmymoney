@@ -89,8 +89,8 @@ matrix:
         directories:
           - $HOME/Library/Caches/Homebrew
 
-      #env:
-        #- RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
+      env:
+        - RUNTIME_TIMEOUT_OSX=2100 #0 for hot cache, 2100 for cold cache
 
       before_cache:
         - brew cleanup
