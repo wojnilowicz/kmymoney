@@ -57,15 +57,12 @@ cd $BUILD_PREFIX/deps-build/
 cmake $KMYMONEY_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DEXT_INSTALL_DIR=$DEPS_INSTALL_PREFIX -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-travis_fold start "dependencies.basic"
 cmake --build . --target ext_iconv
 cmake --build . --target ext_lzma
 cmake --build . --target ext_xml
 cmake --build . --target ext_gettext
 cmake --build . --target ext_xslt
 cmake --build . --target ext_png
-travis_fold end "dependencies.basic"
-
 # cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt
 cmake --build . --target ext_boost
