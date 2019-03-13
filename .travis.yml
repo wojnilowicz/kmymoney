@@ -1,73 +1,93 @@
 language: cpp
-dist: trusty
-compiler: g++
-sudo: required
-cache:
-  ccache: true
-  timeout: 1000
-  directories:
-    - $HOME/workspace
-
-env:
-  global:
-    - MAKEFLAGS="-j 2"
-
 git:
   depth: 3
-
-addons:
-  apt:
-    update: true
-    sources:
-      - ubuntu-toolchain-r-test
-      - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
-    packages:
-      - g++-6
-      - gcc-6
-      - cmake
-      - ninja-build
-      - libxml-parser-perl
-      - libaio-dev
-      - libxcb-keysyms1
-      - libxcb-keysyms1-dev
-      - libudev1
-      - libudev-dev
-      - gperf
-      - qt510base
-      - qt510webengine
-      - qt510svg
-      - qt510declarative
-      - qt510script
-      - qt510tools
-      - qt510x11extras
 
 branches:
   except:
     - # Do not build tags that we create when we upload to GitHub Releases
     - /^(?i:continuous)$/
 
-before_install:
-  - source /opt/qt510/bin/qt510-env.sh
-  - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      compiler: g++
+      sudo: required
+      cache:
+        ccache: true
+        timeout: 1000
+        directories:
+          - $HOME/workspace
 
-# cache-cold build (switch to this section if cache is not build up)
-#install:
-  #- timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
-  #- touch NOTEST
+      env:
+        global:
+          - MAKEFLAGS="-j 2"
 
-# cache-hot build
-install:
-  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
+      addons:
+        apt:
+          update: true
+          sources:
+            - ubuntu-toolchain-r-test
+            - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
+          packages:
+            - g++-6
+            - gcc-6
+            - cmake
+            - ninja-build
+            - libxml-parser-perl
+            - libaio-dev
+            - libxcb-keysyms1
+            - libxcb-keysyms1-dev
+            - libudev1
+            - libudev-dev
+            - gperf
+            - qt510base
+            - qt510webengine
+            - qt510svg
+            - qt510declarative
+            - qt510script
+            - qt510tools
+            - qt510x11extras
+      before_install:
+        - source /opt/qt510/bin/qt510-env.sh
+        - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
+        - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
-script:
-  - test -f NOTEST || $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
-  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
+      # cache-cold build (switch to this section if cache is not build up)
+      #install:
+        #- timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+        #- touch NOTEST
 
-after_success:
-  #- cd $HOME/workspace/kmymoney-build
-  #- ctest -V
-  - ls -lh $HOME/workspace/* # Assuming you have some files in out/ that you would like to upload
-  - cd $TRAVIS_BUILD_DIR
-  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - bash upload.sh $HOME/workspace/*.AppImage*
+      # cache-hot build
+      install:
+        - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
+
+      script:
+        - test -f NOTEST || $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+        - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
+
+      after_success:
+        #- cd $HOME/workspace/kmymoney-build
+        #- ctest -V
+        - ls -lh $HOME/workspace/* # Assuming you have some files in out/ that you would like to upload
+        - cd $TRAVIS_BUILD_DIR
+        - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+        - bash upload.sh $HOME/workspace/*.AppImage*
+    - os: osx
+      compiler: clang
+      sudo: required
+      cache:
+        timeout: 1000
+        directories:
+          - $HOME/Library/Caches/Homebrew
+
+      before_cache:
+        - brew cleanup
+
+      before_install:
+        - brew update
+        - brew tap kde-mac/kde
+        - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
+
+      install:
+        - brew install kde-mac/kde/kf5-karchive
