@@ -41,6 +41,11 @@ addons:
       - qt510tools
       - qt510x11extras
 
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)$/
+
 before_install:
   - source /opt/qt510/bin/qt510-env.sh
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
@@ -57,7 +62,12 @@ install:
 
 script:
   - test -f NOTEST || $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+  - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
-#after_success:
+after_success:
   #- cd $HOME/workspace/kmymoney-build
   #- ctest -V
+  - ls -lh $HOME/workspace/* # Assuming you have some files in out/ that you would like to upload
+  - cd $TRAVIS_BUILD_DIR
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh $HOME/workspace/*.AppImage*
