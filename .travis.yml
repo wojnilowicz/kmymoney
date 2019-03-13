@@ -20,7 +20,7 @@ matrix:
           - $HOME/workspace
 
       env:
-        - RUNTIME_TIMEOUT=2000 #0 for hot cache, 2100 for cold cache
+        - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         global:
           - MAKEFLAGS="-j 2"
 
