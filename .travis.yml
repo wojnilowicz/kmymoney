@@ -21,8 +21,7 @@ matrix:
 
       env:
         - RUNTIME_TIMEOUT_LINUX=2100 #0 for hot cache, 2100 for cold cache
-        global:
-          - MAKEFLAGS="-j 2"
+        - MAKEFLAGS="-j 2"
 
       addons:
         apt:
