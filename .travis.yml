@@ -20,9 +20,9 @@ matrix:
           - $HOME/workspace
 
       env:
+        - RUNTIME_TIMEOUT_LINUX=2100 #0 for hot cache, 2100 for cold cache
         global:
           - MAKEFLAGS="-j 2"
-          - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
 
       addons:
         apt:
@@ -56,7 +56,7 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - timeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+        - timeout $RUNTIME_TIMEOUT_LINUX $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
         - echo "Nothing" || true
