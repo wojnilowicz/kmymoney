@@ -58,26 +58,26 @@ matrix:
         - timeout $RUNTIME_TIMEOUT_LINUX $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
-        - echo "Nothing" || true
-        #- if [ RUNTIME_TIMEOUT == 0 ]; then
-            #$TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR;
-            #$TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR;
-          #else
-            #echo "Skipping script phase because warming cache only.";
-          #fi
+        - |
+          if [ $RUNTIME_TIMEOUT_LINUX == 0 ]; then
+            $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+            $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
+          else
+            echo "Skipping script phase because warming cache only."
+          fi
 
       after_success:
-        - echo "Nothing" || true
-        #- if [ RUNTIME_TIMEOUT == 0 ]; then
-            #cd $HOME/workspace/kmymoney-build;
-            #ctest -V;
-            #ls -lh $HOME/workspace/*;
-            #cd $TRAVIS_BUILD_DIR;
-            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
-            #bash upload.sh $HOME/workspace/*.AppImage*;
-          #else
-            #echo "Skipping after_success phase because warming cache only.";
-          #fi
+        - |
+          if [ $RUNTIME_TIMEOUT_LINUX == 0 ]; then
+            #cd $HOME/workspace/kmymoney-build
+            #ctest -V
+            ls -lh $HOME/workspace/*
+            cd $TRAVIS_BUILD_DIR
+            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            bash upload.sh $HOME/workspace/*.AppImage*
+          else
+            echo "Skipping after_success phase because warming cache only."
+          fi
 
     - os: osx
       osx_image: xcode9.4
@@ -101,12 +101,12 @@ matrix:
 
       install:
         - brew install coreutils # for gtimeout functionality
-        - gtimeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
+        - gtimeout $RUNTIME_TIMEOUT_OSX $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
 
       script:
-        - echo "Nothing" || true
-        #- if [ RUNTIME_TIMEOUT == 0 ]; then
-            #echo "Something.";
-          #else
-            #echo "Skipping after_success phase because warming cache only.";
-          #fi
+        - |
+          if [ $RUNTIME_TIMEOUT_OSX == 0 ]; then
+            echo "Something.";
+          else
+            echo "Skipping after_success phase because warming cache only.";
+          fi
