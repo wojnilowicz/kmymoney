@@ -20,7 +20,6 @@ matrix:
           - $HOME/workspace
 
       env:
-        - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         global:
           - MAKEFLAGS="-j 2"
 
@@ -49,48 +48,38 @@ matrix:
             - qt510script
             - qt510tools
             - qt510x11extras
-
       before_install:
         - source /opt/qt510/bin/qt510-env.sh
         - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
+      # cache-cold build (switch to this section if cache is not build up)
+      #install:
+        #- timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+        #- touch NOTEST
+
+      # cache-hot build
       install:
-        - timeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+        - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
       script:
-        - |
-          if [ RUNTIME_TIMEOUT == 0 ]; then
-            $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
-            $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
-          else
-            echo "Skipping script phase because warming cache only."
-          fi
+        - test -f NOTEST || $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+        - $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
 
       after_success:
-        - |
-          if [ RUNTIME_TIMEOUT == 0 ]; then
-            cd $HOME/workspace/kmymoney-build
-            ctest -V
-            ls -lh $HOME/workspace/*
-            cd $TRAVIS_BUILD_DIR
-            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-            bash upload.sh $HOME/workspace/*.AppImage*
-          else
-            echo "Skipping after_success phase because warming cache only."
-          fi
-
+        #- cd $HOME/workspace/kmymoney-build
+        #- ctest -V
+        - ls -lh $HOME/workspace/* # Assuming you have some files in out/ that you would like to upload
+        - cd $TRAVIS_BUILD_DIR
+        - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+        - bash upload.sh $HOME/workspace/*.AppImage*
     - os: osx
-      osx_image: xcode9.4
       compiler: clang
       sudo: required
       cache:
         timeout: 1000
         directories:
           - $HOME/Library/Caches/Homebrew
-
-      env:
-        - RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
 
       before_cache:
         - brew cleanup
@@ -101,13 +90,4 @@ matrix:
         - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - brew install coreutils # for gtimeout functionality
-        - gtimeout $RUNTIME_TIMEOUT $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
-
-      script:
-        - |
-          if [ RUNTIME_TIMEOUT == 0 ]; then
-            echo "Something."
-          else
-            echo "Skipping after_success phase because warming cache only."
-          fi
+        - brew install kde-mac/kde/kf5-karchive
