@@ -20,7 +20,7 @@ matrix:
           - $HOME/workspace
 
       env:
-        - RUNTIME_TIMEOUT_LINUX=2100 #0 for hot cache, 2100 for cold cache
+        - RUNTIME_TIMEOUT_LINUX=0 #0 for hot cache, 2100 for cold cache
         - MAKEFLAGS="-j 2"
 
       addons:
@@ -87,9 +87,10 @@ matrix:
         timeout: 1000
         directories:
           - $HOME/Library/Caches/Homebrew
+          - $HOME/workspace
 
       env:
-        - RUNTIME_TIMEOUT_OSX=2100 #0 for hot cache, 2100 for cold cache
+        - RUNTIME_TIMEOUT_OSX=0 #0 for hot cache, 2100 for cold cache
 
       before_cache:
         - brew cleanup
@@ -105,7 +106,7 @@ matrix:
       script:
         - |
           if [ $RUNTIME_TIMEOUT_OSX == 0 ]; then
-            echo "Something."
+            $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
           fi
