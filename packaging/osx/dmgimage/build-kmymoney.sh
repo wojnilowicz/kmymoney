@@ -36,10 +36,12 @@ CPU_COUNT=2
 
 # Configure KMyMoney
 cmake $KMYMONEY_SOURCES \
-    -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/kmymoney.appdir/usr \
+    -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX/kmymoney.app \
+    -DKDE_INSTALL_BUNDLEDIR=$BUILD_PREFIX/kmymoney.app/Applications/KDE \
     -DCMAKE_BUILD_TYPE=RelWithDebInfo \
     -DBUILD_TESTING=TRUE \
     -DENABLE_WEBENGINE=TRUE \
+    -DAPPLE_SUPPRESS_X11_WARNING=ON \
     -DIS_APPIMAGE=FALSE
 
 # Build and Install KMyMoney (ready for the next phase)
