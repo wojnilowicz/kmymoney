@@ -9,6 +9,7 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} --without-python --with-icu --without-catalog --with-lzma=${EXT_INSTALL_DIR}/lib CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
   BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
+  BUILD_ALWAYS TRUE
   INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
   DEPENDS ext_lzma ext_readline ext_icu
 )
