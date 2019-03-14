@@ -42,6 +42,7 @@ cmake $KMYMONEY_SOURCES \
     -DBUILD_TESTING=TRUE \
     -DENABLE_WEBENGINE=TRUE \
     -DAPPLE_SUPPRESS_X11_WARNING=ON \
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
     -DIS_APPIMAGE=FALSE
 
 # Build and Install KMyMoney (ready for the next phase)
