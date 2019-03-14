@@ -17,11 +17,9 @@ matrix:
         ccache: true
         timeout: 1000
         directories:
-          - $HOME/workspace
-
-      env:
-        - RUNTIME_TIMEOUT_LINUX=0 #0 for hot cache, 2100 for cold cache
-        - MAKEFLAGS="-j 2"
+          - $HOME/workspace/downloads
+          - $HOME/workspace/deps-build
+          - $HOME/workspace/kmymoney-build
 
       addons:
         apt:
@@ -55,11 +53,12 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - timeout $RUNTIME_TIMEOUT_LINUX $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
+        - timeout 300 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
+        - touch NOTEST
 
       script:
         - |
-          if [ $RUNTIME_TIMEOUT_LINUX == 0 ]; then
+          if [ ! -f NOTEST ]; then
             $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
             $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
@@ -68,7 +67,7 @@ matrix:
 
       after_success:
         - |
-          if [ $RUNTIME_TIMEOUT_LINUX == 0 ]; then
+          if [ ! -f NOTEST ]; then
             #cd $HOME/workspace/kmymoney-build
             #ctest -V
             ls -lh $HOME/workspace/*
@@ -89,11 +88,8 @@ matrix:
           - $HOME/Library/Caches/Homebrew
           - $HOME/workspace
 
-      env:
-        - RUNTIME_TIMEOUT_OSX=0 #0 for hot cache, 2100 for cold cache
-
-      before_cache:
-        - brew cleanup
+      #before_cache:
+        #- brew cleanup
 
       before_install:
         - brew update
@@ -101,11 +97,12 @@ matrix:
         - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - gtimeout $RUNTIME_TIMEOUT_OSX $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true
+        - gtimeout 300 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
+        - touch NOTEST
 
       script:
         - |
-          if [ $RUNTIME_TIMEOUT_OSX == 0 ]; then
+          if [ ! -f NOTEST ]; then
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
