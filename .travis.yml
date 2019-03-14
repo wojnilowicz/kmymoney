@@ -53,7 +53,7 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - timeout 300 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
+        - timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
         - touch NOTEST
 
       script:
@@ -88,8 +88,8 @@ matrix:
           - $HOME/Library/Caches/Homebrew
           - $HOME/workspace
 
-      #before_cache:
-        #- brew cleanup
+      before_cache:
+        - brew cleanup
 
       before_install:
         - brew update
@@ -97,7 +97,7 @@ matrix:
         - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - gtimeout 300 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
+        - gtimeout 2100 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
         - touch NOTEST
 
       script:
