@@ -103,6 +103,9 @@ matrix:
       script:
         - |
           if [ ! -f NOTEST ]; then
+            chmod -R 755 /usr/local/opt/qt5/*
+            export QTDIR="/usr/local/opt/qt5"
+            export PATH="$QTDIR/bin:$PATH"
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
