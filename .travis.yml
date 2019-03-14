@@ -17,9 +17,7 @@ matrix:
         ccache: true
         timeout: 1000
         directories:
-          - $HOME/workspace/downloads
-          - $HOME/workspace/deps-build
-          - $HOME/workspace/kmymoney-build
+          - $HOME/workspace
 
       addons:
         apt:
