@@ -97,8 +97,8 @@ matrix:
         - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - gtimeout 2100 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
-        - touch NOTEST
+        - gtimeout 0 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
+        #- touch NOTEST
 
       script:
         - |
