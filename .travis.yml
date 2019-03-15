@@ -93,7 +93,7 @@ matrix:
         - brew update
 
       install:
-        - brew install qt@5.12.1
+        - brew install qt
         - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
         - export PATH=/usr/local/opt/qt5/bin:$PATH
         - gtimeout 1500 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
