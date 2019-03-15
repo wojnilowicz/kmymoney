@@ -1,3 +1,9 @@
+if (APPLE)
+  set(project_dependencies ext_xml ext_ncurses)
+elseif(UNIX)
+  set(project_dependencies ext_iconv ext_xml ext_ncurses)
+endif ()
+
 ExternalProject_Add(
   ext_gettext
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -8,5 +14,5 @@ ExternalProject_Add(
   BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
   INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
 
-  DEPENDS ext_iconv ext_xml ext_ncurses
+  DEPENDS ${project_dependencies}
 )

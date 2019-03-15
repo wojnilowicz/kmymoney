@@ -51,8 +51,6 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - rm -fr $HOME/workspace/deps-build
-        - rm -fr $HOME/.ccache
         - timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
         - touch NOTEST
 
@@ -93,22 +91,17 @@ matrix:
 
       before_install:
         - brew update
-        - brew tap kde-mac/kde
-        - "$(brew --repo)/Library/Taps/kde-mac/homebrew-kde/tools/all-fixes.sh"
 
       install:
-        - gtimeout 0 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh || true #0 for hot cache, 2100 for cold
-        #- touch NOTEST
+        - brew install qt@5.12.1
+        - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
+        - export PATH=/usr/local/opt/qt5/bin:$PATH
+        - gtimeout 1500 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
+        - touch NOTEST
 
       script:
         - |
           if [ ! -f NOTEST ]; then
-            #chmod -R 755 /usr/local/opt/qt5/*
-            #export QTDIR="/usr/local/opt/qt5"
-            #export PATH="$QTDIR/bin:$PATH"
-
-            export Qt5_DIR="/usr/local/opt/qt5/lib/cmake/Qt5"
-            export PATH="/usr/local/opt/qt5/bin:$PATH"
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."

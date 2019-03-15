@@ -40,7 +40,12 @@ set(CMAKE_GLOBAL_PROFILE
 )
 
 # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
-set(AT_HOST --host=x86_64-linux-gnu)
+if (APPLE)
+  set(AT_HOST --host=x86_64-apple-darwin)
+elseif(UNIX)
+  set(AT_HOST --host=x86_64-linux-gnu)
+endif ()
+
 set(AT_SHARED_ONLY --disable-static --enable-shared)
 set(AT_CPP_FLAGS "-I${EXT_INSTALL_DIR}/include -I${EXT_INSTALL_DIR}/openssl/include")
 set(AT_LD_FLAGS "-L${EXT_INSTALL_DIR}/lib -L${EXT_INSTALL_DIR}/openssl/lib")
