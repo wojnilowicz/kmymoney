@@ -51,8 +51,8 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
-        - touch NOTEST
+        - timeout 0 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
+        #- touch NOTEST
 
       script:
         - |
@@ -96,7 +96,7 @@ matrix:
         - brew install qt
         - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
         - export PATH=/usr/local/opt/qt5/bin:$PATH
-        - gtimeout 1500 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
+        - gtimeout 2100 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
         - touch NOTEST
 
       script:
