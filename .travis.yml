@@ -95,8 +95,6 @@ matrix:
         - brew update
 
       install:
-        - rm -fr $HOME/workspace/deps-build
-        - rm -fr $HOME/workspace/deps
         - brew install qt
         - brew install meson
         - brew install icu4c
