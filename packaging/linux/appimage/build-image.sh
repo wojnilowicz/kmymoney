@@ -44,8 +44,18 @@ fi
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/kmymoney
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
-cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
-cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $APPDIR/usr/lib
+if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
+  cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
+else
+  echo "Warning: $DEPS_INSTALL_PREFIX/translations does not exist."
+fi
+
+if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
+  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $APPDIR/usr/lib
+else
+  echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
+fi
+
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
 mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
