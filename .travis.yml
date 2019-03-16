@@ -97,6 +97,7 @@ matrix:
         - brew install qt
         - brew install meson
         - brew install icu4c
+        - brew install bison
         - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
         - rm -fr $HOME/workspace/deps-build
         - rm -fr $HOME/workspace/deps
