@@ -96,6 +96,8 @@ cd $BUILD_PREFIX
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
+rm -fr KMyMoney*.AppImage
+
 # Step 7: Build the image!!!
 ./linuxdeployqt-continuous-x86_64.AppImage $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
   -executable=$APPDIR/usr/bin/kmymoney \
