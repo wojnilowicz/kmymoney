@@ -23,9 +23,9 @@ export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr
 export DOWNLOADS_DIR=$BUILD_PREFIX/downloads
 
 # Setup variables needed to help everything find what we build
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$DEPS_INSTALL_PREFIX/openssl/lib:$LD_LIBRARY_PATH
-export PATH=$DEPS_INSTALL_PREFIX/bin:$DEPS_INSTALL_PREFIX/openssl/bin:$PATH
-export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:$DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
+export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$DEPS_INSTALL_PREFIX/openssl/lib:/usr/local/lib:$LD_LIBRARY_PATH
+export PATH=$DEPS_INSTALL_PREFIX/bin:$DEPS_INSTALL_PREFIX/openssl/bin:/usr/local/opt/qt5/bin:/usr/local/bin:$PATH
+export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:$DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 
 # A kmymoney build layout looks like this:
 # kmymoney/ -- the source directory
@@ -58,12 +58,7 @@ cmake $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DEXT_INSTALL_DIR=$DEPS_INSTALL_PREFIX \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR \
-      -DBUILD_TESTING=FALSE \
-      -DAPPLE_SUPPRESS_X11_WARNING=ON \
-      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON \
-      -DCMAKE_MACOSX_RPATH=ON \
-      -DKDE_SKIP_RPATH_SETTINGS=ON \
-      -DBUILD_WITH_INSTALL_RPATH=ON
+      -DBUILD_TESTING=FALSE
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --target ext_iconv

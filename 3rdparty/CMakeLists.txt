@@ -32,17 +32,28 @@ set(CMAKE_PREFIX_PATH "${EXT_INSTALL_DIR};${EXT_INSTALL_DIR}/openssl")
 set(CMAKE_INSTALL_PREFIX "${EXT_INSTALL_DIR}")
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-set(CMAKE_GLOBAL_PROFILE
-  -DCMAKE_BUILD_TYPE=RelWithDebInfo
-  -DCMAKE_INSTALL_PREFIX=${CMAKE_PREFIX_PATH}
-  -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
-  -DBUILD_TESTING=FALSE
-)
-
-# without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
 if (APPLE)
+  set(CMAKE_GLOBAL_PROFILE
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_PREFIX_PATH}
+    -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+    -DBUILD_TESTING=FALSE
+    -DAPPLE_SUPPRESS_X11_WARNING=ON
+    -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+    -DCMAKE_MACOSX_RPATH=ON
+    -DKDE_SKIP_RPATH_SETTINGS=ON
+    -DBUILD_WITH_INSTALL_RPATH=ON
+  )
+  # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-apple-darwin)
 elseif(UNIX)
+  set(CMAKE_GLOBAL_PROFILE
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    -DCMAKE_INSTALL_PREFIX=${CMAKE_PREFIX_PATH}
+    -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
+    -DBUILD_TESTING=FALSE
+  )
+  # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-linux-gnu)
 endif ()
 
