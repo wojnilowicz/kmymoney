@@ -101,7 +101,7 @@ rm -fr KMyMoney*.AppImage
 # Step 7: Build the image!!!
 ./linuxdeployqt-continuous-x86_64.AppImage $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
   -executable=$APPDIR/usr/bin/kmymoney \
-  -qmldir=/opt/qt510/qml \
+  -qmldir=/opt/qt59/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
   -appimage \

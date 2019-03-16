@@ -24,7 +24,7 @@ matrix:
           update: true
           sources:
             - ubuntu-toolchain-r-test
-            - sourceline: "ppa:beineri/opt-qt-5.10.1-trusty"
+            - sourceline: "ppa:beineri/opt-qt597-trusty"
           packages:
             - g++-6
             - gcc-6
@@ -37,23 +37,26 @@ matrix:
             - libudev1
             - libudev-dev
             - gperf
-            - qt510base
-            - qt510webengine
-            - qt510svg
-            - qt510declarative
-            - qt510script
-            - qt510tools
-            - qt510x11extras
+            - qt59base
+            - qt59webengine
+            - qt59svg
+            - qt59declarative
+            - qt59script
+            - qt59tools
+            - qt59x11extras
+            - qt59translations
 
       before_install:
-        - source /opt/qt510/bin/qt510-env.sh
+        - source /opt/qt59/bin/qt59-env.sh
         - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - timeout 0 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
-        #- touch NOTEST
-        - rm -fr NOTEST
+        - rm -fr $HOME/workspace/deps-build
+        - rm -fr $HOME/workspace/deps
+        - timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
+        - touch NOTEST
+        #- rm -fr NOTEST
 
       script:
         - |
