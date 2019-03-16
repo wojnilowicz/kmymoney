@@ -91,10 +91,7 @@ matrix:
         timeout: 1000
         directories:
           - $HOME/Library/Caches/Homebrew
-          - $HOME/workspace
-
-      #before_cache:
-        #- brew cleanup
+          - $HOME/workspace/deps-build
 
       before_install:
         - brew update
@@ -112,7 +109,13 @@ matrix:
       script:
         - |
           if [ ! -f NOTEST ]; then
+            export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
+            export PATH=/usr/local/opt/qt5/bin:$PATH
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
           fi
+
+      before_cache:
+        - find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
+        #- brew cleanup
