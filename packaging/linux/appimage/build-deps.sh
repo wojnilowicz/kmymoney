@@ -81,3 +81,4 @@ cmake --build . --target ext_kitemviews
 # cmake --build . --target ext_sqlcipher
 # cmake --build . --target ext_ofx
 # cmake --build . --target ext_ical
+cmake --build . --target ext_patchelf
