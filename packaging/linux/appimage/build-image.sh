@@ -99,7 +99,7 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 # Step 7: Build the image!!!
 ./linuxdeployqt-continuous-x86_64.AppImage $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
   -executable=$APPDIR/usr/bin/kmymoney \
-  -qmldir=$DEPS_INSTALL_PREFIX/qml \
+  -qmldir=/opt/qt510/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
   -appimage \
