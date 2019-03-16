@@ -71,6 +71,7 @@ cmake --build . --target ext_lzma
 cmake --build . --target ext_xml
 cmake --build . --target ext_gettext
 cmake --build . --target ext_xslt
+cmake --build . --target ext_glib
 cmake --build . --target ext_png
 # cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt
