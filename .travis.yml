@@ -14,10 +14,10 @@ matrix:
       compiler: g++
       sudo: required
       cache:
-        ccache: true
+        ccache: false
         timeout: 1000
         directories:
-          - $HOME/workspace
+          - $HOME/workspace/deps-build
 
       addons:
         apt:
@@ -54,22 +54,25 @@ matrix:
       install:
         - rm -fr $HOME/workspace/deps-build
         - rm -fr $HOME/workspace/deps
-        - timeout 2100 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
-        - touch NOTEST
-        #- rm -fr NOTEST
+        - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
+        - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
         - |
-          if [ ! -f NOTEST ]; then
+          if (( ${RUNTIME_TIMEOUT} == 0 )); then
             $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
             $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping script phase because warming cache only."
           fi
 
+      before_cache:
+        # deletes install timestamps to force reinstalling dependencies into deps directory
+        - find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
+
       after_success:
         - |
-          if [ ! -f NOTEST ]; then
+          if (( ${RUNTIME_TIMEOUT} == 0 )); then
             #cd $HOME/workspace/kmymoney-build
             #ctest -V
             ls -lh $HOME/workspace/*
