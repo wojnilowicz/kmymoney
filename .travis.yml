@@ -100,7 +100,8 @@ matrix:
         - brew install bison
         - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
         - gtimeout 2100 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
-        - touch NOTEST
+        #- touch NOTEST
+        - rm -fr NOTEST
 
       script:
         - |
