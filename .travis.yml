@@ -37,7 +37,6 @@ matrix:
             - libudev1
             - libudev-dev
             - gperf
-            - patchelf
             - qt510base
             - qt510webengine
             - qt510svg
@@ -52,6 +51,7 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
+        - sudo apt-get install -y --allow-unauthenticated patchelf
         - timeout 0 $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold cache
         #- touch NOTEST
         - rm -fr NOTEST
