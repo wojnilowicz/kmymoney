@@ -34,6 +34,9 @@ cd $BUILD_PREFIX/kmymoney-build/
 # Determine how many CPUs we have
 CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
+# Delete previous installation
+rm -fr $BUILD_PREFIX/kmymoney.appdir
+
 # Configure KMyMoney
 cmake $KMYMONEY_SOURCES \
     -DCMAKE_INSTALL_PREFIX=$BUILD_PREFIX/kmymoney.appdir/usr \
