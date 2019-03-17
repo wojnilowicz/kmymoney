@@ -95,6 +95,7 @@ matrix:
         timeout: 1000
         directories:
           - $HOME/Library/Caches/Homebrew
+          - $HOME/workspace/deps
           - $HOME/workspace/deps-build
           - $HOME/workspace/kmymoney-build
 
@@ -117,16 +118,16 @@ matrix:
             export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
             export PATH=/usr/local/opt/qt5/bin:$PATH
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
-            #$TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
+            $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
           fi
 
       before_cache:
-        - find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
+        #- find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
         - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/
-        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-mkdir
-        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-download
+        #- rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-mkdir
+        #- rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-download
 
         #- brew cleanup
 
