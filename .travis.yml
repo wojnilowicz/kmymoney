@@ -118,7 +118,7 @@ matrix:
             export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
             export PATH=/usr/local/opt/qt5/bin:$PATH
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
-            #$TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
+            $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
           fi
@@ -133,7 +133,7 @@ matrix:
 
       after_success:
         - |
-          if (( ${RUNTIME_TIMEOUT} == 0 )) && false; then
+          if (( ${RUNTIME_TIMEOUT} == 0 )); then
             cd $TRAVIS_BUILD_DIR
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             bash upload.sh $HOME/workspace/*.dmg*
