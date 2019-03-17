@@ -69,6 +69,9 @@ matrix:
       before_cache:
         # deletes install timestamps to force reinstalling dependencies into deps directory
         - find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/
+        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-mkdir
+        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-download
 
       after_success:
         - |
@@ -118,4 +121,8 @@ matrix:
 
       before_cache:
         - find $HOME/workspace/deps-build -type f -name ext_*install -empty -exec rm -v {} \;
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/
+        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-mkdir
+        - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-download
+
         #- brew cleanup
