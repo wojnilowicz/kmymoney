@@ -18,6 +18,7 @@ matrix:
         timeout: 1000
         directories:
           - $HOME/workspace/deps-build
+          - $HOME/workspace/kmymoney-build
 
       addons:
         apt:
@@ -54,7 +55,7 @@ matrix:
       install:
         #- rm -fr $HOME/workspace/deps-build
         #- rm -fr $HOME/workspace/deps
-        - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
+        - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
@@ -95,26 +96,28 @@ matrix:
         directories:
           - $HOME/Library/Caches/Homebrew
           - $HOME/workspace/deps-build
+          - $HOME/workspace/kmymoney-build
 
       before_install:
         - brew update
 
       install:
+        - brew install node@8
         - brew install qt
         - brew install meson
         - brew install icu4c
         - brew install bison
         - export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
-        - gtimeout 2100 $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true #0 for hot cache, 2100 for cold
-        #- touch NOTEST
-        - rm -fr NOTEST
+        - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
+        - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-deps.sh $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
         - |
-          if [ ! -f NOTEST ]; then
+          if (( ${RUNTIME_TIMEOUT} == 0 )); then
             export Qt5_DIR="/usr/local/opt/qt5/lib/cmake"
             export PATH=/usr/local/opt/qt5/bin:$PATH
             $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-kmymoney.sh $HOME/workspace $TRAVIS_BUILD_DIR
+            #$TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build-image.sh $HOME/workspace $TRAVIS_BUILD_DIR
           else
             echo "Skipping after_success phase because warming cache only."
           fi
@@ -126,3 +129,13 @@ matrix:
         - rm -fr $HOME/workspace/deps-build/ext_boost-prefix/src/ext_boost-stamp/ext_boost-download
 
         #- brew cleanup
+
+      after_success:
+        - |
+          if (( ${RUNTIME_TIMEOUT} == 0 )) && false; then
+            cd $TRAVIS_BUILD_DIR
+            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            bash upload.sh $HOME/workspace/*.dmg*
+          else
+            echo "Skipping after_success phase because warming cache only."
+          fi
