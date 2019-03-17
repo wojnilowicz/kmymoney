@@ -46,7 +46,7 @@ export LD_LIBRARY_PATH=\
 $DEPS_INSTALL_PREFIX/lib:\
 $DEPS_INSTALL_PREFIX/openssl/lib:\
 /usr/local/lib:\
-$LD_LIBRARY_PATH
+${LD_LIBRARY_PATH:-}
 
 export PATH=\
 $DEPS_INSTALL_PREFIX/bin:\
@@ -55,7 +55,7 @@ $DEPS_INSTALL_PREFIX/openssl/bin:\
 /usr/local/opt/bison/bin:\
 /usr/local/bin:\
 /usr/bin:\
-$PATH
+${PATH:-}
 
 export PKG_CONFIG_PATH=\
 $DEPS_INSTALL_PREFIX/share/pkgconfig:\
@@ -64,7 +64,7 @@ $DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 /usr/local/opt/qt/lib/pkgconfig:\
 /usr/local/lib/pkgconfig:\
 /usr/lib/pkgconfig:\
-$PKG_CONFIG_PATH
+${PKG_CONFIG_PATH:-}
 
 # Get available processors count
 export CPU_COUNT=2 #`grep processor /proc/cpuinfo | wc -l`
