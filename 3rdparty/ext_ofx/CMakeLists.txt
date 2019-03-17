@@ -1,5 +1,5 @@
-set(ofx_openSPIncludeDir "${EXT_INSTALL_DIR}/include/OpenSP")
-set(ofx_openSPLibDir "${EXT_INSTALL_DIR}/lib")
+set(ofx_openSPIncludeDir "${DEPS_INSTALL_PREFIX}/include/OpenSP")
+set(ofx_openSPLibDir "${DEPS_INSTALL_PREFIX}/lib")
 
 ExternalProject_Add(
   ext_ofx
@@ -7,9 +7,9 @@ ExternalProject_Add(
   URL http://downloads.sourceforge.net/project/libofx/libofx/libofx-0.9.13.tar.gz
   URL_MD5 dde6276ffe2999f86bed5bf2cc80f7b2
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --with-opensp-includes=${ofx_openSPIncludeDir} --with-opensp-libs=${ofx_openSPLibDir}
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --with-opensp-includes=${ofx_openSPIncludeDir} --with-opensp-libs=${ofx_openSPLibDir}
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 
   DEPENDS ext_opensp
 )

@@ -10,9 +10,9 @@ ExternalProject_Add(
 
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXT_INSTALL_DIR} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools ICU_LIBDIR="${EXT_INSTALL_DIR}/lib" ICU_INCDIR="${EXT_INSTALL_DIR}/include" OPENSSL_LIBDIR="${EXT_INSTALL_DIR}/openssl/lib" OPENSSL_INCDIR="${EXT_INSTALL_DIR}/openssl/include" -openssl-linked -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtdoc -skip qtmacextras -skip qtwinextras -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtmultimedia -skip qtnetworkauth -skip qtimageformats -system-webengine-icu
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${DEPS_INSTALL_PREFIX} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools ICU_LIBDIR="${DEPS_INSTALL_PREFIX}/lib" ICU_INCDIR="${DEPS_INSTALL_PREFIX}/include" OPENSSL_LIBDIR="${DEPS_INSTALL_PREFIX}/openssl/lib" OPENSSL_INCDIR="${DEPS_INSTALL_PREFIX}/openssl/include" -openssl-linked -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtdoc -skip qtmacextras -skip qtwinextras -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtmultimedia -skip qtnetworkauth -skip qtimageformats -system-webengine-icu
 
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
   DEPENDS ext_xslt ext_mysql ext_sqlite ext_postgresql ext_pcre2
 )

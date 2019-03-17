@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2
   URL_MD5 7fbd1890f571051f2a209681d57d486a
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${EXT_INSTALL_DIR} --with-libraries=system
+  CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${CMAKE_INSTALL_PREFIX} --with-libraries=system
   BUILD_COMMAND ""
   INSTALL_COMMAND <SOURCE_DIR>/b2 -j1 install
 

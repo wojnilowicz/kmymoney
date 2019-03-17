@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL https://github.com/tcltk/tcl/archive/core-8-6-8.zip
   URL_MD5 8fd508d3d2216b9c75895d6141219eab
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --enable-threads --enable-64bit
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/unix/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --enable-threads --enable-64bit
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 )

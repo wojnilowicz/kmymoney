@@ -3,41 +3,41 @@ project (kmymoney-and-all-its-deps)
 #
 # Build all dependencies for KMyMoney and finally KMyMoney itself.
 # Parameters: EXT_DOWNLOAD_DIR place to download all packages
-#             INSTALL_ROOT place to install everything to
+#             CMAKE_INSTALL_PREFIX place to install everything to
 #
-# Example usage: cmake ..\kmymoneydep -DEXT_DOWNLOAD_DIR=/dev2/d -DINSTALL_ROOT=/dev2/i
+# Example usage: cmake ..\kmymoneydep -DEXT_DOWNLOAD_DIR=/dev2/d -DCMAKE_INSTALL_PREFIX=/dev2/i
 
 
 cmake_minimum_required(VERSION 2.8.6)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
-	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
+  message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
 endif()
+
+# Check if make executable for autotools projects is available
+find_program(MAKE_EXECUTABLE NAMES gmake nmake make)
+if(NOT MAKE_EXECUTABLE)
+  message(FATAL_ERROR "No gmake, nmake or make available.")
+endif()
+
+# Get available processors count
+include(ProcessorCount)
+ProcessorCount(CMAKE_CPU_COUNT)
+message( STATUS "Available CPUs: ${CMAKE_CPU_COUNT}")
 
 # Tools must be obtained to work with:
 include(ExternalProject)
 
-# allow specification of a directory with pre-downloaded
-# requirements
-if(NOT IS_DIRECTORY ${EXT_DOWNLOAD_DIR})
-    message(FATAL_ERROR "No externals download dir set. Use -DEXT_DOWNLOAD_DIR")
-endif()
-
-if(NOT IS_DIRECTORY ${EXT_INSTALL_DIR})
-    message(FATAL_ERROR "No install dir set. Use -DEXT_INSTALL_DIR")
-endif()
-
 message( STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
-set(CMAKE_PREFIX_PATH "${EXT_INSTALL_DIR};${EXT_INSTALL_DIR}/openssl")
-set(CMAKE_INSTALL_PREFIX "${EXT_INSTALL_DIR}")
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
+
+set(CMAKE_GLOBAL_PROFILE
+  -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+  -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+  -DBUILD_TESTING=FALSE
+)
 
 if (APPLE)
-  set(CMAKE_GLOBAL_PROFILE
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_PREFIX_PATH}
-    -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
-    -DBUILD_TESTING=FALSE
+  list(APPEND CMAKE_GLOBAL_PROFILE
     -DAPPLE_SUPPRESS_X11_WARNING=ON
     -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
     -DCMAKE_MACOSX_RPATH=ON
@@ -47,19 +47,13 @@ if (APPLE)
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-apple-darwin)
 elseif(UNIX)
-  set(CMAKE_GLOBAL_PROFILE
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo
-    -DCMAKE_INSTALL_PREFIX=${CMAKE_PREFIX_PATH}
-    -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}
-    -DBUILD_TESTING=FALSE
-  )
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-linux-gnu)
 endif ()
 
 set(AT_SHARED_ONLY --disable-static --enable-shared)
-set(AT_CPP_FLAGS "-I${EXT_INSTALL_DIR}/include -I${EXT_INSTALL_DIR}/openssl/include")
-set(AT_LD_FLAGS "-L${EXT_INSTALL_DIR}/lib -L${EXT_INSTALL_DIR}/openssl/lib")
+set(AT_CPP_FLAGS "-I${CMAKE_INSTALL_PREFIX}/include -I${CMAKE_INSTALL_PREFIX}/openssl/include")
+set(AT_LD_FLAGS "-L${CMAKE_INSTALL_PREFIX}/lib -L${CMAKE_INSTALL_PREFIX}/openssl/lib")
 
 set(PATCH_COMMAND patch)
 

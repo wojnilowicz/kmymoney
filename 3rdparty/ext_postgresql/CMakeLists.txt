@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL https://ftp.postgresql.org/pub/source/v11.0/postgresql-11.0.tar.bz2
   URL_MD5 338ede84c0443db02ff6e8c4c8cbc5e9
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} --with-libxml --with-libxslt --with-icu --with-tcl --enable-thread-safety --without-readline --with-openssl --with-libraries=${EXT_INSTALL_DIR}/lib --with-includes=${EXT_INSTALL_DIR}/include CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --with-libxml --with-libxslt --with-icu --with-tcl --enable-thread-safety --without-readline --with-openssl --with-libraries=${DEPS_INSTALL_PREFIX}/lib --with-includes=${DEPS_INSTALL_PREFIX}/include CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
   BUILD_COMMAND rsync -a --ignore-existing src/backend/utils/ src/include/utils/
   COMMAND       rsync -a --ignore-existing src/backend/catalog/ src/include/catalog/
   COMMAND ${CMAKE_MAKE_PROGRAM} -C src/bin install

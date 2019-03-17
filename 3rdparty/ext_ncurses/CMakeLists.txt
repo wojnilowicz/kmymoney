@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz
   URL_MD5 98c889aaf8d23910d2b92d65be2e737a
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} --enable-overwrite --enable-pc-files --without-tests --with-shared --with-cxx-shared --without-ada --with-pkg-config-libdir=${EXT_INSTALL_DIR}/lib/pkgconfig
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-overwrite --enable-pc-files --without-tests --with-shared --with-cxx-shared --without-ada --with-pkg-config-libdir=${DEPS_INSTALL_PREFIX}/lib/pkgconfig
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 )

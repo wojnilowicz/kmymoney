@@ -1,4 +1,4 @@
-set(EXT_INSTALL_DIR_applications "${EXT_INSTALL_DIR}")
+set(EXT_INSTALL_DIR_applications "${DEPS_INSTALL_PREFIX}")
 
 ExternalProject_Add(
   ext_akonadi

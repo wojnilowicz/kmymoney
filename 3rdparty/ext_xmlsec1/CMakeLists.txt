@@ -6,9 +6,9 @@ ExternalProject_Add(
   URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.26.tar.gz
   URL_MD5 9c4aaf9ff615a73921b9e3bf4988d878
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --without-openssl --without-nss --disable-crypto-dl
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --without-openssl --without-nss --disable-crypto-dl
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 
   DEPENDS ext_xslt ext_gcrypt ext_gnutls
 )

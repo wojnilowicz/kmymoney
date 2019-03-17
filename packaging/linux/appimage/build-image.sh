@@ -1,65 +1,47 @@
 #!/bin/bash
+#
+# Build AppImage of KMyMoney on Ubuntu 16.04.
 
 # Halt on errors and be verbose about what we are doing
-set -e
-set -x
+set -euxo pipefail
 
-# Read in our parameters
-export BUILD_PREFIX=$1
-export KMYMONEY_SOURCES=$2
+# Switch directory in order to put all build files in the right place
+cd $CMAKE_BUILD_PREFIX
 
 # Save some frequently referenced locations in variables for ease of use / updating
-export APPDIR=$BUILD_PREFIX/kmymoney.appdir
-export PLUGINS=$APPDIR/usr/lib/plugins/
-export APPIMAGEPLUGINS=$APPDIR/usr/plugins/
+export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
+export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
-# That's not always the case, so make sure it is
-export LC_ALL=en_US.UTF-8
-export LANG=en_us.UTF-8
+ls -lh $KMYMONEY_INSTALL_PREFIX/*
 
-# We want to use $prefix/deps/usr/ for all our dependencies
-export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
-export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
-
-# Setup variables needed to help everything find what we built
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib/:$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu/:$APPDIR/usr/lib/:$LD_LIBRARY_PATH
-export PATH=$DEPS_INSTALL_PREFIX/bin/:$PATH
-export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig/:$DEPS_INSTALL_PREFIX/lib/pkgconfig/:/usr/lib/pkgconfig/:$PKG_CONFIG_PATH
-export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
-
-# Switch over to our build prefix
-cd $BUILD_PREFIX
-
-#
 # Now we can get the process started!
 #
 
 # Step 0: place the translations where ki18n and Qt look for them
-if [ -d $APPDIR/usr/share/locale ] ; then
-    mv $APPDIR/usr/share/locale $APPDIR/usr/share/kmymoney
+if [ -d $KMYMONEY_INSTALL_PREFIX/share/locale ] ; then
+    mv $KMYMONEY_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
 fi
 
 # Step 1: Copy over all the resources provided by dependencies that we need
-cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/kmymoney
-cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
-cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
+cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/share
+cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/share
 if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
-  cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
+  cp -r $DEPS_INSTALL_PREFIX/translations $KMYMONEY_INSTALL_PREFIX/usr/
 else
   echo "Warning: $DEPS_INSTALL_PREFIX/translations does not exist."
 fi
 
 if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
-  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $APPDIR/usr/lib
+  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/lib
 else
   echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
 fi
 
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-mv $APPDIR/usr/lib/x86_64-linux-gnu/*  $APPDIR/usr/lib
-rm -rf $APPDIR/usr/lib/x86_64-linux-gnu/
+mv $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
+rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/kmymoney/*.so*; do
@@ -69,9 +51,7 @@ done
 # Step 4: Move plugins to loadable location in AppImage
 
 # Make sure our plugin directory already exists
-if [ ! -d $APPIMAGEPLUGINS ] ; then
-    mkdir -p $APPIMAGEPLUGINS
-fi
+mkdir -p $APPIMAGEPLUGINS
 
 mv $PLUGINS/* $APPIMAGEPLUGINS
 
@@ -83,28 +63,25 @@ KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
 if [[ -d .git ]]; then
-        GIT_REVISION=$(git rev-parse --short HEAD)
-        export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
+  GIT_REVISION=$(git rev-parse --short HEAD)
+  export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
 else
-        export VERSION=$KMYMONEY_VERSION
+  export VERSION=$KMYMONEY_VERSION
 fi
 
 # Finally transition back to the build directory so we can build the appimage
-cd $BUILD_PREFIX
-
+cd $DOWNLOADS_DIR
 #Step 6: Download tool to create AppImage
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
-rm -fr KMyMoney*.AppImage
+cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
-./linuxdeployqt-continuous-x86_64.AppImage $APPDIR/usr/share/applications/org.kde.kmymoney.desktop \
-  -executable=$APPDIR/usr/bin/kmymoney \
-  -qmldir=/opt/qt59/qml \
+$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
+  -executable=$KMYMONEY_INSTALL_PREFIX/bin/kmymoney \
+  -qmldir=/opt/qt512/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
   -appimage \
   -exclude-libs=libnss3.so,libnssutil3.so
-
-rm -fr linuxdeployqt-continuous-x86_64.AppImage

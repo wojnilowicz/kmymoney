@@ -4,9 +4,9 @@ ExternalProject_Add(
   URL http://www.lysator.liu.se/~nisse/archive/nettle-3.4.tar.gz
   URL_MD5 dc0f13028264992f58e67b4e8915f53d
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${EXT_INSTALL_DIR} ${AT_HOST} ${AT_SHARED_ONLY} --enable-public-key --disable-documentation --with-lib-path=${EXT_INSTALL_DIR}/lib --with-include-path=${EXT_INSTALL_DIR}/include
-  BUILD_COMMAND ${CMAKE_MAKE_PROGRAM}
-  INSTALL_COMMAND ${CMAKE_MAKE_PROGRAM} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --enable-public-key --disable-documentation --with-lib-path=${DEPS_INSTALL_PREFIX}/lib --with-include-path=${DEPS_INSTALL_PREFIX}/include
+  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 
   DEPENDS ext_gmp
 )
