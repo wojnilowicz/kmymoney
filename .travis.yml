@@ -57,6 +57,12 @@ matrix:
             - libkf5itemmodels-dev
             - libkf5itemviews-dev
             - extra-cmake-modules
+            - libgpgme-dev
+            - kwallet-kf5
+            - libkf5notifications-dev
+            - libkf5wallet-dev
+            - kio-dev
+            - libkf5archive-dev
 
       before_install:
         - source /opt/qt512/bin/qt512-env.sh
