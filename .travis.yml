@@ -56,6 +56,7 @@ matrix:
             - libkf5activities-dev
             - libkf5itemmodels-dev
             - libkf5itemviews-dev
+            - extra-cmake-modules
 
       before_install:
         - source /opt/qt512/bin/qt512-env.sh
