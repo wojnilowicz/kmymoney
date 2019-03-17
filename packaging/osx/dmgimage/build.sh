@@ -67,7 +67,7 @@ $DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
 
 # Get available processors count
-export CPU_COUNT=2 #`grep processor /proc/cpuinfo | wc -l`
+export CPU_COUNT=1 #`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
   sh $KMYMONEY_SOURCES/packaging/osx/dmgimage/build-deps.sh
