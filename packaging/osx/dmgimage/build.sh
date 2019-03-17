@@ -70,9 +70,9 @@ $PKG_CONFIG_PATH
 export CPU_COUNT=2 #`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
-  sh build-deps.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/osx/build-deps.sh
 elif [ $BUILD_TYPE == "kmymoney" ];then
-  sh build-kmymoney.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/osx/build-kmymoney.sh
 elif [ $BUILD_TYPE == "image" ];then
-  sh build-image.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/osx/build-image.sh
 fi
