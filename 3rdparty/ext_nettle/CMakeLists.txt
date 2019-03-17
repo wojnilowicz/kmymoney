@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL http://www.lysator.liu.se/~nisse/archive/nettle-3.4.tar.gz
   URL_MD5 dc0f13028264992f58e67b4e8915f53d
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --enable-public-key --disable-documentation --with-lib-path=${DEPS_INSTALL_PREFIX}/lib --with-include-path=${DEPS_INSTALL_PREFIX}/include
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --enable-public-key --disable-documentation --with-lib-path=${CMAKE_INSTALL_PREFIX}/lib --with-include-path=${CMAKE_INSTALL_PREFIX}/include
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
 

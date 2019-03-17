@@ -1,5 +1,5 @@
-set(ofx_openSPIncludeDir "${DEPS_INSTALL_PREFIX}/include/OpenSP")
-set(ofx_openSPLibDir "${DEPS_INSTALL_PREFIX}/lib")
+set(ofx_openSPIncludeDir "${CMAKE_INSTALL_PREFIX}/include/OpenSP")
+set(ofx_openSPLibDir "${CMAKE_INSTALL_PREFIX}/lib")
 
 ExternalProject_Add(
   ext_ofx
