@@ -42,6 +42,15 @@ $DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 /usr/lib/pkgconfig:\
 $PKG_CONFIG_PATH
 
+export CMAKE_PREFIX_PATH=\
+$DEPS_INSTALL_PREFIX:\
+${DEPS_INSTALL_PREFIX}/openssl:\
+/usr/local/opt/qt5:\
+/usr/local/opt/bison:\
+/usr/local:\
+/usr:\
+$CMAKE_PREFIX_PATH
+
 # Make sure our build directory exists
 if [ ! -d $BUILD_PREFIX/kmymoney-build/ ] ; then
     mkdir -p $BUILD_PREFIX/kmymoney-build/
