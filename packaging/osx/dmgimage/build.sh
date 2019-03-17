@@ -3,7 +3,7 @@
 # Wrapper for all build scripts, which sets many shared variables.
 
 # Halt on errors and be verbose about what we are doing
-set -euxo pipefail
+set -eux
 
 # Read in our parameters
 BUILD_TYPE=$1

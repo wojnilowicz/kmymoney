@@ -4,7 +4,7 @@
 #
 # Prerequisites: cmake git build-essential libxcb-keysyms1-dev plus all deps for Qt5
 #
-set -euxo pipefail
+set -eux
 
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX

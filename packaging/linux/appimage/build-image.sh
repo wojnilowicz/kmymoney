@@ -3,7 +3,7 @@
 # Build AppImage of KMyMoney on Ubuntu 16.04.
 
 # Halt on errors and be verbose about what we are doing
-set -euxo pipefail
+set -eux
 
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX

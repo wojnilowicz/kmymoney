@@ -2,7 +2,7 @@
 #
 # Build all KMyMoney's dependencies on MacOS High Sierra.
 
-set -euxo pipefail
+set -eux
 
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
