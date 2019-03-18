@@ -49,7 +49,7 @@ matrix:
             - qt512svg
             - qt512declarative
             #- qt512script
-            #- qt512tools
+            - qt512tools
             - qt512x11extras
             #- qt512translations
             #- qt512quickcontrols
