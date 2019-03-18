@@ -29,6 +29,8 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - sourceline: "ppa:beineri/opt-qt-5.12.1-xenial"
+            - sourceline: "ppa:kubuntu-ppa/backports"
+
           packages:
             - g++-6
             - gcc-6
@@ -66,6 +68,7 @@ matrix:
             - libkf5kiofilewidgets5
             - libkio5
             - libkf5kiocore5
+            - libkf5kiogui5
 
       before_install:
         - source /opt/qt512/bin/qt512-env.sh
