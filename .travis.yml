@@ -59,7 +59,6 @@ matrix:
             - libkf5itemmodels-dev
             - libkf5itemviews-dev
             - extra-cmake-modules
-            - libgpgme11-dev
             - libkf5notifications-dev
             - libkf5wallet-dev
             - kio-dev
