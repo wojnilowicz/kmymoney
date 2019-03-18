@@ -37,6 +37,7 @@ matrix:
             - cmake
             - ninja-build
             - libxml-parser-perl
+            - libfam-dev
             - libaio-dev
             #- libxcb-keysyms1
             - libxcb-keysyms1-dev
