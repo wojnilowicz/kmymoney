@@ -51,6 +51,8 @@ matrix:
             - qt512tools
             - qt512x11extras
             - qt512translations
+            - qt512quickcontrols
+            - qt512quickcontrols2
             - shared-mime-info
             - libxml2-dev
             - libxslt1-dev
