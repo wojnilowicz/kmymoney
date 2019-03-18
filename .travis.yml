@@ -40,9 +40,9 @@ matrix:
             - libfam-dev
             - mesa-common-dev
             - libaio-dev
-            #- libxcb-keysyms1
+            - libxcb-keysyms1
             - libxcb-keysyms1-dev
-            #- libudev1
+            - libudev1
             - libudev-dev
             - gperf
             - qt512base
