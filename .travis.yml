@@ -29,7 +29,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - sourceline: "ppa:beineri/opt-qt-5.12.1-xenial"
-            - sourceline: "ppa:kubuntu-ppa/backports"
+            #- sourceline: "ppa:kubuntu-ppa/backports"
 
           packages:
             - g++-6
@@ -38,38 +38,38 @@ matrix:
             - ninja-build
             - libxml-parser-perl
             - libaio-dev
-            - libxcb-keysyms1
+            #- libxcb-keysyms1
             - libxcb-keysyms1-dev
-            - libudev1
+            #- libudev1
             - libudev-dev
             - gperf
             - qt512base
             - qt512webengine
             - qt512svg
             - qt512declarative
-            - qt512script
-            - qt512tools
+            #- qt512script
+            #- qt512tools
             - qt512x11extras
-            - qt512translations
-            - qt512quickcontrols
-            - qt512quickcontrols2
-            - shared-mime-info
-            - libxml2-dev
-            - libxslt1-dev
-            - libkf5kcmutils-dev
-            - libkf5activities-dev
-            - libkf5itemmodels-dev
-            - libkf5itemviews-dev
-            - extra-cmake-modules
-            - libkf5notifications-dev
-            - libkf5wallet-dev
-            - kio-dev
-            - libkf5archive-dev
-            - libkf5kiowidgets5
-            - libkf5kiofilewidgets5
-            - libkio5
-            - libkf5kiocore5
-            - libkf5kiogui5
+            #- qt512translations
+            #- qt512quickcontrols
+            #- qt512quickcontrols2
+            #- shared-mime-info
+            #- libxml2-dev
+            #- libxslt1-dev
+            #- libkf5kcmutils-dev
+            #- libkf5activities-dev
+            #- libkf5itemmodels-dev
+            #- libkf5itemviews-dev
+            #- extra-cmake-modules
+            #- libkf5notifications-dev
+            #- libkf5wallet-dev
+            #- kio-dev
+            #- libkf5archive-dev
+            #- libkf5kiowidgets5
+            #- libkf5kiofilewidgets5
+            #- libkio5
+            #- libkf5kiocore5
+            #- libkf5kiogui5
 
       before_install:
         - source /opt/qt512/bin/qt512-env.sh
@@ -79,7 +79,7 @@ matrix:
       install:
         #- rm -fr $HOME/workspace/deps-build
         #- rm -fr $HOME/workspace/deps
-        - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
+        - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
