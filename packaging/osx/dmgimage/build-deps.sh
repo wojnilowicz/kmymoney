@@ -11,6 +11,7 @@ cd $CMAKE_BUILD_PREFIX
 cmake -GNinja \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX \
+      -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
@@ -18,7 +19,7 @@ cmake -GNinja \
 cmake --build . --target ext_lzma -- -j${CPU_COUNT}
 cmake --build . --target ext_xml -- -j${CPU_COUNT}
 cmake --build . --target ext_gettext -- -j${CPU_COUNT}
-cmake --build . --target ext_xslt -- -j${CPU_COUNT}
+cmake --build . --target ext_xslt -- -j1
 cmake --build . --target ext_png -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt -- -j${CPU_COUNT}

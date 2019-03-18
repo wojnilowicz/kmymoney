@@ -66,8 +66,17 @@ $DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 /usr/lib/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
 
+export CMAKE_PREFIX_PATH=\
+$DEPS_INSTALL_PREFIX:\
+$DEPS_INSTALL_PREFIX/openssl:\
+/usr/local/opt/qt5:\
+/usr/local/opt/bison:\
+/usr/local:\
+/usr:\
+${CMAKE_PREFIX_PATH:-}
+
 # Get available processors count
-export CPU_COUNT=1 #`grep processor /proc/cpuinfo | wc -l`
+export CPU_COUNT=2 #`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
   sh $KMYMONEY_SOURCES/packaging/osx/dmgimage/build-deps.sh
