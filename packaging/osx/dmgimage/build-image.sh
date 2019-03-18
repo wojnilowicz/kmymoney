@@ -72,4 +72,4 @@ fi
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
-macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/ -dmg -always-overwrite -verbose=2
+macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -dmg -always-overwrite -verbose=2

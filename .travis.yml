@@ -128,7 +128,7 @@ matrix:
         - brew install ninja
         - brew install icu4c
         - brew install bison
-        - export RUNTIME_TIMEOUT=2000 #0 for hot cache, 2100 for cold cache
+        - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:

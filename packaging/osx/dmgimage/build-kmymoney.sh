@@ -12,11 +12,14 @@ cd $CMAKE_BUILD_PREFIX
 cmake -GNinja \
       $KMYMONEY_SOURCES \
       -DCMAKE_INSTALL_PREFIX=$CMAKE_INSTALL_PREFIX \
+      -DKDE_INSTALL_BUNDLEDIR=$CMAKE_INSTALL_PREFIX/Applications/KDE \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DBUILD_TESTING=FALSE \
       -DENABLE_WEBENGINE=TRUE \
-      -DIS_APPIMAGE=FALSE
+      -DIS_APPIMAGE=FALSE \
+      -DAPPLE_SUPPRESS_X11_WARNING=ON \
+      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
 
 # Build and Install KMyMoney (ready for the next phase)
 cmake --build . --target install -- -j${CPU_COUNT}
