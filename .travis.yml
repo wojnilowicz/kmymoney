@@ -38,6 +38,7 @@ matrix:
             - ninja-build
             - libxml-parser-perl
             - libfam-dev
+            - mesa-common-dev
             - libaio-dev
             #- libxcb-keysyms1
             - libxcb-keysyms1-dev
