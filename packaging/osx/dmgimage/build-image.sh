@@ -12,8 +12,6 @@ cd $CMAKE_BUILD_PREFIX
 export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
 export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
-ls -lh $KMYMONEY_INSTALL_PREFIX/*
-
 # Now we can get the process started!
 #
 
@@ -69,7 +67,13 @@ else
   export VERSION=$KMYMONEY_VERSION
 fi
 
+ls -lh $KMYMONEY_INSTALL_PREFIX/*
+
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
 macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -dmg -always-overwrite -verbose=2
+
+if [ -f $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.dmg ]; then
+  mv $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.dmg $CMAKE_BUILD_PREFIX/kmymoney-$VERSION-x86_64.dmg
+fi
