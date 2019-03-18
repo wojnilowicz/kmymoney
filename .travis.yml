@@ -62,6 +62,10 @@ matrix:
             - libkf5wallet-dev
             - kio-dev
             - libkf5archive-dev
+            - libkf5kiowidgets5
+            - libkf5kiofilewidgets5
+            - libkio5
+            - libkf5kiocore5
 
       before_install:
         - source /opt/qt512/bin/qt512-env.sh
