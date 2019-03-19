@@ -40,8 +40,8 @@ fi
 
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-mv $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
-rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/
+mv $KMYMONEY_INSTALL_PREFIX/usr/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/usr/lib
+rm -rf $KMYMONEY_INSTALL_PREFIX/usr/lib/x86_64-linux-gnu/
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 for lib in $PLUGINS/kmymoney/*.so*; do
