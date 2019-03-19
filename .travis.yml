@@ -40,6 +40,7 @@ matrix:
             - libfam-dev
             - mesa-common-dev
             - libxfixes-dev
+            - libxcb-xfixes0-dev
             - libaio-dev
             #- libxcb-keysyms1
             - libxcb-keysyms1-dev
