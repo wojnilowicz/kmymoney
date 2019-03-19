@@ -72,6 +72,16 @@ ls -lh $KMYMONEY_INSTALL_PREFIX/*
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
+QT_DIR=/usr/local/Cellar/qt/5.12.1
+cd $QT_DIR/bin
+macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -verbose=2
+
+cd $CMAKE_BUILD_PREFIX
+git clone https://github.com/arl/macdeployqtfix.git
+cd $CMAKE_BUILD_PREFIX/macdeployqtfix
+python macdeployqtfix.py -v $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/MacOS/kmymoney $QT_DIR
+
+cd $QT_DIR/bin
 macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -dmg -always-overwrite -verbose=2
 
 if [ -f $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.dmg ]; then
