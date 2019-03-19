@@ -128,7 +128,7 @@ matrix:
         - brew update
 
       install:
-        - brew install node@8
+        #- brew install node@8
         - brew install qt
         - brew install meson
         - brew install ninja
