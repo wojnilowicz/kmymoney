@@ -9,8 +9,8 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Save some frequently referenced locations in variables for ease of use / updating
-export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
-export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
+export PLUGINS=$KMYMONEY_INSTALL_PREFIX/usr/lib/plugins/
+export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/usr/plugins/
 
 ls -lh $KMYMONEY_INSTALL_PREFIX/*
 
@@ -18,14 +18,14 @@ ls -lh $KMYMONEY_INSTALL_PREFIX/*
 #
 
 # Step 0: place the translations where ki18n and Qt look for them
-if [ -d $KMYMONEY_INSTALL_PREFIX/share/locale ] ; then
-    mv $KMYMONEY_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
+if [ -d $KMYMONEY_INSTALL_PREFIX/usr/share/locale ] ; then
+    mv $KMYMONEY_INSTALL_PREFIX/usr/share/locale $KMYMONEY_INSTALL_PREFIX/usr/share/kmymoney
 fi
 
 # Step 1: Copy over all the resources provided by dependencies that we need
-cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
-cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/share
-cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/share
+cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/usr/share/kmymoney
+cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/usr/share
+cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/usr/share
 if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
   cp -r $DEPS_INSTALL_PREFIX/translations $KMYMONEY_INSTALL_PREFIX/usr/
 else
@@ -33,7 +33,7 @@ else
 fi
 
 if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
-  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/lib
+  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/usr/lib
 else
   echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
 fi
@@ -78,8 +78,8 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
-$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
-  -executable=$KMYMONEY_INSTALL_PREFIX/bin/kmymoney \
+$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/usr/share/applications/org.kde.kmymoney.desktop \
+  -executable=$KMYMONEY_INSTALL_PREFIX/usr/bin/kmymoney \
   -qmldir=/opt/qt512/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
