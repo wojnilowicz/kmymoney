@@ -76,7 +76,7 @@ $DEPS_INSTALL_PREFIX/openssl:\
 ${CMAKE_PREFIX_PATH:-}
 
 # Get available processors count
-export CPU_COUNT=2 #`grep processor /proc/cpuinfo | wc -l`
+export CPU_COUNT=`sysctl -n hw.physicalcpu`
 
 if [ $BUILD_TYPE == "deps" ];then
   sh $KMYMONEY_SOURCES/packaging/osx/dmgimage/build-deps.sh
