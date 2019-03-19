@@ -72,7 +72,7 @@ ls -lh $KMYMONEY_INSTALL_PREFIX/*
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
-QT_DIR=/usr/local/Cellar/qt/5.12.1
+QT_DIR=/usr/local/Cellar/qt/5.12.2
 cd $QT_DIR/bin
 macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -verbose=2
 
