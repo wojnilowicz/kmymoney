@@ -12,7 +12,6 @@ export KMYMONEY_SOURCES=$3
 
 # We want to use $prefix/deps/usr/ for all our dependencies
 if [ $BUILD_TYPE == "deps" ] || [ $BUILD_TYPE == "kmymoney" ] || [ $BUILD_TYPE == "image" ];then
-  export CMAKE_INSTALL_PREFIX=$WORKSPACE_PATH/$BUILD_TYPE-install
   export CMAKE_BUILD_PREFIX=$WORKSPACE_PATH/$BUILD_TYPE-build
 else
   echo "ERROR: no valid build type."
@@ -20,7 +19,8 @@ else
 fi
 
 export DEPS_INSTALL_PREFIX=$WORKSPACE_PATH/deps-install
-export KMYMONEY_INSTALL_PREFIX=$WORKSPACE_PATH/kmymoney-install
+export KMYMONEY_INSTALL_PREFIX=$WORKSPACE_PATH/kmymoney-install/usr
+export IMAGE_INSTALL_PREFIX=$WORKSPACE_PATH/image-install
 export DOWNLOADS_DIR=$WORKSPACE_PATH/downloads
 
 # A kmymoney build layout looks like this:
@@ -31,9 +31,10 @@ export DOWNLOADS_DIR=$WORKSPACE_PATH/downloads
 # deps-install/ -- the location for the built dependencies
 
 # Make sure our build directory exists
-mkdir -p $CMAKE_INSTALL_PREFIX
 mkdir -p $CMAKE_BUILD_PREFIX
 mkdir -p $DEPS_INSTALL_PREFIX
+mkdir -p $KMYMONEY_INSTALL_PREFIX
+mkdir -p $IMAGE_INSTALL_PREFIX
 mkdir -p $DOWNLOADS_DIR
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
@@ -44,6 +45,7 @@ export LANG=en_us.UTF-8
 # Setup variables needed to help everything find what we build
 export LD_LIBRARY_PATH=\
 $DEPS_INSTALL_PREFIX/lib:\
+$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu:\
 $DEPS_INSTALL_PREFIX/openssl/lib:\
 ${LD_LIBRARY_PATH:-}
 
