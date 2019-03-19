@@ -39,6 +39,7 @@ matrix:
             - libxml-parser-perl
             - libfam-dev
             - mesa-common-dev
+            - libxfixes-dev
             - libaio-dev
             #- libxcb-keysyms1
             - libxcb-keysyms1-dev
