@@ -83,7 +83,7 @@ matrix:
       install:
         #- rm -fr $HOME/workspace/deps-build
         #- rm -fr $HOME/workspace/deps
-        - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
+        - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
       script:
