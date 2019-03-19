@@ -12,8 +12,6 @@ cd $CMAKE_BUILD_PREFIX
 export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
 export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
-ls -lh $KMYMONEY_INSTALL_PREFIX/*
-
 # Now we can get the process started!
 #
 
@@ -60,9 +58,11 @@ mv $PLUGINS/* $APPIMAGEPLUGINS
 cd $KMYMONEY_SOURCES
 KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
 
+ls -lh $KMYMONEY_SOURCES/*
+
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
-if [[ -d .git ]]; then
+if [ -d .git ]; then
   GIT_REVISION=$(git rev-parse --short HEAD)
   export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
 else
