@@ -3,7 +3,7 @@
 # Build DmgImage of KMyMoney on MacOS High Sierra.
 
 # Halt on errors and be verbose about what we are doing
-set -eux
+set -eu
 
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
@@ -280,7 +280,7 @@ cd $CMAKE_BUILD_PREFIX
 # Step 7: Build the image!!!
 cd $QT_DIR/bin
 macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app \
-            -verbose=2 \
+            -verbose=1 \
             -qmldir=$QT_DIR/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
 
