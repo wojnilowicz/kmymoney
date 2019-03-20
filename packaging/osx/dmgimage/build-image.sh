@@ -212,9 +212,9 @@ rsync -prul --delete ./ \
 
 echo "Copying plugins..."
 # exclude kmymoneyquicklook.qlgenerator/
-cd $DEPS_INSTALL_PREFIX/plugins/
-rsync -prul --delete \
-  $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
+# cd $DEPS_INSTALL_PREFIX/plugins/
+# rsync -prul --delete \
+#   $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
 
 rsync -prul $QT_DIR/plugins/kmymoney/ $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
 
