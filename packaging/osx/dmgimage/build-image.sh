@@ -180,7 +180,7 @@ createDMG () {
     # Add git version number
 #     GIT_SHA=$(grep "#define KMYMONEY_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kmymoneygitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
 
-    mv kmymoney-out.dmg kmymoney-nightly_${GIT_SHA}.dmg
+    mv kmymoney-out.dmg kmymoney-$VERSION-x86_64.dmg
     echo "moved kmymoney-out.dmg to kmymoney-$VERSION-x86_64.dmg"
     rm kmymoney.temp.dmg
 
