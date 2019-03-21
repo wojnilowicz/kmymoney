@@ -191,23 +191,10 @@ createDMG () {
 echo "Copying share..."
 cd  $DEPS_INSTALL_PREFIX/share
 rsync -prul --delete ./ \
-        --exclude kmymoney_SRCS.icns \
-        --exclude aclocal \
-        --exclude doc \
-        --exclude ECM \
-        --exclude eigen3 \
-        --exclude emacs \
-        --exclude gettext \
-        --exclude gettext-0.19.8 \
-        --exclude info \
-        --exclude kf5 \
-        --exclude kservices5 \
-        --exclude man \
-        --exclude ocio \
-        --exclude pkgconfig \
-        --exclude mime \
-        --exclude translations \
-        --exclude qml \
+        $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
+
+cd  $KMYMONEY_INSTALL_PREFIX/share
+rsync -prul --delete ./ \
         $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
 
 echo "Copying plugins..."
@@ -216,7 +203,10 @@ echo "Copying plugins..."
 # rsync -prul --delete \
 #   $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
 
-rsync -prul $QT_DIR/plugins/kmymoney/ $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
+#copy whole dir
+rsync -prul $QT_DIR/plugins/kmymoney $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
+#copy only plugins
+# rsync -prul $QT_DIR/plugins/kmymoney/ $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
 
 # Now we can get the process started!
 #
@@ -281,8 +271,11 @@ cd $CMAKE_BUILD_PREFIX
 cd $QT_DIR/bin
 macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app \
             -verbose=1 \
+            -executable=${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney \
             -qmldir=$QT_DIR/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
+
+install_name_tool -delete_rpath @loader_path/../../../../lib ${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney
 
 # repair kmymoney for plugins
 kmymoney_findmissinglibs
