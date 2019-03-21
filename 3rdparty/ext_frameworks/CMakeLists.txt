@@ -85,6 +85,7 @@ ExternalProject_Add(
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL http://download.kde.org/stable/frameworks/5.51/kcoreaddons-5.51.0.zip
   URL_MD5 bd29fb792d368dcc031277182e20dd57
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/kcoreaddons.diff
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   DEPENDS ext_extra_cmake_modules
 )

@@ -1,0 +1,19 @@
+diff -Npru kcoreaddons-5.51.0.orig/src/lib/plugin/kpluginloader.cpp kcoreaddons-5.51.0/src/lib/plugin/kpluginloader.cpp
+--- kcoreaddons-5.51.0.orig/src/lib/plugin/kpluginloader.cpp	2018-10-08 10:11:36.000000000 +0200
++++ kcoreaddons-5.51.0/src/lib/plugin/kpluginloader.cpp	2019-03-21 18:53:42.836984554 +0100
+@@ -28,6 +28,7 @@
+ #include "kcoreaddons_debug.h"
+ #include <QCoreApplication>
+ #include <QMutex>
++#include <QDebug>
+ 
+ // TODO: Upstream the versioning stuff to Qt
+ // TODO: Patch for Qt to expose plugin-finding code directly
+@@ -250,6 +251,7 @@ void KPluginLoader::forEachPlugin(const
+     }
+ 
+     qCDebug(KCOREADDONS_DEBUG) << "Checking for plugins in" << dirsToCheck;
++    qDebug() << "Checking for plugins in" << dirsToCheck;
+ 
+     foreach (const QString &dir, dirsToCheck) {
+         QDirIterator it(dir, QDir::Files);
