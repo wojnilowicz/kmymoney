@@ -275,7 +275,7 @@ macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app \
             -qmldir=$QT_DIR/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
 
-install_name_tool -delete_rpath @loader_path/../../../../lib ${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney
+# install_name_tool -delete_rpath @loader_path/../../../../lib ${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney
 
 # repair kmymoney for plugins
 kmymoney_findmissinglibs
