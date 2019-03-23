@@ -83,7 +83,6 @@ matrix:
       install:
         #- rm -fr $HOME/workspace/deps-build
         #- rm -fr $HOME/workspace/deps
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix/
         - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
@@ -135,6 +134,7 @@ matrix:
         - brew install ninja
         - brew install icu4c
         - brew install bison
+        - rm -vfr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
         - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
