@@ -56,10 +56,10 @@
 #include "pluginsettings.h"
 #include "mymoneyenums.h"
 
-#ifdef IS_APPIMAGE
+//#ifdef IS_APPIMAGE
 #include <QCoreApplication>
 #include <QStandardPaths>
-#endif
+//#endif
 
 struct CheckPrinting::Private {
   QAction* m_action;

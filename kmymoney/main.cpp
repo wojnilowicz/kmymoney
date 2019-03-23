@@ -73,6 +73,7 @@ int main(int argc, char *argv[])
    * Create application first
    */
   QApplication app(argc, argv);
+  qDebug() << "nazwa aplikacji na starcie: " << qAppName();
   KLocalizedString::setApplicationDomain("kmymoney");
 
   migrateConfigFiles();
