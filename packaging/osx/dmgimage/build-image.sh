@@ -189,13 +189,8 @@ createDMG () {
 
 
 echo "Copying share..."
-cd  $DEPS_INSTALL_PREFIX/share
-rsync -prul --delete ./ \
-        $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
-
-cd  $KMYMONEY_INSTALL_PREFIX/share
-rsync -prul --delete ./ \
-        $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
+rsync -prul $KMYMONEY_INSTALL_PREFIX/share $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
+rsync -prul $DEPS_INSTALL_PREFIX/share $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
 
 echo "Copying plugins..."
 # exclude kmymoneyquicklook.qlgenerator/
