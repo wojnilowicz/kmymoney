@@ -192,7 +192,7 @@ echo "Copying share..."
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
 rsync -prul $DEPS_INSTALL_PREFIX/share/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
-cp $KMYMONEY_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources/icontheme.rcc
+cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources/icontheme.rcc
 
 echo "Copying plugins..."
 # exclude kmymoneyquicklook.qlgenerator/
