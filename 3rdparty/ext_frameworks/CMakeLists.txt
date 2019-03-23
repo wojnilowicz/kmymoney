@@ -1,5 +1,6 @@
 # All needed frameworks:
 # Tier 1
+#   BreezeIcons
 #   Archive
 #   Codecs
 #   Config
@@ -42,6 +43,17 @@ ExternalProject_Add(
   URL http://download.kde.org/stable/frameworks/5.51/extra-cmake-modules-5.51.0.zip
   URL_MD5 0c49de5686624746af45f578486c275f
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+)
+
+ExternalProject_Add(
+  ext_breezeicons
+  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  URL http://download.kde.org/stable/frameworks/5.51/breeze-icons-5.51.0.zip
+  URL_MD5 a926d8fdb4847509b5855c55d1f75acf
+  CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+             -DBINARY_ICONS_RESOURCE=ON
+             -DSKIP_INSTALL_ICONS=ON
+  DEPENDS ext_extra_cmake_modules
 )
 
 ExternalProject_Add(
