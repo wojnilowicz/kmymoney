@@ -85,7 +85,12 @@ CheckPrinting::CheckPrinting(QObject *parent, const QVariantList &args) :
   const QString localRcFilePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + QLatin1Char('/') + componentName + QLatin1Char('/') + rcFileName;
   setLocalXMLFile(localRcFilePath);
 #else
-  setXMLFile(rcFileName);
+  const QString rcFilePath = QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kxmlgui5/") + componentName + QLatin1Char('/') + rcFileName;
+  setXMLFile(rcFilePath);
+
+  const QString localRcFilePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + QLatin1Char('/') + componentName + QLatin1Char('/') + rcFileName;
+  setLocalXMLFile(localRcFilePath);
+//  setXMLFile(rcFileName);
 #endif
 
   // For ease announce that we have been loaded.
