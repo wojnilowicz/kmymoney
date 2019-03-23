@@ -274,6 +274,7 @@ macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app \
 
 # repair kmymoney for plugins
 kmymoney_findmissinglibs
+kmymoney_findmissinglibs
 
 createDMG
 
