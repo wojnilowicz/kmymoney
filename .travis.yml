@@ -135,6 +135,9 @@ matrix:
         - brew install icu4c
         - brew install bison
         - rm -vfr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
+        - find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        - find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        - find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
         - export RUNTIME_TIMEOUT=0 #0 for hot cache, 2100 for cold cache
         - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
