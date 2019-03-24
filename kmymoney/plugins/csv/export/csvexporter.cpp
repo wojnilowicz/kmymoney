@@ -38,6 +38,7 @@
 #include "csvexportdlg.h"
 #include "csvwriter.h"
 #include "viewinterface.h"
+#include <QtDebug>
 
 //#ifdef IS_APPIMAGE
 #include <QCoreApplication>
