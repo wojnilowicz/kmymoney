@@ -8,9 +8,9 @@ set -eu
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
-ls -lh $DEPS_INSTALL_PREFIX/*
+#ls -lh $DEPS_INSTALL_PREFIX/*
 
-QT_DIR=/usr/local/Cellar/qt/5.12.2
+QT_DIR=/usr/local/opt/qt
 export MACOSX_DEPLOYMENT_TARGET=10.11
 export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 
@@ -18,11 +18,11 @@ export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
 export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
 export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
-mkdir -p $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
-mkdir -p $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Frameworks
-
 KMYMONEY_DMG=$KMYMONEY_INSTALL_PREFIX/Applications/KDE
 DMG_title=kmymoney
+
+mkdir -p $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
+mkdir -p $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
 
 # Helper functions
 countArgs () {
@@ -42,6 +42,10 @@ add_lib_to_list() {
     echo ${llist}
 }
 
+sourceLibPaths=(
+$DEPS_INSTALL_PREFIX/lib
+$QT_DIR/lib
+)
 
 # Find all @rpath and Absolute to buildroot path libs
 # Add to libs_used
@@ -49,7 +53,7 @@ add_lib_to_list() {
 find_needed_libs () {
     echo "Analizing libraries with oTool..." >&2
     local libs_used="" # input lib_lists founded
-    for libFile in $(find ${KMYMONEY_DMG}/kmymoney.app/Contents -name "*.so" -or -name "*.dylib"); do
+    for libFile in $(find ${KMYMONEY_DMG}/kmymoney.app/Contents -type f -name "*.so" -or -type f -name "*.dylib" -or -type f -name "kmymoney"); do
         oToolResult=$(otool -L ${libFile} | awk '{print $1}')
         resultArray=(${oToolResult}) # convert to array
         echo "${libFile##*Contents/}" >&2
@@ -57,11 +61,15 @@ find_needed_libs () {
             if test "${lib:0:1}" = "@"; then
                 local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
             fi
-            if test "${lib:0:${#WORKSPACE_PATH}}" = "${WORKSPACE_PATH}"; then
-                install_name_tool -id ${lib##*/} "${libFile}"
-                install_name_tool -change ${lib} "@rpath/${lib##*/}" "${libFile}"
-                local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
-            fi
+
+            for souceLibPath in ${sourceLibPaths[@]}; do
+                if test "${lib:0:${#souceLibPath}}" = "${souceLibPath}"; then
+                    install_name_tool -id ${lib##*/} "${libFile}"
+                    install_name_tool -change ${lib} "@rpath${lib:${#souceLibPath}}" "${libFile}"
+                    local libs_used=$(add_lib_to_list ${lib} "${libs_used}")
+                    break
+                fi
+            done
         done
     done
     echo ${libs_used} # return updated list
@@ -81,7 +89,13 @@ find_missing_libs (){
 
 copy_missing_libs () {
     for lib in ${@}; do
-        result=$(find "$DEPS_INSTALL_PREFIX" -name "${lib}")
+        for souceLibPath in ${sourceLibPaths[@]} ; do
+            result=$(find "$souceLibPath" -name "${lib}")
+            if test $(countArgs ${result[@]}) -gt 0; then
+                break
+            fi
+        done
+#        result=$(find "$DEPS_INSTALL_PREFIX" -name "${lib}")
 
         if test $(countArgs ${result}) -eq 1; then
             echo ${result}
@@ -95,11 +109,18 @@ copy_missing_libs () {
         else
             echo "${lib} might be a missing framework"
             if [ "$(stringContains "${result}" "framework")" ]; then
-                echo "copying framework $DEPS_INSTALL_PREFIX/lib/${lib}.framework to dmg"
+
+                for souceLibPath in ${sourceLibPaths[@]}; do
+                    if test "${result:0:${#souceLibPath}}" = "${souceLibPath}"; then
+                        break
+                    fi
+                done
+
+                echo "copying framework $souceLibPath/${lib}.framework to dmg"
                 # TODO rsync only included ${lib} Resources Versions
-                rsync -priul $DEPS_INSTALL_PREFIX/lib/${lib}.framework/${lib} ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul $DEPS_INSTALL_PREFIX/lib/${lib}.framework/Resources ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
-                rsync -priul $DEPS_INSTALL_PREFIX/lib/${lib}.framework/Versions ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul $souceLibPath/${lib}.framework/${lib} ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul $souceLibPath/${lib}.framework/Resources ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
+                rsync -priul $souceLibPath/${lib}.framework/Versions ${KMYMONEY_DMG}/kmymoney.app/Contents/Frameworks/${lib}.framework/
             fi
         fi
     done
@@ -187,23 +208,43 @@ createDMG () {
     echo "dmg done!"
 }
 
+echo "Copying libs..."
+rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/* \
+            --exclude plugins \
+            $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
+
+rsync -prul $DEPS_INSTALL_PREFIX/lib/libphonon4qt5* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
+rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5Notifications* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
+install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libphonon4qt5experimental.4.dylib
+
+install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
+
+install_name_tool -change lib/libphonon4qt5experimental.4.dylib @rpath/libphonon4qt5experimental.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
 
 echo "Copying share..."
-rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
-rsync -prul $DEPS_INSTALL_PREFIX/share/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
-rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources
-cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/Resources/icontheme.rcc
+rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
+rsync -prul $DEPS_INSTALL_PREFIX/share/* \
+            --exclude aclocal \
+            --exclude doc \
+            --exclude ECM \
+            --exclude eigen3 \
+            --exclude emacs \
+            --exclude gettext \
+            --exclude gettext-0.19.8 \
+            --exclude info \
+            --exclude man \
+            --exclude ocio \
+            --exclude pkgconfig \
+            --exclude mime \
+            --exclude translations \
+            --exclude qml \
+            $KMYMONEY_DMG/kmymoney.app/Contents/Resources
+rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
+cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icontheme.rcc
 
 echo "Copying plugins..."
-# exclude kmymoneyquicklook.qlgenerator/
-# cd $DEPS_INSTALL_PREFIX/plugins/
-# rsync -prul --delete \
-#   $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
-
-#copy whole dir
-rsync -prul $QT_DIR/plugins/kmymoney $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
-#copy only plugins
-# rsync -prul $QT_DIR/plugins/kmymoney/ $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/PlugIns
+rsync -prul $DEPS_INSTALL_PREFIX/lib/plugins/* $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
+rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 
 # Now we can get the process started!
 #
@@ -260,19 +301,18 @@ else
   export VERSION=$KMYMONEY_VERSION
 fi
 
-ls -lh $KMYMONEY_INSTALL_PREFIX/*
+#ls -lh $KMYMONEY_INSTALL_PREFIX/*
 
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
+install_name_tool -add_rpath @loader_path/../Frameworks $KMYMONEY_DMG/kmymoney.app/Contents/MacOS/kmymoney
 cd $QT_DIR/bin
-macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app \
+macdeployqt $KMYMONEY_DMG/kmymoney.app \
             -verbose=1 \
             -executable=${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney \
             -qmldir=$QT_DIR/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
-
-# install_name_tool -delete_rpath @loader_path/../../../../lib ${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney
 
 # repair kmymoney for plugins
 kmymoney_findmissinglibs
@@ -280,17 +320,17 @@ kmymoney_findmissinglibs
 
 createDMG
 
-ls -lh $KMYMONEY_INSTALL_PREFIX/*
-ls -lh $CMAKE_BUILD_PREFIX/*
+#ls -lh $KMYMONEY_INSTALL_PREFIX/*
+#ls -lh $CMAKE_BUILD_PREFIX/*
 
 # cd $CMAKE_BUILD_PREFIX
 # git clone https://github.com/arl/macdeployqtfix.git
 # cd $CMAKE_BUILD_PREFIX/macdeployqtfix
-# python macdeployqtfix.py -v $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app/Contents/MacOS/kmymoney $QT_DIR
+# python macdeployqtfix.py -v $KMYMONEY_DMG/kmymoney.app/Contents/MacOS/kmymoney $QT_DIR
 #
 # cd $QT_DIR/bin
-# macdeployqt $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.app -dmg -verbose=2
+# macdeployqt $KMYMONEY_DMG/kmymoney.app -dmg -verbose=2
 #
-# if [ -f $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.dmg ]; then
-#   mv $KMYMONEY_INSTALL_PREFIX/Applications/KDE/kmymoney.dmg $CMAKE_BUILD_PREFIX/kmymoney-$VERSION-x86_64.dmg
+# if [ -f $KMYMONEY_DMG/kmymoney.dmg ]; then
+#   mv $KMYMONEY_DMG/kmymoney.dmg $CMAKE_BUILD_PREFIX/kmymoney-$VERSION-x86_64.dmg
 # fi

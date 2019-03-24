@@ -19,7 +19,8 @@ cmake -GNinja \
       -DENABLE_WEBENGINE=TRUE \
       -DIS_APPIMAGE=FALSE \
       -DAPPLE_SUPPRESS_X11_WARNING=ON \
-      -DKDE_INSTALL_USE_QT_SYS_PATHS=ON
+      -DCMAKE_MACOSX_RPATH=ON \
+      -DKDE_SKIP_RPATH_SETTINGS=ON
 
 # Build and Install KMyMoney (ready for the next phase)
 cmake --build . --target install -- -j${CPU_COUNT}
