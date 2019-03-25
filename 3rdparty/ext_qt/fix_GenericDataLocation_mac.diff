@@ -1,0 +1,12 @@
+diff -ruN qt-everywhere-src-5.12.2.orig/qtbase/src/corelib/io/qstandardpaths_mac.mm qt-everywhere-src-5.12.2/qtbase/src/corelib/io/qstandardpaths_mac.mm
+--- qt-everywhere-src-5.12.2.orig/qtbase/src/corelib/io/qstandardpaths_mac.mm	2019-03-06 08:59:50.000000000 +0100
++++ qt-everywhere-src-5.12.2/qtbase/src/corelib/io/qstandardpaths_mac.mm	2019-03-25 18:44:15.665354842 +0100
+@@ -200,7 +200,7 @@
+         }
+     }
+ 
+-    if (type == AppDataLocation || type == AppLocalDataLocation) {
++    if (type == AppDataLocation || type == AppLocalDataLocation || type == GenericDataLocation) {
+         CFBundleRef mainBundle = CFBundleGetMainBundle();
+         if (mainBundle) {
+             if (QCFType<CFURLRef> resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle)) {

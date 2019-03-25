@@ -1,0 +1,14 @@
+diff -ruN qt-everywhere-src-5.12.2.orig/qtbase/src/dbus/qdbusconnection.cpp qt-everywhere-src-5.12.2/qtbase/src/dbus/qdbusconnection.cpp
+--- qt-everywhere-src-5.12.2.orig/qtbase/src/dbus/qdbusconnection.cpp	2019-03-06 08:59:50.000000000 +0100
++++ qt-everywhere-src-5.12.2/qtbase/src/dbus/qdbusconnection.cpp	2019-03-25 18:37:43.773306293 +0100
+@@ -142,6 +142,10 @@
+     connect(this, &QDBusConnectionManager::serverRequested,
+             this, &QDBusConnectionManager::createServer, Qt::BlockingQueuedConnection);
+     moveToThread(this);         // ugly, don't do this in other projects
++    
++    qAddPostRoutine([]() {
++        QMetaObject::invokeMethod(QDBusConnectionManager::instance(), "quit");
++    });
+ 
+ #ifdef Q_OS_WIN
+     // prevent the library from being unloaded on Windows. See comments in the function.
