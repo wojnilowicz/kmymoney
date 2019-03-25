@@ -130,10 +130,11 @@ matrix:
       install:
         #- brew install node@8
         - brew install qt meson ninja bison
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
-        - find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
-        - find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
-        - find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
+        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
+        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
+        #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
         - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
