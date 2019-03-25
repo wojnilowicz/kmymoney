@@ -9,8 +9,47 @@ ExternalProject_Add(
   URL_MD5 99c2eb46e533371798b4ca2d1458e065
 
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${CMAKE_INSTALL_PREFIX} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools ICU_LIBDIR="${CMAKE_INSTALL_PREFIX}/lib" ICU_INCDIR="${CMAKE_INSTALL_PREFIX}/include" OPENSSL_LIBDIR="${CMAKE_INSTALL_PREFIX}/openssl/lib" OPENSSL_INCDIR="${CMAKE_INSTALL_PREFIX}/openssl/include" -openssl-linked -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtenginio -skip qtgraphicaleffects -skip qtlocation -skip qtwayland -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -skip qtdoc -skip qtmacextras -skip qtwinextras -skip qtwebglplugin -skip qtwebsockets -skip qtwebview -skip qtmultimedia -skip qtnetworkauth -skip qtimageformats -system-webengine-icu
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure \
+  -prefix ${CMAKE_INSTALL_PREFIX} \
+  -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools \
+  ICU_LIBDIR="${CMAKE_INSTALL_PREFIX}/lib" ICU_INCDIR="${CMAKE_INSTALL_PREFIX}/include" \
+  OPENSSL_LIBDIR="${CMAKE_INSTALL_PREFIX}/openssl/lib" OPENSSL_INCDIR="${CMAKE_INSTALL_PREFIX}/openssl/include" \
+  -openssl-linked \
+  -skip qt3d \
+  -skip qtactiveqt \
+  -skip qtcanvas3d \
+  -skip qtconnectivity \
+  -skip qtenginio \
+  -skip qtgraphicaleffects \
+  -skip qtlocation \
+  -skip qtwayland \
+  -skip qtandroidextras \
+  -skip qtserialport \
+  -skip qtdatavis3d \
+  -skip qtvirtualkeyboard \
+  -skip qtspeech \
+  -skip qtsensors \
+  -skip qtgamepad \
+  -skip qtscxml \
+  -skip qtremoteobjects \
+  -skip qtxmlpatterns \
+  -skip qtcharts \
+  -skip qtpurchasing \
+  -skip qtserialbus \
+  -skip qtdoc \
+  -skip qtmacextras \
+  -skip qtwinextras \
+  -skip qtwebglplugin \
+  -skip qtwebsockets \
+  -skip qtwebview \
+  -skip qtmultimedia \
+  -skip qtnetworkauth \
+  -skip qtimageformats \
+  -system-webengine-icu
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
