@@ -96,7 +96,7 @@ endif()
 
 # Recent changes to LibAlkimia should allow us to remove this construct
 #if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-#  include_directories(${GMP_INCLUDE_DIR})
+ include_directories(${GMP_INCLUDE_DIR})
 #endif()
 
 find_package(KChart 2.6.0)
