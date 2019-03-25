@@ -5,8 +5,8 @@
 ExternalProject_Add(
   ext_qt
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/official_releases/qt/5.11/5.11.2/single/qt-everywhere-src-5.11.2.tar.xz
-  URL_MD5 152a8ade9c11fe33ff5bc95310a1bb64
+  URL https://download.qt.io/official_releases/qt/5.12/5.12.2/single/qt-everywhere-src-5.12.2.tar.xz
+  URL_MD5 99c2eb46e533371798b4ca2d1458e065
 
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
 

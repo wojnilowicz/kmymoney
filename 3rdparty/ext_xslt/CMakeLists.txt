@@ -1,8 +1,8 @@
 ExternalProject_Add(
   ext_xslt
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://xmlsoft.org/sources/libxslt-1.1.32.tar.gz
-  URL_MD5 1fc72f98e98bf4443f1651165f3aa146
+  URL http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz
+  URL_MD5 b3bd254a03e46d58f8ad1e4559cd2c2f
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --without-python --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST}
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
