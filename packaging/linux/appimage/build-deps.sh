@@ -28,7 +28,7 @@ cmake -GNinja \
 # cmake --build . --target ext_png -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt -- -j${CPU_COUNT}
-cmake --build . --target ext_qtbase -- VERBOSE=1 -j${CPU_COUNT}
+cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 cmake --build . --target ext_qtx11extras -- -j${CPU_COUNT}
