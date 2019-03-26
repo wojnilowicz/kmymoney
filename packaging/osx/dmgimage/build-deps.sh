@@ -13,7 +13,9 @@ cmake -GNinja \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
+      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR \
+      -DCMAKE_RULE_MESSAGES=OFF \
+      -DCMAKE_VERBOSE_MAKEFILE=ON
 
 # Now start building everything we need, in the appropriate order
 # cmake --build . --target ext_lzma -- -j${CPU_COUNT}
@@ -23,6 +25,7 @@ cmake -GNinja \
 # cmake --build . --target ext_png -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt -- -j${CPU_COUNT}
+cmake --build . --target ext_qtbase -- -j${CPU_COUNT} VERBOSE=1
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 cmake --build . --target ext_qtmacextras -- -j${CPU_COUNT}
