@@ -71,7 +71,7 @@ ExternalProject_Add(
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
+#         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
   CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${CMAKE_INSTALL_PREFIX} -opensource -confirm-license -pkg-config -release -nomake examples -nomake tests -nomake tools -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} --silent -j${CMAKE_CPU_COUNT}
