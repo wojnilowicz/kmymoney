@@ -74,9 +74,9 @@ ExternalProject_Add(
 #         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
   -prefix ${CMAKE_INSTALL_PREFIX}
-  -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools
+  -opensource -confirm-license -verbose -pkg-config -release -nomake examples -nomake tests -nomake tools
   ICU_LIBDIR="${CMAKE_INSTALL_PREFIX}/lib" ICU_INCDIR="${CMAKE_INSTALL_PREFIX}/include"
-  ${qt_extras_option}
+  ${qt_extras_option} -recheck-all
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install

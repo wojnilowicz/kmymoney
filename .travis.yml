@@ -45,6 +45,7 @@ matrix:
             - libxcb-keysyms1-dev
             - libudev-dev
             - gperf
+            - libgl1-mesa-dev
             #- qt512base
             #- qt512webengine
             #- qt512svg
