@@ -107,7 +107,7 @@ matrix:
         - brew update > /dev/null
 
       install:
-        - brew install meson ninja bison pkg-config > /dev/null #qt
+        - brew install meson ninja bison > /dev/null #qt
         - rm -fr $HOME/workspace/deps-build/ext_frameworks
         - rm -fr $HOME/workspace/kmymoney-build
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
