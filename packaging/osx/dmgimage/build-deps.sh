@@ -29,6 +29,7 @@ cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 cmake --build . --target ext_qtmacextras -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwebchannel -- -j${CPU_COUNT}
+cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 # cmake --build . --target ext_boost -- -j${CPU_COUNT}
 # cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}

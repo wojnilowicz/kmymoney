@@ -59,9 +59,9 @@ matrix:
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
       install:
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks
-        - rm -fr $HOME/workspace/kmymoney-build
-        #- rm -fr $HOME/workspace/deps
+        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        #- rm -fr $HOME/workspace/kmymoney-build
+        - rm -fr $HOME/workspace/deps-build
         - export RUNTIME_TIMEOUT=2100 #0 for hot cache, 2100 for cold cache
         - timeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
 
@@ -108,8 +108,8 @@ matrix:
 
       install:
         - brew install meson ninja bison > /dev/null #qt
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks
-        - rm -fr $HOME/workspace/kmymoney-build
+        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        #- rm -fr $HOME/workspace/kmymoney-build
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
         #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
