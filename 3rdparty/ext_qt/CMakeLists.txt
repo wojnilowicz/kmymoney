@@ -183,7 +183,7 @@ ExternalProject_Add(
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtwebengine-everywhere-src-5.12.2.tar.xz
   URL_MD5 a5182f10645103b54a35f8611fd13506
-  CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> -- -system-webengine-icu #-no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc -no-webengine-pepper-plugins
+  CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> #-- -system-webengine-icu #-no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc -no-webengine-pepper-plugins
   BUILD_COMMAND ${MAKE_EXECUTABLE} --silent -j${CMAKE_CPU_COUNT}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
   DEPENDS ext_qtbase ext_qtdeclarative ext_qtwebchannel ext_qtlocation
