@@ -112,6 +112,10 @@ matrix:
         #- rm -fr $HOME/workspace/kmymoney-build
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
