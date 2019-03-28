@@ -48,6 +48,8 @@ $DEPS_INSTALL_PREFIX/openssl/lib:\
 /usr/local/lib:\
 ${LD_LIBRARY_PATH:-}
 
+export DYLD_LIBRARY_PATH=$LD_LIBRARY_PATH
+
 export PATH=\
 $DEPS_INSTALL_PREFIX/bin:\
 $DEPS_INSTALL_PREFIX/openssl/bin:\
