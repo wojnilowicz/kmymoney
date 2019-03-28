@@ -40,7 +40,6 @@ if (APPLE)
   list(APPEND CMAKE_GLOBAL_PROFILE
     -DAPPLE_SUPPRESS_X11_WARNING=ON
     -DCMAKE_MACOSX_RPATH=ON
-    -DKDE_SKIP_RPATH_SETTINGS=ON
   )
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-apple-darwin)
