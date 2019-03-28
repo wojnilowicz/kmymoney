@@ -294,7 +294,7 @@ ExternalProject_Add(
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL http://download.kde.org/stable/frameworks/5.51/kservice-5.51.0.zip
   URL_MD5 7444dbd3388a1e3cce9d8f7cd64c7d23
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/${project_patch} #this makes finding KCModules in AppImage possible
+#   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/${project_patch} #this makes finding KCModules in AppImage possible
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   DEPENDS ext_kconfig ext_kcoreaddons ext_kcrash ext_kdbusaddons ext_ki18n
 )

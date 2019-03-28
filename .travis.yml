@@ -75,7 +75,8 @@ matrix:
           fi
 
       before_cache:
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
 
       after_success:
         - |
@@ -116,6 +117,8 @@ matrix:
         - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine
         #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
@@ -132,7 +135,8 @@ matrix:
           fi
 
       before_cache:
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
+        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
         #- brew cleanup
 
       after_success:
