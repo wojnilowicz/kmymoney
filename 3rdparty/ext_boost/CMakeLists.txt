@@ -6,7 +6,7 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${CMAKE_INSTALL_PREFIX} --with-libraries=system
   BUILD_COMMAND ""
-  INSTALL_COMMAND <SOURCE_DIR>/b2 -j1 install
+  INSTALL_COMMAND <SOURCE_DIR>/b2 -d0 install
 
   BUILD_IN_SOURCE 1
 )
