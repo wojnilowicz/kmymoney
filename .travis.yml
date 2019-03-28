@@ -122,6 +122,8 @@ matrix:
         #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
+        - ls -lh $HOME/workspace/deps-install
+        - install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
         - otool -l $HOME/workspace/deps-install/bin/desktoptojson
         - export RUNTIME_TIMEOUT=1500 #0 for hot cache, 2100 for cold cache
         - gtimeout ${RUNTIME_TIMEOUT} $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
