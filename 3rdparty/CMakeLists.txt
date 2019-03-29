@@ -8,7 +8,7 @@ project (kmymoney-and-all-its-deps)
 # Example usage: cmake ..\kmymoneydep -DEXT_DOWNLOAD_DIR=/dev2/d -DCMAKE_INSTALL_PREFIX=/dev2/i
 
 
-cmake_minimum_required(VERSION 2.8.6)
+cmake_minimum_required(VERSION 3.0.2)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
