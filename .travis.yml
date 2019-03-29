@@ -61,7 +61,9 @@ matrix:
       install:
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks
         #- rm -fr $HOME/workspace/kmymoney-build
-        - rm -fr $HOME/workspace/deps-build
+        #- rm -fr $HOME/workspace/deps-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         - export RUNTIME_TIMEOUT=1800 #0 for hot cache, 2100 for cold cache
