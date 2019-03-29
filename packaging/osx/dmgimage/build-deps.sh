@@ -7,23 +7,42 @@ set -eux
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
+# Build ninja from source in order to avoid lenghty "brew install ninja"
+cd $CMAKE_BUILD_PREFIX
+NINJA_EXECUTABLE=$DEPS_INSTALL_PREFIX/bin/ninja
+if [ ! -f $NINJA_EXECUTABLE ] ||
+   [ $(tr . 0 <<< $($NINJA_EXECUTABLE --version)) -lt $(tr . 0 <<< "1.9.0") ] ; then
+  rm -fr ninja
+  git clone --single-branch -b release --depth 1 git://github.com/ninja-build/ninja.git
+  cd ninja
+  python3 configure.py --bootstrap
+  mkdir -p $DEPS_INSTALL_PREFIX/bin
+  install -vm755 ninja $DEPS_INSTALL_PREFIX/bin
+  cd ..
+  rm -fr ninja
+fi
+
+
 # Configure the dependencies for building
 cmake -GNinja \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR \
+      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
+bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
 # Now start building everything we need, in the appropriate order
+pip3 install meson
 # cmake --build . --target ext_lzma -- -j${CPU_COUNT}
 # cmake --build . --target ext_xml -- -j${CPU_COUNT}
 # cmake --build . --target ext_gettext -- -j${CPU_COUNT}
+# cmake --build . --target ext_bison -- -j${CPU_COUNT}
+# cmake --build . --target ext_flex -- -j${CPU_COUNT}
 # cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 # cmake --build . --target ext_png -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt -- -j${CPU_COUNT}
-bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" &
 cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
