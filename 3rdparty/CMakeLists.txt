@@ -57,7 +57,7 @@ set(PATCH_COMMAND patch)
 # this list must be dependency-ordered
 add_subdirectory( ext_iconv )
 add_subdirectory( ext_zlib )
-add_subdirectory( ext_lzma )
+add_subdirectory( ext_xz )
 add_subdirectory( ext_icu )
 add_subdirectory( ext_ncurses )
 add_subdirectory( ext_readline )

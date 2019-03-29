@@ -1,9 +1,3 @@
-if (APPLE)
-  set(project_dependencies ext_lzma ext_readline ext_icu)
-elseif(UNIX)
-  set(project_dependencies ext_lzma ext_readline ext_icu)
-endif ()
-
 # --without-catalog is requirement of QWebEngine
 ExternalProject_Add(
   ext_xml
@@ -16,5 +10,5 @@ ExternalProject_Add(
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} --without-python --with-icu --with-catalog --with-lzma=${CMAKE_INSTALL_PREFIX} CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
-  DEPENDS ${project_dependencies}
+  DEPENDS ext_xz ext_readline ext_icu
 )
