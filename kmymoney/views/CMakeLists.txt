@@ -3,8 +3,6 @@ set(libviews_a_SOURCES
   kaccountsview.cpp
   kcategoriesview.cpp
   kgloballedgerview.cpp
-  kwelcomepage.cpp
-  khomeview.cpp
   kinstitutionsview.cpp
   kinvestmentview.cpp
   kmymoneyfile.cpp
@@ -15,7 +13,6 @@ set(libviews_a_SOURCES
   ktagsview.cpp
   kpayeeidentifierview.cpp
   payeeidentifierselectiondelegate.cpp
-  kmymoneywebpage.cpp
 )
 
 if(ENABLE_UNFINISHEDFEATURES)

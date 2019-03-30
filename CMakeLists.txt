@@ -171,9 +171,6 @@ cmake_dependent_option(ENABLE_ACTIVITIES "Enable activities support." ON
 
 option(ENABLE_FORECASTVIEW "Enable forecast view" ON)
 add_feature_info("Forecast view" ENABLE_FORECASTVIEW "Adds possibility to calculate forecasts.")
-cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON
-                       "KChart_FOUND" OFF)
-add_feature_info("Reports view" ENABLE_REPORTSVIEW "Adds possibility to display chart and table reports.")
 option(ENABLE_BUDGETVIEW "Enable budget view" ON)
 add_feature_info("Budget view" ENABLE_BUDGETVIEW "Adds possibility to plan a budget.")
 option(ENABLE_ONLINEJOBOUTBOXVIEW "Enable online job outbox view" ON)
@@ -204,13 +201,27 @@ add_feature_info("IBAN/BIC data" ENABLE_IBANBICDATA "Adds predefined IBAN/BIC nu
 # check for optional QWebEngine
 option(ENABLE_WEBENGINE "Enable QWebEngine" OFF)
 if(ENABLE_WEBENGINE)
-  find_package(Qt5WebEngineWidgets 5.8 REQUIRED)
+  find_package(Qt5WebEngineWidgets 5.8)
   if(Qt5WebEngineWidgets_VERSION VERSION_GREATER 5.8.99 AND Qt5WebEngineWidgets_VERSION VERSION_LESS 5.9.3)
     message(WARNING "QWebEngine version ${Qt5WebEngineWidgets_VERSION} is known to be unstable with KMyMoney")
   endif()
-else(ENABLE_WEBENGINE)
-  find_package(KF5WebKit REQUIRED)
-endif(ENABLE_WEBENGINE)
+endif()
+
+cmake_dependent_option(ENABLE_HOMEVIEW "Enable home view." ON
+                       "Qt5WebEngineWidgets_FOUND" OFF)
+add_feature_info("Home view" ENABLE_HOMEVIEW "Adds home view.")
+
+cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON
+                       "KChart_FOUND;Qt5WebEngineWidgets_FOUND" OFF)
+add_feature_info("Reports view" ENABLE_REPORTSVIEW "Adds possibility to display chart and table reports.")
+
+cmake_dependent_option(ENABLE_CHECKPRINTING "Enable check printing." ON
+                       "Qt5WebEngineWidgets_FOUND" OFF)
+add_feature_info("Check printing" ENABLE_CHECKPRINTING "Adds possibility to print checks.")
+
+cmake_dependent_option(ENABLE_RECONCILIATIONREPORT "Enable reconciliation report." ON
+                       "Qt5WebEngineWidgets_FOUND" OFF)
+add_feature_info("Reconciliation report" ENABLE_RECONCILIATIONREPORT "Adds possibility to report reconciliation.")
 
 # check for optional LibOFX support
 find_package(LibOfx)

@@ -5,9 +5,15 @@ add_subdirectory( qif )
 add_subdirectory( gnc )
 add_subdirectory( ofx )
 add_subdirectory( icalendar )
-add_subdirectory( reconciliationreport )
-add_subdirectory( checkprinting )
 add_subdirectory( views )
+
+if(ENABLE_RECONCILIATIONREPORT)
+  add_subdirectory( reconciliationreport )
+endif()
+
+if(ENABLE_CHECKPRINTING)
+  add_subdirectory( checkprinting )
+endif()
 
 #if(ENABLE_SQLSTORAGE OR ENABLE_XMLSTORAGE)
   add_subdirectory(xmlhelper)
