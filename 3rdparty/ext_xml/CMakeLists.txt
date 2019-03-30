@@ -7,7 +7,7 @@ ExternalProject_Add(
 
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xml.diff
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} --without-python --with-icu --with-catalog --with-lzma=${CMAKE_INSTALL_PREFIX} CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --without-python --with-icu --with-catalog --with-lzma=${CMAKE_INSTALL_PREFIX}
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}

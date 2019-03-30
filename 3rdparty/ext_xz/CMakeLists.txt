@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL http://tukaani.org/xz/xz-5.2.4.tar.xz
   URL_MD5 003e4d0b1b1899fc6e3000b24feddf7c
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} --disable-doc
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --disable-lzmadec --disable-lzmainfo --disable-scripts --disable-doc --enable-silent-rules
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}

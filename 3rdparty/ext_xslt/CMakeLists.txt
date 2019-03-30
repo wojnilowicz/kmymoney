@@ -9,5 +9,5 @@ ExternalProject_Add(
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_xml
+  DEPENDS ext_xml ext_gcrypt
 )

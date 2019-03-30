@@ -41,6 +41,9 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix/src/ext_qtxmlpatterns-build
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix/src/ext_qtxmlpatterns
+
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
 
@@ -108,7 +111,7 @@ matrix:
         #- ls -lh $HOME/workspace/deps-install
         #- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
         #- otool -l $HOME/workspace/deps-install/bin/desktoptojson
-        - sed -i "s/\/usr\/local\/bin\/ninja/\/Users\/travis\/workspace\/deps-install\/bin/" $HOME/workspace/deps-build\CMakeCache.txt
+        - sed -i "s/\/usr\/local\/bin\/ninja/\/Users\/travis\/workspace\/deps-install\/bin/" $HOME/workspace/deps-build/CMakeCache.txt
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
 
