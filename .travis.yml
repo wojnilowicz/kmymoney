@@ -42,6 +42,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
+        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
 
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
