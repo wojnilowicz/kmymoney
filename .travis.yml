@@ -28,7 +28,7 @@ matrix:
         - RUNTIME_TIMEOUT=40
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
         - sudo apt-get update -qq
-        - sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxfixes-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev
+        - sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxfixes-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev > /dev/null
         - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
         - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
         #- source /opt/qt512/bin/qt512-env.sh
@@ -42,18 +42,18 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-        - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
+        - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
 
       script:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) ; then
-            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || true
+          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
           fi
 
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) ; then
-            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR || true
+          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
           fi
 
       before_cache:
@@ -63,7 +63,7 @@ matrix:
       after_success:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 3 )) ; then
+          if (( ${REMAINING_TIME} >= 3 )) && $CONTINUE_WITH_NEXT_STEP ; then
             #cd $HOME/workspace/kmymoney-build
             #ctest -V
             ls -lh $HOME/workspace/*
@@ -108,19 +108,20 @@ matrix:
         #- ls -lh $HOME/workspace/deps-install
         #- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
         #- otool -l $HOME/workspace/deps-install/bin/desktoptojson
+        - sed -i "s/\/usr\/local\/bin\/ninja/\/Users\/travis\/workspace\/deps-install\/bin/" $HOME/workspace/deps-build\CMakeCache.txt
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-        - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || true
+        - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
 
       script:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) ; then
-            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || true
+          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
           fi
 
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) ; then
-            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR  || true
+          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR  || CONTINUE_WITH_NEXT_STEP=false
           fi
 
       before_cache:
@@ -130,7 +131,7 @@ matrix:
       after_success:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 3 )) ; then
+          if (( ${REMAINING_TIME} >= 3 )) && $CONTINUE_WITH_NEXT_STEP ; then
             cd $HOME/workspace/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="osx"

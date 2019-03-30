@@ -21,7 +21,7 @@ bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
 # Now start building everything we need, in the appropriate order
 # cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 # cmake --build . --target ext_lzma -- -j${CPU_COUNT}
-# cmake --build . --target ext_xml -- -j${CPU_COUNT}
+cmake --build . --target ext_xml -- -j${CPU_COUNT}
 # cmake --build . --target ext_gettext -- -j${CPU_COUNT}
 # cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 # cmake --build . --target ext_png -- -j${CPU_COUNT}
