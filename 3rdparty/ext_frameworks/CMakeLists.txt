@@ -159,9 +159,9 @@ ExternalProject_Add(
 )
 
 if (APPLE)
-  set(project_dependencies ext_extra_cmake_modules ext_qtmacextras )
+  set(project_dependencies ext_qtmacextras )
 elseif(UNIX)
-  set(project_dependencies ext_extra_cmake_modules ext_qtx11extras )
+  set(project_dependencies ext_qtx11extras )
 endif ()
 
 ExternalProject_Add(
@@ -171,7 +171,7 @@ ExternalProject_Add(
   URL_MD5 4cec43e5c481322f0b36e78d6b5688a5
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
-  DEPENDS ${project_dependencies}
+  DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
 
 ExternalProject_Add(
