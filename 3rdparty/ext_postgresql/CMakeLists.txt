@@ -7,9 +7,9 @@ ExternalProject_Add(
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --with-libxml --with-libxslt --with-icu --with-tcl --enable-thread-safety --without-readline --with-openssl --with-libraries=${CMAKE_INSTALL_PREFIX}/lib --with-includes=${CMAKE_INSTALL_PREFIX}/include CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
   BUILD_COMMAND rsync -a --ignore-existing src/backend/utils/ src/include/utils/
   COMMAND       rsync -a --ignore-existing src/backend/catalog/ src/include/catalog/
-  COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} -C src/bin install
-  COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} -C src/include install
-  COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} -C src/interfaces install
+  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/bin install
+  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/include install
+  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/interfaces install
   INSTALL_COMMAND ""
   UPDATE_COMMAND ""
   BUILD_IN_SOURCE 1

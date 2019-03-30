@@ -5,4 +5,5 @@ ExternalProject_Add( ext_png
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DPNG_TESTS=OFF
+  ${CLEANUP_COMMAND}
 )

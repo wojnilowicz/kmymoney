@@ -6,5 +6,6 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/source/configure --prefix=${CMAKE_INSTALL_PREFIX} --enable-rpath --disable-tests
   BUILD_COMMAND ${MAKE_EXECUTABLE} --silent -j${CMAKE_CPU_COUNT}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  ${CLEANUP_COMMAND}
 )

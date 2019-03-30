@@ -9,4 +9,5 @@ ExternalProject_Add(
              -DICAL_UNIX_NEWLINE=OFF
              -DICAL_GLIB=OFF
              -DSHARED_ONLY=ON
+  ${CLEANUP_COMMAND}
 )

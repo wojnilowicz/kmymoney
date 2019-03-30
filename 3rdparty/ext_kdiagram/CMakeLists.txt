@@ -5,4 +5,7 @@ ExternalProject_Add(
   URL_MD5 d0f8624a2decad2ba6a871e13799da23
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${CLEANUP_COMMAND}
+
+  DEPENDS ext_qtsvg
 )

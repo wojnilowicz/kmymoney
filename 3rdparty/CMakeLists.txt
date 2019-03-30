@@ -14,16 +14,20 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
 endif()
 
+# Get available processors count
+include(ProcessorCount)
+ProcessorCount(CMAKE_CPU_COUNT)
+message( STATUS "Available CPUs: ${CMAKE_CPU_COUNT}")
+
 # Check if make executable for autotools projects is available
 find_program(MAKE_EXECUTABLE NAMES gmake nmake make)
 if(NOT MAKE_EXECUTABLE)
   message(FATAL_ERROR "No gmake, nmake or make available.")
 endif()
 
-# Get available processors count
-include(ProcessorCount)
-ProcessorCount(CMAKE_CPU_COUNT)
-message( STATUS "Available CPUs: ${CMAKE_CPU_COUNT}")
+set (MAKE_ARGS --silent -j${CMAKE_CPU_COUNT})
+# set (CLEANUP_COMMAND TEST_COMMAND rm -fr <SOURCE_DIR> && rm -fr <BINARY_DIR>)
+set (CLEANUP_COMMAND "")
 
 # Tools must be obtained to work with:
 include(ExternalProject)

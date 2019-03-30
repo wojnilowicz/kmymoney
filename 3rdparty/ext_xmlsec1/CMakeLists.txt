@@ -7,8 +7,9 @@ ExternalProject_Add(
   URL_MD5 508bee7e4f1b99f2d50aaa7d38ede56e
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --without-openssl --without-nss --disable-crypto-dl
-  BUILD_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j${CMAKE_CPU_COUNT} install
+  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
+  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  ${CLEANUP_COMMAND}
 
   DEPENDS ext_xslt ext_gcrypt ext_gnutls
 )
