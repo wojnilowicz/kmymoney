@@ -78,7 +78,7 @@ ExternalProject_Add(
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_xslt ext_sqlite ext_pcre2 ext_icu ext_png #ext_mysql #ext_postgresql
+  DEPENDS ext_xslt ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
 )
 
 ExternalProject_Add(

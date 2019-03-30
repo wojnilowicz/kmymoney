@@ -56,6 +56,7 @@ cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
+cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 # cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 # cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
