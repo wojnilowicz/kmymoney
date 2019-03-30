@@ -41,7 +41,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
-        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
+        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
 
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
@@ -103,7 +103,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine
-        - rm -fr $HOME/workspace/deps-build
+        #- rm -fr $HOME/workspace/deps-build
         #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
