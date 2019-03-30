@@ -33,7 +33,7 @@ cmake -GNinja \
       -DDARWIN_KERNEL_VERSION=16.0.0 \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
+bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & #MacOS accepts only seconds
 # Now start building everything we need, in the appropriate order
 pip3 install meson
 cmake --build . --target ext_xml -- -j${CPU_COUNT}
