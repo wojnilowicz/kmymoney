@@ -46,7 +46,7 @@ if (APPLE)
     -DCMAKE_MACOSX_RPATH=ON
   )
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
-  set(AT_HOST --host=x86_64-apple-darwin)
+  set(AT_HOST --host=x86_64-apple-darwin${DARWIN_KERNEL_VERSION})
 elseif(UNIX)
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
   set(AT_HOST --host=x86_64-linux-gnu)

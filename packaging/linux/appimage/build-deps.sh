@@ -19,24 +19,24 @@ cmake -GNinja \
 
 bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
 # Now start building everything we need, in the appropriate order
-# cmake --build . --target ext_iconv -- -j${CPU_COUNT}
+cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 cmake --build . --target ext_xml -- -j${CPU_COUNT}
 cmake --build . --target ext_gettext -- -j${CPU_COUNT}
 cmake --build . --target ext_xslt -- -j${CPU_COUNT}
-# cmake --build . --target ext_png -- -j${CPU_COUNT}
-# cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
+cmake --build . --target ext_png -- -j${CPU_COUNT}
+cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 # cmake --build . --target ext_qt -- -j${CPU_COUNT}
 cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 cmake --build . --target ext_qtx11extras -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwebchannel -- -j${CPU_COUNT}
-cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
-# cmake --build . --target ext_boost -- -j${CPU_COUNT}
-# cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
-# cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
-# cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
-# cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
+# cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
+cmake --build . --target ext_boost -- -j${CPU_COUNT}
+cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
+cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
+cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
+cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
 # cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 # cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
