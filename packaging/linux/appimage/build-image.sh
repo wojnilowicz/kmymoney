@@ -80,7 +80,7 @@ cd $CMAKE_BUILD_PREFIX
 # Step 7: Build the image!!!
 $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
   -executable=$KMYMONEY_INSTALL_PREFIX/bin/kmymoney \
-  -qmldir=/opt/qt512/qml \
+  -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
   -appimage \
