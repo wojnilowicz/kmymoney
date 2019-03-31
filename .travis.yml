@@ -44,6 +44,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
+        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
