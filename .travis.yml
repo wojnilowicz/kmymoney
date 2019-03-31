@@ -11,146 +11,82 @@ branches:
 
 matrix:
   include:
-    - os: linux
-      dist: xenial
-      compiler: g++
-      sudo: required
-      cache:
-        ccache: false
-        timeout: 1000
-        directories:
-          - $HOME/workspace/deps-build
-          - $HOME/workspace/deps-install
-          - $HOME/workspace/kmymoney-build
+    #- os: linux
+      #dist: xenial
+      #compiler: g++
+      #sudo: required
+      #cache:
+        #ccache: false
+        #timeout: 1000
+        #directories:
+          #- $HOME/workspace/deps-build
+          #- $HOME/workspace/deps-install
+          #- $HOME/workspace/kmymoney-build
 
-      before_install:
-        - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=34
-        - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-        - sudo apt-get update -qq
-        - sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxkbcommon-dev libxcb-util-dev > /dev/null
-        - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
-        - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
-        #- source /opt/qt512/bin/qt512-env.sh
+      #before_install:
+        #- START_TIME=$(date +%s)
+        #- RUNTIME_TIMEOUT=34
+        #- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+        #- sudo apt-get update -qq
+        #- sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxkbcommon-dev libxcb-util-dev > /dev/null
+        #- sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
+        #- sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
+        ##- source /opt/qt512/bin/qt512-env.sh
 
-      install:
-        #- rm -fr $HOME/workspace/deps-build/ext_qt
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
-        #- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
-        #- rm -fr $HOME/workspace/kmymoney-build
-        #- rm -fr $HOME/workspace/deps-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
+      #install:
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        ##- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
+        ##- rm -fr $HOME/workspace/kmymoney-build
+        ##- rm -fr $HOME/workspace/deps-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
 
-        - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-        - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+        #- REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+        #- timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
 
-      script:
-        - |
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
-          fi
+      #script:
+        #- |
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+          #fi
 
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
-          fi
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+          #fi
 
-      before_cache:
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
+      #before_cache:
+        #- rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
+        #- rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
 
-      after_success:
-        - |
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            #cd $HOME/workspace/kmymoney-build
-            #ctest -V
-            ls -lh $HOME/workspace/*
-            cd $HOME/workspace/downloads
-            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-            export UPLOADTOOL_SUFFIX="linux"
-            bash upload.sh $HOME/workspace/image-build/*.AppImage*
-          else
-            echo "Skipping after_success phase because warming cache only."
-          fi
+      #after_success:
+        #- |
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            ##cd $HOME/workspace/kmymoney-build
+            ##ctest -V
+            #ls -lh $HOME/workspace/*
+            #cd $HOME/workspace/downloads
+            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            #export UPLOADTOOL_SUFFIX="linux"
+            #bash upload.sh $HOME/workspace/image-build/*.AppImage*
+          #else
+            #echo "Skipping after_success phase because warming cache only."
+          #fi
 
-    - os: osx
-      osx_image: xcode9.4
-      compiler: clang
-      sudo: required
-      cache:
-        timeout: 1000
-        directories:
-          - $HOME/workspace/deps-build
-          - $HOME/workspace/deps-install
-          - $HOME/workspace/kmymoney-build
-
-      before_install:
-        - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=40
-
-      install:
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
-        #- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
-        #- rm -fr $HOME/workspace/kmymoney-build
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine-build
-        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine
-        #- rm -fr $HOME/workspace/deps-build
-        #- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
-        #- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
-        #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
-        #- ls -lh $HOME/workspace/deps-install
-        #- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_breezeicons-prefix
-        - otool -L $HOME/workspace/deps-install/lib/libphonon4qt5experimental.4.dylib
-        - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-        - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
-
-      script:
-        - |
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
-          fi
-
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR  || CONTINUE_WITH_NEXT_STEP=false
-          fi
-
-      before_cache:
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
-        - rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
-
-      after_success:
-        - |
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            cd $HOME/workspace/downloads
-            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-            export UPLOADTOOL_SUFFIX="osx"
-            bash upload.sh $HOME/workspace/image-build/*.dmg*
-          else
-            echo "Skipping after_success phase because warming cache only."
-          fi
-
-    - os: windows
-      language: sh
+    #- os: osx
+      #osx_image: xcode9.4
+      #compiler: clang
+      #sudo: required
       #cache:
         #timeout: 1000
         #directories:
@@ -158,8 +94,68 @@ matrix:
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
 
-      before_install:
-        - choco install python3
+      #before_install:
+        #- START_TIME=$(date +%s)
+        #- RUNTIME_TIMEOUT=40
+
+      #install:
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        ##- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
+        ##- rm -fr $HOME/workspace/kmymoney-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine-build
+        ##- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtwebengine-prefix/src/ext_qtwebengine
+        ##- rm -fr $HOME/workspace/deps-build
+        ##- find $HOME/workspace/deps-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        ##- find $HOME/workspace/kmymoney-build -type f -name CMakeCache.txt -exec rm -fr {} \;
+        ##- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
+        ##- ls -lh $HOME/workspace/deps-install
+        ##- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
+        ##- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_breezeicons-prefix
+        #- otool -L $HOME/workspace/deps-install/lib/libphonon4qt5experimental.4.dylib
+        #- REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+        #- gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+
+      #script:
+        #- |
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+          #fi
+
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $HOME/workspace $TRAVIS_BUILD_DIR  || CONTINUE_WITH_NEXT_STEP=false
+          #fi
+
+      #before_cache:
+        #- rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost-build
+        #- rm -fr $HOME/workspace/deps-build/ext_boost/ext_boost-prefix/src/ext_boost
+
+      #after_success:
+        #- |
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #cd $HOME/workspace/downloads
+            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            #export UPLOADTOOL_SUFFIX="osx"
+            #bash upload.sh $HOME/workspace/image-build/*.dmg*
+          #else
+            #echo "Skipping after_success phase because warming cache only."
+          #fi
+
+    - os: windows
+      #cache:
+        #timeout: 1000
+        #directories:
+          #- $HOME/workspace/deps-build
+          #- $HOME/workspace/deps-install
+          #- $HOME/workspace/kmymoney-build
 
       install:
         - $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
