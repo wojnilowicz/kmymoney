@@ -61,7 +61,7 @@ ExternalProject_Add(
 if (APPLE)
   set(qt_platform_specific_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
 elseif(UNIX)
-  set(qt_platform_specific_option -recheck-all -system-xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(qt_platform_specific_option -recheck-all -xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
 endif ()
 
 ExternalProject_Add(
