@@ -8,19 +8,9 @@ set -eu
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
-#ls -lh $DEPS_INSTALL_PREFIX/*
-
-QT_DIR=/usr/local/opt/qt
 QT_DIR=$DEPS_INSTALL_PREFIX
-export MACOSX_DEPLOYMENT_TARGET=10.11
-export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.11
-
-# Save some frequently referenced locations in variables for ease of use / updating
-export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
-export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
 KMYMONEY_DMG=$KMYMONEY_INSTALL_PREFIX/Applications/KDE
-DMG_title=kmymoney
 
 mkdir -p $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 mkdir -p $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
@@ -45,7 +35,6 @@ add_lib_to_list() {
 
 sourceLibPaths=(
 $DEPS_INSTALL_PREFIX/lib
-$QT_DIR/lib
 )
 
 # Find all @rpath and Absolute to buildroot path libs
@@ -148,6 +137,8 @@ createDMG () {
     echo "Starting creation of dmg..."
     cd $CMAKE_BUILD_PREFIX
     DMG_size=500
+    DMG_title=kmymoney
+    DMG_background=background.png
 
     ## Build dmg from folder
 
@@ -155,40 +146,36 @@ createDMG () {
     # usage of -fsargs minimze gaps at front of filesystem (reduce size)
     hdiutil create -srcfolder "${KMYMONEY_DMG}" -volname "${DMG_title}" -fs HFS+ \
         -fsargs "-c c=64,a=16,e=16" -format UDRW -size ${DMG_size}m kmymoney.temp.dmg
-    # Next line is only useful if we have a dmg as a template!
-    # previous hdiutil must be uncommented
-    # cp kmymoney-template.dmg kmymoney.dmg
 
     device=$(hdiutil attach -readwrite -noverify -noautoopen "kmymoney.temp.dmg" | egrep '^/dev/' | sed 1q | awk '{print $1}')
 
     # Set style for dmg
-#     if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
-#         mkdir "/Volumes/${DMG_title}/.background"
-#     fi
-#     cp ${BUILDROOT}/${DMG_background} "/Volumes/${DMG_title}/.background/"
+    if [[ ! -d "/Volumes/${DMG_title}/.background" ]]; then
+        mkdir "/Volumes/${DMG_title}/.background"
+    fi
+
+    cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
-#     echo '
-#         tell application "Finder"
-#             tell disk "'${DMG_title}'"
-#                 open
-#                 set current view of container window to icon view
-#                 set toolbar visible of container window to false
-#                 set statusbar visible of container window to false
-#                 set the bounds of container window to {186, 156, 956, 592}
-#                 set theViewOptions to the icon view options of container window
-#                 set arrangement of theViewOptions to not arranged
-#                 set icon size of theViewOptions to 80
-#                 set background picture of theViewOptions to file ".background:'${DMG_background}'"
-#                 set position of item "'kmymoney.app'" of container window to {279, 272}
-#                 set position of item "Applications" of container window to {597, 272}
-#                 set position of item "Terms of Use" of container window to {597, 110}
-#                 update without registering applications
-#                 delay 1
-#                 close
-#             end tell
-#         end tell
-#         ' | osascript
+    echo '
+        tell application "Finder"
+            tell disk "'${DMG_title}'"
+                open
+                set current view of container window to icon view
+                set toolbar visible of container window to false
+                set statusbar visible of container window to false
+                set the bounds of container window to {186, 156, 956, 592}
+                set theViewOptions to the icon view options of container window
+                set arrangement of theViewOptions to not arranged
+                set icon size of theViewOptions to 80
+                set background picture of theViewOptions to file ".background:'${DMG_background}'"
+                set position of item "'kmymoney.app'" of container window to {279, 272}
+                update without registering applications
+                delay 1
+                close
+            end tell
+        end tell
+        ' | osascript
 
 
     chmod -Rf go-w "/Volumes/${DMG_title}"
@@ -200,8 +187,6 @@ createDMG () {
     hdiutil convert kmymoney.temp.dmg -format ULFO -o kmymoney-out.dmg
 
     # Add git version number
-#     GIT_SHA=$(grep "#define KMYMONEY_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kmymoneygitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
-
     mv kmymoney-out.dmg kmymoney-$VERSION-x86_64.dmg
     echo "moved kmymoney-out.dmg to kmymoney-$VERSION-x86_64.dmg"
     rm kmymoney.temp.dmg
@@ -216,11 +201,6 @@ rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/* \
 
 rsync -prul $DEPS_INSTALL_PREFIX/lib/libphonon4qt5* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
 rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5Notifications* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
-# install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libphonon4qt5experimental.4.dylib
-#
-# install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
-#
-# install_name_tool -change lib/libphonon4qt5experimental.4.dylib @rpath/libphonon4qt5experimental.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
 
 echo "Copying share..."
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
@@ -242,62 +222,32 @@ rsync -prul $DEPS_INSTALL_PREFIX/share/* \
             --exclude locale \
             --exclude terminfo \
             --exclude gtk-doc \
+            --exclude bison \
+            --exclude icu \
+            --exclude kf5 \
+            --exclude tabset \
+            --exclude phonon4qt5 \
+            --exclude knotifications5 \
+            --exclude common-lisp \
+            --exclude dbus-1 \
             $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icontheme.rcc
-rm -fr $KMYMONEY_INSTALL_PREFIX/share/icons/breeze
-rm -fr $KMYMONEY_INSTALL_PREFIX/share/icons/breeze-dark
+rm -fr $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icons/breeze
+rm -fr $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icons/breeze-dark
 
 echo "Copying plugins..."
 # rsync -prul $DEPS_INSTALL_PREFIX/lib/plugins/* $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 rsync -prul $DEPS_INSTALL_PREFIX/plugins/* \
             --exclude geoservices \
+            --exclude qmltooling \
+            --exclude kcm_kio.so \
+            --exclude kcm_trash.so \
+            --exclude kcm_webshortcuts.so \
             $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 
-# Now we can get the process started!
-#
 
-# # Step 0: place the translations where ki18n and Qt look for them
-# if [ -d $KMYMONEY_INSTALL_PREFIX/share/locale ] ; then
-#     mv $KMYMONEY_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
-# fi
-#
-# # Step 1: Copy over all the resources provided by dependencies that we need
-# cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
-# cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/share
-# cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/share
-# if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
-#   cp -r $DEPS_INSTALL_PREFIX/translations $KMYMONEY_INSTALL_PREFIX/usr/
-# else
-#   echo "Warning: $DEPS_INSTALL_PREFIX/translations does not exist."
-# fi
-#
-# if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
-#   cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/lib
-# else
-#   echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
-# fi
-#
-#
-# # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-# mv $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
-# rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/
-#
-# # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
-# for lib in $PLUGINS/kmymoney/*.so*; do
-#   patchelf --set-rpath '$ORIGIN/../../lib' $lib;
-# done
-#
-# # Step 4: Move plugins to loadable location in AppImage
-#
-# # Make sure our plugin directory already exists
-# mkdir -p $APPIMAGEPLUGINS
-#
-# mv $PLUGINS/* $APPIMAGEPLUGINS
-
-# Step 5: Determine the version of KMyMoney we have just built
-# This is needed for linuxdeployqt/appimagetool to do the right thing
 cd $KMYMONEY_SOURCES
 KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
 
@@ -310,17 +260,21 @@ else
   export VERSION=$KMYMONEY_VERSION
 fi
 
-#ls -lh $KMYMONEY_INSTALL_PREFIX/*
-
 cd $CMAKE_BUILD_PREFIX
 
 # Step 7: Build the image!!!
 install_name_tool -add_rpath @loader_path/../Frameworks $KMYMONEY_DMG/kmymoney.app/Contents/MacOS/kmymoney
-cd $QT_DIR/bin
+cd $DEPS_INSTALL_PREFIX/bin
 macdeployqt $KMYMONEY_DMG/kmymoney.app \
             -verbose=1 \
             -executable=${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney \
-            -qmldir=$QT_DIR/qml \
+            -qmldir=$DEPS_INSTALL_PREFIX/qml \
+            -libpath=$DEPS_INSTALL_PREFIX/lib
+
+macdeployqt $KMYMONEY_DMG/kmymoney.app \
+            -verbose=1 \
+            -executable=${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney \
+            -qmldir=$DEPS_INSTALL_PREFIX/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
 
 # repair kmymoney for plugins
@@ -328,18 +282,3 @@ kmymoney_findmissinglibs
 kmymoney_findmissinglibs
 
 createDMG
-
-#ls -lh $KMYMONEY_INSTALL_PREFIX/*
-#ls -lh $CMAKE_BUILD_PREFIX/*
-
-# cd $CMAKE_BUILD_PREFIX
-# git clone https://github.com/arl/macdeployqtfix.git
-# cd $CMAKE_BUILD_PREFIX/macdeployqtfix
-# python macdeployqtfix.py -v $KMYMONEY_DMG/kmymoney.app/Contents/MacOS/kmymoney $QT_DIR
-#
-# cd $QT_DIR/bin
-# macdeployqt $KMYMONEY_DMG/kmymoney.app -dmg -verbose=2
-#
-# if [ -f $KMYMONEY_DMG/kmymoney.dmg ]; then
-#   mv $KMYMONEY_DMG/kmymoney.dmg $CMAKE_BUILD_PREFIX/kmymoney-$VERSION-x86_64.dmg
-# fi
