@@ -25,7 +25,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=36
+        - RUNTIME_TIMEOUT=34
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
         - sudo apt-get update -qq
         - sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxkbcommon-dev libxcb-util-dev > /dev/null
@@ -44,7 +44,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
-        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix
+        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix

@@ -271,14 +271,7 @@ macdeployqt $KMYMONEY_DMG/kmymoney.app \
             -qmldir=$DEPS_INSTALL_PREFIX/qml \
             -libpath=$DEPS_INSTALL_PREFIX/lib
 
-macdeployqt $KMYMONEY_DMG/kmymoney.app \
-            -verbose=1 \
-            -executable=${KMYMONEY_DMG}/kmymoney.app/Contents/MacOS/kmymoney \
-            -qmldir=$DEPS_INSTALL_PREFIX/qml \
-            -libpath=$DEPS_INSTALL_PREFIX/lib
-
 # repair kmymoney for plugins
-kmymoney_findmissinglibs
 kmymoney_findmissinglibs
 
 createDMG

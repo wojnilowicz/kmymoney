@@ -15,8 +15,8 @@ cmake -GNinja \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DBUILD_TESTING=FALSE \
-      -DENABLE_WEBENGINE=TRUE \
-      -DIS_APPIMAGE=TRUE
+      -DENABLE_WEBENGINE=FALSE \
+      -DIS_APPIMAGE=FALSE
 
 # Build and Install KMyMoney (ready for the next phase)
 cmake --build . --target install -- -j${CPU_COUNT}
