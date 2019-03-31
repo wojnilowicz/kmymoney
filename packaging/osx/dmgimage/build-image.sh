@@ -197,7 +197,7 @@ createDMG () {
     sync
 
     hdiutil detach $device
-    hdiutil convert "kmymoney.temp.dmg" -format ULFO -imagekey -o kmymoney-out.dmg
+    hdiutil convert -format ULFO -o kmymoney-out.dmg -imagekey kmymoney.temp.dmg
 
     # Add git version number
 #     GIT_SHA=$(grep "#define KMYMONEY_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kmymoneygitversion.h | awk '{gsub(/"/, "", $3); printf $3}')

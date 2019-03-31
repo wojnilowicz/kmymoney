@@ -34,7 +34,8 @@ matrix:
         #- source /opt/qt512/bin/qt512-env.sh
 
       install:
-        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
+        - rm -fr $HOME/workspace/deps-build/ext_qt
+        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks
         #- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
         #- rm -fr $HOME/workspace/kmymoney-build
@@ -44,7 +45,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
+        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
 
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
@@ -69,7 +70,7 @@ matrix:
       after_success:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 3 )) && $CONTINUE_WITH_NEXT_STEP ; then
+          if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
             #cd $HOME/workspace/kmymoney-build
             #ctest -V
             ls -lh $HOME/workspace/*
@@ -137,7 +138,7 @@ matrix:
       after_success:
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          if (( ${REMAINING_TIME} >= 3 )) && $CONTINUE_WITH_NEXT_STEP ; then
+          if (( ${REMAINING_TIME} >= 0 )) && $CONTINUE_WITH_NEXT_STEP ; then
             cd $HOME/workspace/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="osx"
