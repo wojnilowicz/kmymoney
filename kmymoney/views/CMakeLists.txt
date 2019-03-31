@@ -61,12 +61,6 @@ add_library(views STATIC ${libviews_a_SOURCES})
 
 target_link_libraries(views PUBLIC newaccountwizard KF5::TextWidgets Qt5::PrintSupport)
 
-if(ENABLE_WEBENGINE)
- target_link_libraries(views PUBLIC Qt5::WebEngineWidgets)
-else(ENABLE_WEBENGINE)
- target_link_libraries(views PUBLIC KF5::WebKit)
-endif(ENABLE_WEBENGINE)
-
 # TODO: Remove this dependency. But it is needed as long as the payee editor uses these objects directly
 # This should be replaced by virtual methods in a pure abstract object.
 target_link_libraries( views PUBLIC
