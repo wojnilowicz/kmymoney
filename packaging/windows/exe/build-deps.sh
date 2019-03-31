@@ -8,22 +8,21 @@ set -eux
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
-# cd $CMAKE_BUILD_PREFIX
-# NINJA_EXECUTABLE=$DEPS_INSTALL_PREFIX/bin/ninja
-# if [ ! -f $NINJA_EXECUTABLE ] ||
-#    [ $(tr . 0 <<< $($NINJA_EXECUTABLE --version)) -lt $(tr . 0 <<< "1.9.0") ] ; then
-#   rm -fr ninja
-#   git clone --single-branch -b release --depth 1 git://github.com/ninja-build/ninja.git
-#   cd ninja
+NINJA_EXECUTABLE=$DEPS_INSTALL_PREFIX/bin/ninja
+if [ ! -f $NINJA_EXECUTABLE ] ||
+   [ $(tr . 0 <<< $($NINJA_EXECUTABLE --version)) -lt $(tr . 0 <<< "1.9.0") ] ; then
+  rm -fr ninja
+  git clone --single-branch -b release --depth 1 git://github.com/ninja-build/ninja.git
+  cd ninja
 #   python3 configure.py --bootstrap
 #   mkdir -p $DEPS_INSTALL_PREFIX/bin
 #   install -vm755 ninja $DEPS_INSTALL_PREFIX/bin
 #   cd ..
 #   rm -fr ninja
-# fi
+fi
 
 # Configure the dependencies for building
-cmake  \
+cmake -G "MinGW Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
