@@ -168,27 +168,27 @@ createDMG () {
 #     cp ${BUILDROOT}/${DMG_background} "/Volumes/${DMG_title}/.background/"
 
     ## Apple script to set style
-    echo '
-        tell application "Finder"
-            tell disk "'${DMG_title}'"
-                open
-                set current view of container window to icon view
-                set toolbar visible of container window to false
-                set statusbar visible of container window to false
-                set the bounds of container window to {186, 156, 956, 592}
-                set theViewOptions to the icon view options of container window
-                set arrangement of theViewOptions to not arranged
-                set icon size of theViewOptions to 80
-                set background picture of theViewOptions to file ".background:'${DMG_background}'"
-                set position of item "'kmymoney.app'" of container window to {279, 272}
-                set position of item "Applications" of container window to {597, 272}
-                set position of item "Terms of Use" of container window to {597, 110}
-                update without registering applications
-                delay 1
-                close
-            end tell
-        end tell
-        ' | osascript
+#     echo '
+#         tell application "Finder"
+#             tell disk "'${DMG_title}'"
+#                 open
+#                 set current view of container window to icon view
+#                 set toolbar visible of container window to false
+#                 set statusbar visible of container window to false
+#                 set the bounds of container window to {186, 156, 956, 592}
+#                 set theViewOptions to the icon view options of container window
+#                 set arrangement of theViewOptions to not arranged
+#                 set icon size of theViewOptions to 80
+#                 set background picture of theViewOptions to file ".background:'${DMG_background}'"
+#                 set position of item "'kmymoney.app'" of container window to {279, 272}
+#                 set position of item "Applications" of container window to {597, 272}
+#                 set position of item "Terms of Use" of container window to {597, 110}
+#                 update without registering applications
+#                 delay 1
+#                 close
+#             end tell
+#         end tell
+#         ' | osascript
 
 
     chmod -Rf go-w "/Volumes/${DMG_title}"
@@ -197,7 +197,7 @@ createDMG () {
     sync
 
     hdiutil detach $device
-    hdiutil convert "kmymoney.temp.dmg" -format UDZO -imagekey -zlib-level=9 -o kmymoney-out.dmg
+    hdiutil convert "kmymoney.temp.dmg" -format ULFO -imagekey -o kmymoney-out.dmg
 
     # Add git version number
 #     GIT_SHA=$(grep "#define KMYMONEY_GIT_SHA1_STRING" ${KIS_BUILD_DIR}/libs/version/kmymoneygitversion.h | awk '{gsub(/"/, "", $3); printf $3}')
@@ -216,11 +216,11 @@ rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/* \
 
 rsync -prul $DEPS_INSTALL_PREFIX/lib/libphonon4qt5* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
 rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5Notifications* $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks
-install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libphonon4qt5experimental.4.dylib
-
-install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
-
-install_name_tool -change lib/libphonon4qt5experimental.4.dylib @rpath/libphonon4qt5experimental.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
+# install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libphonon4qt5experimental.4.dylib
+#
+# install_name_tool -change lib/libphonon4qt5.4.dylib @rpath/libphonon4qt5.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
+#
+# install_name_tool -change lib/libphonon4qt5experimental.4.dylib @rpath/libphonon4qt5experimental.4.dylib $KMYMONEY_DMG/kmymoney.app/Contents/Frameworks/libKF5Notifications.dylib
 
 echo "Copying share..."
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
@@ -239,13 +239,20 @@ rsync -prul $DEPS_INSTALL_PREFIX/share/* \
             --exclude mime \
             --exclude translations \
             --exclude qml \
+            --exclude locale \
+            --exclude terminfo \
+            --exclude gtk-doc \
             $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icontheme.rcc
+rm -fr $DEPS_INSTALL_PREFIX/share/icons/breeze
+rm -fr $DEPS_INSTALL_PREFIX/share/icons/breeze-dark
 
 echo "Copying plugins..."
 # rsync -prul $DEPS_INSTALL_PREFIX/lib/plugins/* $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
-rsync -prul $DEPS_INSTALL_PREFIX/plugins/* $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
+rsync -prul $DEPS_INSTALL_PREFIX/plugins/* \
+            --exclude geoservices \
+            $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
 
 # Now we can get the process started!
