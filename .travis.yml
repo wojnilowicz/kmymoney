@@ -34,7 +34,8 @@ matrix:
         #- source /opt/qt512/bin/qt512-env.sh
 
       install:
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        - rm -fr $HOME/workspace/deps-build/ext_frameworks
+        - rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
         #- rm -fr $HOME/workspace/kmymoney-build
         #- rm -fr $HOME/workspace/deps-build
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build
@@ -43,7 +44,7 @@ matrix:
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtdeclarative-prefix/src/ext_qtdeclarative
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kwindowsystem-prefix
-        - rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
+        #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtxmlpatterns-prefix
 
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
@@ -95,7 +96,8 @@ matrix:
         - RUNTIME_TIMEOUT=40
 
       install:
-        #- rm -fr $HOME/workspace/deps-build/ext_frameworks
+        - rm -fr $HOME/workspace/deps-build/ext_frameworks
+        - rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
         #- rm -fr $HOME/workspace/kmymoney-build
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_kservice-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_extra_cmake_modules-prefix
