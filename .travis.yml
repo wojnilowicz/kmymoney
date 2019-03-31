@@ -25,7 +25,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=37
+        - RUNTIME_TIMEOUT=36
         - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
         - sudo apt-get update -qq
         - sudo apt-get install -qq -y g++-6 gcc-6 cmake ninja-build libxml-parser-perl libfam-dev mesa-common-dev libxcb-xfixes0-dev libaio-dev libxcb-keysyms1-dev libudev-dev gperf libgl1-mesa-dev libfontconfig1-dev libfreetype6-dev libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxkbcommon-dev libxcb-util-dev > /dev/null
@@ -34,7 +34,7 @@ matrix:
         #- source /opt/qt512/bin/qt512-env.sh
 
       install:
-        - rm -fr $HOME/workspace/deps-build/ext_qt
+        #- rm -fr $HOME/workspace/deps-build/ext_qt
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks
         #- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
@@ -115,7 +115,7 @@ matrix:
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
         #- ls -lh $HOME/workspace/deps-install
         #- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
-        - rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_breezeicons-prefix
+        #- rm -fr $HOME/workspace/deps-build/ext_frameworks/ext_breezeicons-prefix
         - otool -L $HOME/workspace/deps-install/lib/libphonon4qt5experimental.4.dylib
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
