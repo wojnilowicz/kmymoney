@@ -27,7 +27,7 @@ cd $CMAKE_BUILD_PREFIX
 # fi
 
 # Configure the dependencies for building
-cmake -G "MinGW Makefiles" \
+cmake -G "MSYS Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
