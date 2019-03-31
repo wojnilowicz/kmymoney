@@ -3,12 +3,6 @@
 # don't use -I and -L switches as they will cause explicit link to
 # OpenSSL instead of BoringSSL in QWebEngine
 
-if (APPLE)
-  set(qt_extras_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
-elseif(UNIX)
-  set(qt_extras_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
-endif ()
-
 ExternalProject_Add(
   ext_qt
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -64,6 +58,12 @@ ExternalProject_Add(
 )
 
 
+if (APPLE)
+  set(qt_platform_specific_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+elseif(UNIX)
+  set(qt_platform_specific_option -recheck-all -system-xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+endif ()
+
 ExternalProject_Add(
   ext_qtbase
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -73,7 +73,7 @@ ExternalProject_Add(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
 #         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${CMAKE_INSTALL_PREFIX} -opensource -confirm-license -verbose -pkg-config -release -nomake examples -nomake tests -nomake tools -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${CMAKE_INSTALL_PREFIX} -opensource -confirm-license -verbose -pkg-config -release -nomake examples -nomake tests -nomake tools ICU_PREFIX=${CMAKE_INSTALL_PREFIX} ${qt_platform_specific_option}
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
