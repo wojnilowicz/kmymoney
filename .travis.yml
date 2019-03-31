@@ -34,7 +34,7 @@ matrix:
         #- source /opt/qt512/bin/qt512-env.sh
 
       install:
-        - rm -fr $HOME/workspace/deps-build/ext_qt
+        #- rm -fr $HOME/workspace/deps-build/ext_qt
         #- rm -fr $HOME/workspace/deps-build/ext_qt/ext_qtx11extras-prefix
         #- rm -fr $HOME/workspace/deps-build/ext_frameworks
         #- rm -fr $HOME/workspace/deps-install/lib/*5.56.0.dylib
@@ -115,6 +115,7 @@ matrix:
         #- find $HOME/workspace/deps-build -type f -empty -name *install -exec rm -fr {} \;
         #- ls -lh $HOME/workspace/deps-install
         #- install_name_tool -add_rpath @loader_path/../lib $HOME/workspace/deps-install/bin/desktoptojson
+        - rm -fr $HOME/workspace/deps-build/ext_breezeicons-prefix
         - otool -L $HOME/workspace/deps-install/lib/libphonon4qt5experimental.4.dylib
         - REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
         - gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false

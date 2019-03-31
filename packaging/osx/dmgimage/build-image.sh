@@ -245,8 +245,8 @@ rsync -prul $DEPS_INSTALL_PREFIX/share/* \
             $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/kmymoney/* $KMYMONEY_DMG/kmymoney.app/Contents/Resources
 cp $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_DMG/kmymoney.app/Contents/Resources/icontheme.rcc
-rm -fr $DEPS_INSTALL_PREFIX/share/icons/breeze
-rm -fr $DEPS_INSTALL_PREFIX/share/icons/breeze-dark
+rm -fr $KMYMONEY_INSTALL_PREFIX/share/icons/breeze
+rm -fr $KMYMONEY_INSTALL_PREFIX/share/icons/breeze-dark
 
 echo "Copying plugins..."
 # rsync -prul $DEPS_INSTALL_PREFIX/lib/plugins/* $KMYMONEY_DMG/kmymoney.app/Contents/PlugIns
