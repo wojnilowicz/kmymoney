@@ -148,17 +148,18 @@ matrix:
           else
             echo "Skipping after_success phase because warming cache only."
           fi
-  #include:
-    #- os: windows
-      ##cache:
-        ##timeout: 1000
-        ##directories:
-          ##- $HOME/workspace/deps-build
-          ##- $HOME/workspace/deps-install
-          ##- $HOME/workspace/kmymoney-build
 
-      #install:
-        #- choco install python3
-        ##- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
+    - os: windows
+      #cache:
+        #timeout: 1000
+        #directories:
+          #- $HOME/workspace/deps-build
+          #- $HOME/workspace/deps-install
+          #- $HOME/workspace/kmymoney-build
 
-      #script: true
+      install:
+        - choco install python
+        #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
+
+      script:
+        - mkdir build
