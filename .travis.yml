@@ -165,10 +165,10 @@ matrix:
         - bash --version
         - export MSYSTEM=MINGW64
         - |
-          if [[ ! -d /c/tools/msys64 ]] ; then
+          if [[ ! -f /c/tools/msys64/usr/bin/bash.exe ]] ; then
             choco install -y msys2
           fi
-          echo "ścieżka PATH:"
+          echo "PATH variable:"
           export PATH="/c/tools/msys64/usr/bin:$PATH"
           powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
         #- export /c/Program\ Files/Git/usr/bin/:$PATH
