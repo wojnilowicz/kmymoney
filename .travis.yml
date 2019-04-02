@@ -162,6 +162,8 @@ matrix:
       install:
         - echo "katalog domowy:"
         - echo $HOME/workspace
+        - bash --version
+        - export MSYSTEM=MINGW64
         - |
           if [[ ! -d /c/tools/msys64 ]] ; then
             choco install -y msys2
