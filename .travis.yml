@@ -161,7 +161,7 @@ matrix:
       install:
         - echo "katalog domowy:"
         - echo $HOME/workspace
-        - choco install -y msys2
+        #- choco install -y msys2
         - powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
         #- export /c/Program\ Files/Git/usr/bin/:$PATH
         #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR

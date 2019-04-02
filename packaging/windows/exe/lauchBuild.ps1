@@ -1,1 +1,1 @@
-bash $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
+bash $Env:TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $$Env:HOME/workspace $$Env:TRAVIS_BUILD_DIR
