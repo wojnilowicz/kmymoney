@@ -151,9 +151,10 @@ matrix:
 
     - os: windows
       filter_secrets: false
-      #cache:
-        #timeout: 1000
-        #directories:
+      cache:
+        timeout: 1000
+        directories:
+          - C:\tools\msys64
           #- $HOME/workspace/deps-build
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
@@ -161,8 +162,8 @@ matrix:
       install:
         - echo "katalog domowy:"
         - echo $HOME/workspace
-        #- choco install -y msys2
-        - powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
+        - choco install -y msys2
+        #- powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
         #- export /c/Program\ Files/Git/usr/bin/:$PATH
         #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
 
