@@ -179,6 +179,3 @@ matrix:
 
       script:
         - echo "script phase"
-
-      after_success:
-        - echo "after_success phase"
