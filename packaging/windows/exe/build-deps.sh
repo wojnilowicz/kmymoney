@@ -29,7 +29,7 @@ cd $CMAKE_BUILD_PREFIX
 # Configure the dependencies for building
 cmake -G "MSYS Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
-      -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
+      -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX;/c/tools/msys64/mingw64 \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
