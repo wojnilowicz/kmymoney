@@ -165,6 +165,7 @@ matrix:
         - echo "katalog domowy:"
         - echo $HOME/workspace
         - python --version
+        - choco install -y nsis
         #- |
           #if [[ ! -d /c/tools/msys64/usr/bin ]] ; then
             #if [[ -d /c/tools/msys64 ]] ; then
@@ -172,7 +173,6 @@ matrix:
             #fi
             #choco install -y msys2
           #fi
-          #choco install -y nsis
 
         #  powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
         #- export /c/Program\ Files/Git/usr/bin/:$PATH
@@ -182,3 +182,4 @@ matrix:
       script:
         - echo "script phase"
         - ps -ef
+
