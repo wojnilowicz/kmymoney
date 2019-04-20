@@ -169,7 +169,7 @@ matrix:
             if [[ -d /c/tools/msys64 ]] ; then
               rm -fr /c/tools/msys64
             fi
-            choco install -y msys2 --params="/NoUpdate"
+            choco install -y msys2 --params="'/NoUpdate'"
           fi
 
         #  powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
