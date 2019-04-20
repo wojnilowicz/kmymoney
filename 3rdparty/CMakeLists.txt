@@ -26,8 +26,13 @@ if(NOT MAKE_EXECUTABLE)
 endif()
 
 set (MAKE_ARGS --silent -j${CMAKE_CPU_COUNT})
-# set (CLEANUP_COMMAND TEST_COMMAND rm -fr <SOURCE_DIR> && rm -fr <BINARY_DIR>)
-set (CLEANUP_COMMAND "")
+
+# For performance reason, cache install and don't cache build and source directory on Travis CI, which defines CI=true
+if($ENV{CI})
+  set (CLEANUP_COMMAND TEST_COMMAND rm -fr <SOURCE_DIR> && rm -fr <BINARY_DIR>)
+else()
+  set (CLEANUP_COMMAND "")
+endif()
 
 # Tools must be obtained to work with:
 include(ExternalProject)
