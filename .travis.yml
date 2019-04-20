@@ -172,11 +172,11 @@ matrix:
             choco install -y msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
           fi
 
-        #  powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
-        - export PATH="/c/msys64/usr/bin:$PATH"
-        - bash -lc "pacman -Ss git"
-        - bash -lc "pacman -S --needed --noconfirm make patch"
-        - $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
+         powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
+        #- export PATH="/c/msys64/usr/bin:$PATH"
+        #- bash -lc "pacman -Ss git"
+        #- bash -lc "pacman -S --needed --noconfirm make patch"
+        #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
 
       script:
         - echo "script phase"
