@@ -4,10 +4,18 @@ ExternalProject_Add(
   URL https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.36.tar.bz2
   URL_MD5 eff437f397e858a9127b76c0d87fa5ed
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --disable-doc --disable-tests --enable-silent-rules
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    --prefix=${UNIX_INSTALL_PREFIX}
+    --host=${AT_SYSTEM_TYPE}
+    ${AT_SHARED_ONLY}
+    ${AT_LESS_PROCESSING}
+    --disable-doc
+    --disable-tests
+    --disable-nls
+    --disable-languages
+    --without-readline
+
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
-
-  DEPENDS ext_readline
 )

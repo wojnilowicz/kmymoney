@@ -1,11 +1,35 @@
+# Without --enable-term-driver there are linking errors on MinGW.
 ExternalProject_Add(
   ext_ncurses
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz
   URL_MD5 98c889aaf8d23910d2b92d65be2e737a
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} --enable-overwrite --enable-pc-files --without-tests --without-manpages --with-shared --with-cxx-shared --enable-rpath --without-ada --with-pkg-config-libdir=${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+  # otherwise shlib gets invoked with PATH variable converted to Windows style paths
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ncurses_mingw.diff
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    --prefix=${UNIX_INSTALL_PREFIX}
+    --host=${AT_SYSTEM_TYPE}
+    --enable-overwrite
+    --enable-pc-files
+    --without-tests
+    --without-manpages
+    --with-shared
+    --with-cxx-shared
+    --without-ada
+    --disable-home-terminfo
+    --enable-term-driver
+    --without-termlib
+    --enable-sp-funcs
+    --enable-interop
+    --without-debug
+    --without-normal
+    --disable-widec
+    --enable-rpath
+    --with-pkg-config-libdir=${UNIX_INSTALL_PREFIX}/lib/pkgconfig #${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+
   ${CLEANUP_COMMAND}
 )

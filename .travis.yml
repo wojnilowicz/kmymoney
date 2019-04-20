@@ -155,14 +155,14 @@ matrix:
         timeout: 1000
         directories:
           - /c/tools/msys64
-          #- $HOME/workspace/deps-build
+          - $HOME/workspace/deps-build
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
 
       install:
         - echo "katalog domowy:"
         - echo $HOME/workspace
-        - export MSYSTEM=MINGW64
+        - python --version
         - |
           if [[ ! -d /c/tools/msys64/usr/bin ]] ; then
             if [[ -d /c/tools/msys64 ]] ; then
@@ -170,10 +170,9 @@ matrix:
             fi
             choco install -y msys2
           fi
-          #echo "PATH variable:"
-          #export PATH="/c/tools/msys64/usr/bin:$PATH"
-          #ls -lh /c/tools/msys64/usr/bin
-          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
+          choco install -y nsis
+
+        #  powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
         #- export /c/Program\ Files/Git/usr/bin/:$PATH
         #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
 

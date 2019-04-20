@@ -68,6 +68,12 @@ ExternalProject_Add(
   DEPENDS ext_extra_cmake_modules
 )
 
+if(MINGW)
+  set(project_dependencies ext_gperf)
+else()
+  set(project_dependencies "" )
+endif ()
+
 ExternalProject_Add(
   ext_kcodecs
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -75,7 +81,7 @@ ExternalProject_Add(
   URL_MD5 9cf8636f8ecd5699dc4cff2cd003bdaa
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
-  DEPENDS ext_extra_cmake_modules
+  DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
 
 ExternalProject_Add(
@@ -162,6 +168,9 @@ if (APPLE)
   set(project_dependencies ext_qtmacextras )
 elseif(UNIX)
   set(project_dependencies ext_qtx11extras )
+elseif(MINGW)
+#  set(project_dependencies ext_qtwinextras ext_kdewin )
+  set(project_dependencies ext_kdewin )
 endif ()
 
 ExternalProject_Add(
@@ -174,6 +183,12 @@ ExternalProject_Add(
   DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
 
+if (APPLE)
+  set(project_dependencies ext_bison )
+else(UNIX)
+  set(project_dependencies "" )
+endif ()
+
 ExternalProject_Add(
   ext_solid
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -181,7 +196,7 @@ ExternalProject_Add(
   URL_MD5 d9d13af96a11f19b68a8787b07a9a8c4
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
-  DEPENDS ext_extra_cmake_modules
+  DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
 
 ExternalProject_Add(
@@ -214,14 +229,16 @@ ExternalProject_Add(
   DEPENDS ext_extra_cmake_modules
 )
 
+# without "-DKACTIVITIES_LIBRARY_ONLY=ON" ext_boost is required
 ExternalProject_Add(
   ext_kactivities
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL http://download.kde.org/stable/frameworks/5.55/kactivities-5.55.0.tar.xz
   URL_MD5 e643d57385e5bddb12cba895af11f93e
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+             -DKACTIVITIES_LIBRARY_ONLY=ON
   ${CLEANUP_COMMAND}
-  DEPENDS ext_boost ext_kconfig ext_kcoreaddons ext_kwindowsystem
+  DEPENDS ext_kconfig ext_kcoreaddons ext_kwindowsystem
 )
 
 ExternalProject_Add(

@@ -20,9 +20,9 @@ ProcessorCount(CMAKE_CPU_COUNT)
 message( STATUS "Available CPUs: ${CMAKE_CPU_COUNT}")
 
 # Check if make executable for autotools projects is available
-find_program(MAKE_EXECUTABLE NAMES gmake nmake make)
+find_program(MAKE_EXECUTABLE NAMES gmake nmake make )
 if(NOT MAKE_EXECUTABLE)
-  message(FATAL_ERROR "No gmake, nmake or make available.")
+  message(FATAL_ERROR "No gmake, nmake, mingw32-make or make available.")
 endif()
 
 set (MAKE_ARGS --silent -j${CMAKE_CPU_COUNT})
@@ -33,6 +33,11 @@ set (CLEANUP_COMMAND "")
 include(ExternalProject)
 
 message( STATUS "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+file(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} CMAKE_INSTALL_PREFIX_NATIVE)
+file(TO_CMAKE_PATH ${CMAKE_INSTALL_PREFIX} CMAKE_INSTALL_PREFIX_CMAKE)
+
+set (UNIX_INSTALL_PREFIX "$<SHELL_PATH:${CMAKE_INSTALL_PREFIX}>")
+message( STATUS "UNIX_INSTALL_PREFIX ${UNIX_INSTALL_PREFIX}")
 
 set(CMAKE_GLOBAL_PROFILE
   -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
@@ -46,30 +51,38 @@ if (APPLE)
     -DCMAKE_MACOSX_RPATH=ON
   )
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
-  set(AT_HOST --host=x86_64-apple-darwin${DARWIN_KERNEL_VERSION})
+  set(AT_SYSTEM_TYPE x86_64-apple-darwin${DARWIN_KERNEL_VERSION})
+elseif(MINGW)
+  list(APPEND CMAKE_GLOBAL_PROFILE
+    -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+  )
+  # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
+  set(AT_SYSTEM_TYPE x86_64-w64-mingw32)
 elseif(UNIX)
   # without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
-  set(AT_HOST --host=x86_64-linux-gnu)
+  set(AT_SYSTEM_TYPE x86_64-linux-gnu)
 endif ()
 
 set(AT_SHARED_ONLY --disable-static --enable-shared)
-set(AT_CPP_FLAGS "-I${CMAKE_INSTALL_PREFIX}/include -I${CMAKE_INSTALL_PREFIX}/openssl/include")
-set(AT_LD_FLAGS "-L${CMAKE_INSTALL_PREFIX}/lib -L${CMAKE_INSTALL_PREFIX}/openssl/lib")
+set(AT_CPP_FLAGS "-I${UNIX_INSTALL_PREFIX}/include -I${UNIX_INSTALL_PREFIX}/openssl/include")
+set(AT_LD_FLAGS "-L${UNIX_INSTALL_PREFIX}/lib -L${UNIX_INSTALL_PREFIX}/openssl/lib")
+set(AT_LESS_PROCESSING --enable-silent-rules --disable-dependency-tracking)
 
 set(PATCH_COMMAND patch)
 
 # this list must be dependency-ordered
-add_subdirectory( ext_iconv )
 add_subdirectory( ext_zlib )
+add_subdirectory( ext_iconv )
+add_subdirectory( ext_bison )
+add_subdirectory( ext_flex )
+add_subdirectory( ext_glib )
+add_subdirectory( ext_pkgconfig )
 add_subdirectory( ext_xz )
 add_subdirectory( ext_icu )
 add_subdirectory( ext_ncurses )
 add_subdirectory( ext_readline )
 add_subdirectory( ext_xml )
 add_subdirectory( ext_gettext )
-add_subdirectory( ext_glib )
-add_subdirectory( ext_bison )
-add_subdirectory( ext_flex )
 add_subdirectory( ext_png )
 add_subdirectory( ext_nasm )
 add_subdirectory( ext_jpeg )
@@ -95,6 +108,8 @@ add_subdirectory( ext_mysql )
 add_subdirectory( ext_tcl )
 add_subdirectory( ext_postgresql )
 add_subdirectory( ext_qt )
+add_subdirectory( ext_kdewin )
+add_subdirectory( ext_gperf )
 add_subdirectory( ext_gpgme )
 add_subdirectory( ext_frameworks )
 add_subdirectory( ext_grantlee )
@@ -110,3 +125,4 @@ add_subdirectory( ext_opensp )
 add_subdirectory( ext_ofx )
 add_subdirectory( ext_ical )
 add_subdirectory( ext_patchelf )
+add_subdirectory( ext_png2ico )

@@ -1,0 +1,12 @@
+diff -ruN ncurses-6.1.orig/misc/run_tic.in ncurses-6.1/misc/run_tic.in
+--- ncurses-6.1.orig/misc/run_tic.in	2017-10-24 02:16:22.000000000 +0200
++++ ncurses-6.1/misc/run_tic.in	2019-04-12 21:13:34.251410300 +0200
+@@ -77,7 +77,7 @@
+ 		export PATH
+ 		if test @DFT_LWR_MODEL@ = shared
+ 		then
+-			SHLIB="sh $srcdir/shlib"
++            SHLIB="$srcdir/shlib"
+ 			TIC_PATH="$SHLIB tic"
+ 		else
+ 			TIC_PATH="tic"

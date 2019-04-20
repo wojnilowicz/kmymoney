@@ -3,34 +3,57 @@
 # don't use -I and -L switches as they will cause explicit link to
 # OpenSSL instead of BoringSSL in QWebEngine
 
+# kxmlgui uses QSslSocket and fails to build without that, so openssl must be present
+
 if (APPLE)
   set(qt_platform_specific_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+elseif(MINGW)
+  set(qt_platform_specific_option -platform win32-g++ -opengl desktop)
 elseif(UNIX)
-  set(qt_platform_specific_option -recheck-all -xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(qt_platform_specific_option -xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
 endif ()
 
 ExternalProject_Add(
   ext_qtbase
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtbase-everywhere-src-5.12.2.tar.xz
-  URL_MD5 a8f4329015a25e3488078d905379bedd
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
+  URL_MD5 fe47852113fc27581dbc0cf71644d6f1
+ PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
+       COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
+       COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
 #         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${CMAKE_INSTALL_PREFIX} -opensource -confirm-license -verbose -pkg-config -release -nomake examples -nomake tests -nomake tools ICU_PREFIX=${CMAKE_INSTALL_PREFIX} ${qt_platform_specific_option}
+
+
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    -prefix ${CMAKE_INSTALL_PREFIX}
+    -opensource
+    -confirm-license
+    -verbose
+    -release
+    -nomake examples
+    -nomake tests
+    -nomake tools
+    -pkg-config
+    -icu
+    -ssl
+    -openssl-runtime
+    -recheck-all
+    ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
+    OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
+    ${qt_platform_specific_option}
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_xslt ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
+  DEPENDS ext_openssl ext_xslt ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
 )
 
 ExternalProject_Add(
   ext_qtsvg
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtsvg-everywhere-src-5.12.2.tar.xz
-  URL_MD5 175641313dbf21c31e5aae33d8757cad
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtsvg-everywhere-src-5.12.3.tar.xz
+  URL_MD5 f8fa6e39584ed631f2795d8d80d5229c
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -43,22 +66,22 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qttools
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qttools-everywhere-src-5.12.2.tar.xz
-  URL_MD5 ac44a458945e801b82efd97f2c836237
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qttools-everywhere-src-5.12.3.tar.xz
+  URL_MD5 d2e4776ca7ca1bbb39330adffa17a65f
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_qtbase
+ DEPENDS ext_qtbase
 )
 
 ExternalProject_Add(
   ext_qtlocation
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtlocation-everywhere-src-5.12.2.tar.xz
-  URL_MD5 cd4b62e31d33c7f0d68bec523af828b8
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtlocation-everywhere-src-5.12.3.tar.xz
+  URL_MD5 0ccaa6be759513650158d552c6130529
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -71,8 +94,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtxmlpatterns
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtxmlpatterns-everywhere-src-5.12.2.tar.xz
-  URL_MD5 d84dd8a7659a5f209835ccee82792d13
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtxmlpatterns-everywhere-src-5.12.3.tar.xz
+  URL_MD5 f1f6b4c1253d2b833e849663c7661110
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -82,15 +105,18 @@ ExternalProject_Add(
   DEPENDS ext_qtbase
 )
 
+# kdeclarative uses QQmlDebuggingEnabler, so -no-qml-debug cannot be passed
+
 ExternalProject_Add(
   ext_qtdeclarative
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtdeclarative-everywhere-src-5.12.2.tar.xz
-  URL_MD5 7b6abe476da9368ae73de430def58c53
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtdeclarative-everywhere-src-5.12.3.tar.xz
+  URL_MD5 2f8e8a30507adbec8f4c10fa56b06027
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+          COMMAND bash -c "find ${DEPS_INSTALL_PREFIX}/lib/pkgconfig -type f -name Qt5*.pc -exec sed -i 's/Qt5\(.*\)d$*/Qt5\1/g' {} \;"
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtxmlpatterns ext_qtsvg
@@ -99,8 +125,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtx11extras
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtx11extras-everywhere-src-5.12.2.tar.xz
-  URL_MD5 08eb87bb411d96e62f91fab121df8e81
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtx11extras-everywhere-src-5.12.3.tar.xz
+  URL_MD5 4069ca615b14c0c2b5be8744c9a75633
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} -j2
@@ -113,8 +139,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtwinextras
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtwinextras-everywhere-src-5.12.2.tar.xz
-  URL_MD5 a60da2661b4c76a48efee7249028aa0a
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwinextras-everywhere-src-5.12.3.tar.xz
+  URL_MD5 1e10104f161cccecbb9c1c2638b1a719
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -127,8 +153,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtmacextras
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtmacextras-everywhere-src-5.12.2.tar.xz
-  URL_MD5 254f05233b041080a401e4769c1d9a60
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtmacextras-everywhere-src-5.12.3.tar.xz
+  URL_MD5 66ef1fe02a59abdd5ad20152618475b1
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -141,8 +167,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtwebchannel
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtwebchannel-everywhere-src-5.12.2.tar.xz
-  URL_MD5 e71c7ba1c932ec777150384a5c72a129
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebchannel-everywhere-src-5.12.3.tar.xz
+  URL_MD5 bd4e964b35ab060a733262a8c3243718
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -155,8 +181,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtwebengine
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.qt.io/archive/qt/5.12/5.12.2/submodules/qtwebengine-everywhere-src-5.12.2.tar.xz
-  URL_MD5 a5182f10645103b54a35f8611fd13506
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebengine-everywhere-src-5.12.3.tar.xz
+  URL_MD5 9841599435095b16f12870bd48ef5342
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> #-- -system-webengine-icu #-no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc -no-webengine-pepper-plugins
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
@@ -165,5 +191,3 @@ ExternalProject_Add(
 
   DEPENDS ext_qtbase ext_qtdeclarative ext_qtwebchannel ext_qtlocation
 )
-
-

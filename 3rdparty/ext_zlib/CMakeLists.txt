@@ -1,14 +1,35 @@
 # this library isn't shipped with AppImage as per
 # https://github.com/AppImage/AppImages/blob/master/excludelist#L126
+if(MINGW)
+  ExternalProject_Add(
+    ext_zlib
+    DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+    URL https://zlib.net/zlib-1.2.11.tar.gz
+    URL_MD5 1c9f62f0778697a09d36121ead88e08e
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ${MAKE_EXECUTABLE} -fwin32/Makefile.gcc
+    INSTALL_COMMAND ${MAKE_EXECUTABLE}
+      prefix=${UNIX_INSTALL_PREFIX}
+      BINARY_PATH=${UNIX_INSTALL_PREFIX}/bin
+      INCLUDE_PATH=${UNIX_INSTALL_PREFIX}/include
+      LIBRARY_PATH=${UNIX_INSTALL_PREFIX}/lib
+      install -fwin32/Makefile.gcc SHARED_MODE=1
 
-ExternalProject_Add(
-  ext_zlib
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://zlib.net/zlib-1.2.11.tar.gz
-  URL_MD5 1c9f62f0778697a09d36121ead88e08e
+    ${CLEANUP_COMMAND}
+    BUILD_IN_SOURCE 1
+  )
+else()
+  ExternalProject_Add(
+    ext_zlib
+    DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+    URL https://zlib.net/zlib-1.2.11.tar.gz
+    URL_MD5 1c9f62f0778697a09d36121ead88e08e
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
-  ${CLEANUP_COMMAND}
+    CONFIGURE_COMMAND sh <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX}
+    BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
+    INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+    ${CLEANUP_COMMAND}
 )
+endif ()
+
+
