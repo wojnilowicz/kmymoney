@@ -150,14 +150,12 @@ matrix:
           #fi
 
     - os: windows
-      filter_secrets: false
-      env:
-        YARN_GPG=no
-      cache:
-        timeout: 1000
-        directories:
+      #filter_secrets: false
+      #cache: false
+        #timeout: 1000
+        #directories:
           #- /c/tools/msys64
-          - $HOME/workspace/deps-build
+          # - $HOME/workspace/deps-build
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
 
