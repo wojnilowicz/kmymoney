@@ -156,7 +156,7 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - /c/tools/msys64
+          #- /c/tools/msys64
           - $HOME/workspace/deps-build
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
