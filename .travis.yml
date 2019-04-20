@@ -154,7 +154,7 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - /c/tools/msys64
+          - /c/msys64
           - $HOME/workspace/deps-build
           - $HOME/workspace/deps-install
           - $HOME/workspace/kmymoney-build
@@ -165,15 +165,17 @@ matrix:
         - python --version
         #- choco install -y nsis
         - |
-          if [[ ! -d /c/tools/msys64/usr/bin ]] ; then
-            if [[ -d /c/tools/msys64 ]] ; then
-              rm -fr /c/tools/msys64
+          if [[ ! -d /c/msys64/usr/bin ]] ; then
+            if [[ -d /c/msys64 ]] ; then
+              rm -fr /c/msys64
             fi
-            choco install -y msys2 --params="'/NoUpdate'"
+            choco install -y msys2 --params="'/NoUpdate /InstallDir=C:\msys64'"
           fi
 
         #  powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1
-        #- export /c/Program\ Files/Git/usr/bin/:$PATH
+        - export /c/msys64/usr/bin:$PATH
+        - bash -lc "pacman -Ss git"
+        - bash -lc "pacman -S --needed --noconfirm make patch"
         - $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
 
       script:
