@@ -1,6 +1,7 @@
 language: cpp
 git:
   depth: 3
+  quiet: true
 
 branches:
   except:
@@ -176,7 +177,7 @@ matrix:
 
           # Workaround broken casher implementation that extracts absolute paths to the current working directory
           # See https://github.com/travis-ci/casher/pull/38
-          for path in msys64 deps-build ; do if [ -d "$path" ]; then echo "Restoring C:/$path"; mv "$path/"* "C:/$path"; fi; done
+          for path in msys64 deps-build ; do if [ -d "c/$path" ]; then echo "Restoring C:/$path"; mv "c/$path/"* "C:/$path"; fi; done
 
           # Update checksums to avoid invalidating the cache (saves 2-3mins).
           if [ -d Qt ]; then md5deep64 -o f -r "C:/wireshark-libs" "C:/Qt" | sort > ~/.casher/md5sums_before; fi
@@ -197,6 +198,7 @@ matrix:
 
           echo "Check TRAVIS_BUILD_DIR:"
           ls -lh $TRAVIS_BUILD_DIR
+          ls -lh $TRAVIS_BUILD_DIR/c
 
           #if [[ ! -d "/c/msys64/usr/bin" ]] ; then
             #echo "----------------1"
