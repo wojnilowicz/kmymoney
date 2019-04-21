@@ -156,6 +156,7 @@ matrix:
         timeout: 1000
         directories:
           - /c/msys64
+          - /c/Python37
           - /c/deps-build
           - /c/deps-install
           - /c/kmymoney-build
@@ -164,8 +165,6 @@ matrix:
         - START_TIME=$(date +%s)
         - RUNTIME_TIMEOUT=40
         - |
-          cinst -y --no-progress nsis python
-
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
           # Entries in the Machine PATH might contain trailing slashes, drop those.
@@ -174,21 +173,23 @@ matrix:
             [Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
           } | Select -Unique | % { cygpath $_ }) -Join ":"')"
           echo "PATH=$PATH"
-
+        - |
           # Workaround broken casher implementation that extracts absolute paths to the current working directory
           # See https://github.com/travis-ci/casher/pull/38
           if [ -d "$TRAVIS_BUILD_DIR/c" ]; then mv "$TRAVIS_BUILD_DIR/c/"* "/c/"; fi;
           #for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "./c/$path" ]; then echo "Restoring C:/$path"; mv "./c/$path/"* "C:/#$path"; fi; done
-
+        - |
           mkdir -p /c/msys64
+          mkdir -p /c/Python37
           mkdir -p /c/deps-build
           mkdir -p /c/deps-install
           mkdir -p /c/kmymoney-build
 
+        - |
           # Update checksums to avoid invalidating the cache (saves 2-3mins).
-          if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
+          if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/Python37" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
 
-          pip3.exe install meson
+        - |
           if [[ ! -d "/c/msys64/usr/bin" ]] ; then
             if [[ -d "/c/msys64" ]] ; then
               rm -fr /c/msys64
@@ -196,7 +197,16 @@ matrix:
             cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
+          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
 
+        - |
+          if [[ ! -d "/c/Python37/bin" ]] ; then
+            if [[ -d "/c/Python37" ]] ; then
+              rm -fr /c/Python37
+            fi
+            cinst -y --no-progress python
+            /c/Python37/Script/pip3.exe install meson
+          fi
 
       install:
         - echo "install phase"

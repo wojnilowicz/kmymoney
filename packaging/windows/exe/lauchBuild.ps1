@@ -1,6 +1,6 @@
 Write-Host $Env:Path
 Write-Host $args[0]
-$Env:Path="C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;$Env:Path"
+$Env:Path="C:\Python37\Script;C:\Python37\bin;C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;$Env:Path"
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower().Trim("/")
 if ( $args[0]="pacman-deps" ) {
