@@ -154,11 +154,11 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - C:/msys64
+          - /c/msys64
           - $HOME/cachedir
-          - $HOME/workspace/deps-build
-          - $HOME/workspace/deps-install
-          - $HOME/workspace/kmymoney-build
+          #- $HOME/workspace/deps-build
+          #- $HOME/workspace/deps-install
+          #- $HOME/workspace/kmymoney-build
 
       install:
         - echo "katalog domowy:"
@@ -168,24 +168,27 @@ matrix:
           echo "----------------0"
           ls -lh /c
           mkdir -p /c/msys64
-          echo "----------------1"
+          echo "Check cached directory:"
           ls -lh /c/msys64
           echo "----------------2"
           echo "123" > /c/msys64/cachedFile.txt
-          echo "----------------3"
+          echo "Check directory after its warming up:"
           ls -lh /c/msys64
           echo "----------------4"
 
           echo "----------------0"
           ls -lh $HOME/
           mkdir -p $HOME/cachedir
-          echo "----------------1"
+          echo "Check cached directory:"
           ls -lh $HOME/cachedir
           echo "----------------2"
           echo "123" > $HOME/cachedir/cachedFile.txt
-          echo "----------------3"
+          echo "Check directory after its warming up:"
           ls -lh $HOME/cachedir
           echo "----------------4"
+
+          echo "Check TRAVIS_BUILD_DIR:"
+          ls -lh $TRAVIS_BUILD_DIR
 
           #if [[ ! -d "/c/msys64/usr/bin" ]] ; then
             #echo "----------------1"
