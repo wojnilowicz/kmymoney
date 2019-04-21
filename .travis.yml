@@ -195,8 +195,10 @@ matrix:
               rm -fr /c/msys64
             fi
             cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 update-msys2
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
+          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 update-msys2
           powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
 
         - |
@@ -205,8 +207,9 @@ matrix:
               rm -fr /c/Python37
             fi
             cinst -y --no-progress python
-            /c/Python37/Script/pip3.exe install meson
+            /c/Python37/Scripts/pip3.exe install meson
           fi
+        - export PATH="/c/Python37/Scripts:/c/Python37/bin:/c/msys64/usr/bin:/c/Program Files/CMake/bin:/c/ProgramData/chocolatey/lib\mingw/tools/install/mingw64/bin:$PATH"
 
       install:
         - echo "install phase"
