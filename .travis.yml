@@ -212,11 +212,11 @@ matrix:
 
       install:
         - echo "install phase"
-        #- |
-          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            #timeout ${REMAINING_TIME}m powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
-          #fi
+        - |
+          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            timeout ${REMAINING_TIME}m powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
+          fi
 
       script:
         - echo "script phase"
