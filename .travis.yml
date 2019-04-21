@@ -209,7 +209,7 @@ matrix:
             cinst -y --no-progress python
             /c/Python37/Scripts/pip3.exe install meson
           fi
-        - export PATH="/c/Python37/Scripts:/c/Python37/bin:/c/msys64/usr/bin:/c/Program Files/CMake/bin:/c/ProgramData/chocolatey/lib\mingw/tools/install/mingw64/bin:$PATH"
+        #- export PATH="/c/Python37/Scripts:/c/Python37/bin:/c/msys64/usr/bin:/c/Program Files/CMake/bin:/c/ProgramData/chocolatey/lib\mingw/tools/install/mingw64/bin:$PATH"
 
       install:
         - echo "install phase"
