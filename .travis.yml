@@ -217,6 +217,7 @@ matrix:
           if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
             timeout ${REMAINING_TIME}m powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
           fi
+        - cat /c/deps-build/CMakeFiles/CMakeOutput.log
 
       script:
         - echo "script phase"
