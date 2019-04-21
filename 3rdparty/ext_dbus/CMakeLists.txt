@@ -17,7 +17,7 @@ ExternalProject_Add( ext_dbus
              -DDBUS_SESSION_BUS_LISTEN_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SESSION_BUS_CONNECT_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SYSTEM_BUS_DEFAULT_ADDRESS:STRING=autolaunch:scope=*install-path
-
+  BUILD_IN_SOURCE 1
   ${CLEANUP_COMMAND}
   DEPENDS ext_expat ext_glib
 )
