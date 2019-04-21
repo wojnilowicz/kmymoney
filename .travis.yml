@@ -162,6 +162,8 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
+        - echo "Start time:"
+        - echo ${START_TIME}
         - RUNTIME_TIMEOUT=40
         - |
 
@@ -178,18 +180,16 @@ matrix:
 
           # Workaround broken casher implementation that extracts absolute paths to the current working directory
           # See https://github.com/travis-ci/casher/pull/38
-          echo "----------------1"
-          ls -lh $TRAVIS_BUILD_DIR/c
-          echo "----------------2"
-          ls -lh /c/
-          echo "----------------3"
           if [ -d "$TRAVIS_BUILD_DIR/c" ]; then mv "$TRAVIS_BUILD_DIR/c/"* "/c/"; fi;
           #for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "./c/$path" ]; then echo "Restoring C:/$path"; mv "./c/$path/"* "C:/#$path"; fi; done
-          ls -lh /c/
-          echo "----------------4"
+
+          mkdir -p /c/msys64
+          mkdir -p /c/deps-build
+          mkdir -p /c/deps-install
+          mkdir -p /c/kmymoney-build
 
           # Update checksums to avoid invalidating the cache (saves 2-3mins).
-          if [ -d "c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
+          if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
 
           #pip3.exe install meson
           if [[ ! -d "/c/msys64/usr/bin" ]] ; then
@@ -197,11 +197,15 @@ matrix:
               rm -fr /c/msys64
             fi
             #cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
-          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
+
 
       install:
         - echo "install phase"
+        - timeout --version
+        - timeout --help
+        - timeout 2 echo "123"
         #- |
           #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
           #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
