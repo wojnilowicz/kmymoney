@@ -30,7 +30,7 @@ set (MAKE_ARGS --silent -j${CMAKE_CPU_COUNT})
 # For performance reason, cache install and don't cache build and source directory on Travis CI, which defines CI=true
 if($ENV{CI})
   message( STATUS "Running in CI mode. Build and source directory will be deleted after first use")
-  set (CLEANUP_COMMAND TEST_COMMAND rm -fr <SOURCE_DIR> && rm -fr <BINARY_DIR>)
+  set (CLEANUP_COMMAND COMMAND rm -fr <SOURCE_DIR> && rm -fr <BINARY_DIR>)
 else()
   set (CLEANUP_COMMAND "")
 endif()
