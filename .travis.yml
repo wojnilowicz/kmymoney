@@ -155,15 +155,32 @@ matrix:
         timeout: 1000
         directories:
           - /c/msys64
-          - $HOME/cachedir
+          - /c/deps-build
+          #- $HOME/cachedir
           #- $HOME/workspace/deps-build
           #- $HOME/workspace/deps-install
           #- $HOME/workspace/kmymoney-build
 
+      before_install:
+        - |
+          cinst -y --no-progress nsis
+
+          # Ensure Python and the Scripts folder is available in PATH.
+          # refreshenv does not seem to work in bash, so reload it manually.
+          # Entries in the Machine PATH might contain trailing slashes, drop those.
+          # Apply Process paths before Machine to ensure /bin appears before others (otherwise casher will break and stall).
+          export PATH="$(powershell -Command '("Process", "Machine" | % {
+            [Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
+          } | Select -Unique | % { cygpath $_ }) -Join ":"')"
+          echo "PATH=$PATH"
+
+          # Workaround broken casher implementation that extracts absolute paths to the current working directory
+          # See https://github.com/travis-ci/casher/pull/38
+          for path in msys64 deps-build ; do if [ -d "$path" ]; then echo "Restoring C:/$path"; mv "$path/"* "C:/$path"; fi; done
+
+          # Update checksums to avoid invalidating the cache (saves 2-3mins).
+          if [ -d Qt ]; then md5deep64 -o f -r "C:/wireshark-libs" "C:/Qt" | sort > ~/.casher/md5sums_before; fi
       install:
-        - echo "katalog domowy:"
-        - echo $HOME/workspace
-        #- choco install -y nsis
         - |
           echo "----------------0"
           ls -lh /c
@@ -176,16 +193,6 @@ matrix:
           ls -lh /c/msys64
           echo "----------------4"
 
-          echo "----------------0"
-          ls -lh $HOME/
-          mkdir -p $HOME/cachedir
-          echo "Check cached directory:"
-          ls -lh $HOME/cachedir
-          echo "----------------2"
-          echo "123" > $HOME/cachedir/cachedFile.txt
-          echo "Check directory after its warming up:"
-          ls -lh $HOME/cachedir
-          echo "----------------4"
 
           echo "Check TRAVIS_BUILD_DIR:"
           ls -lh $TRAVIS_BUILD_DIR
