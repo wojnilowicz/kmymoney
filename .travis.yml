@@ -164,13 +164,20 @@ matrix:
         - echo $HOME/workspace
         #- choco install -y nsis
         - |
+          echo "----------------0"
           ls -lh /c
-          if [[ ! -d /c/msys64/usr/bin ]] ; then
-            ls -lh /c/msys64
-            if [[ -d /c/msys64 ]] ; then
+          if [[ ! -d "/c/msys64/usr/bin" ]] ; then
+            echo "----------------1"
+            ls -lh "/c/msys64"
+            echo "----------------2"
+            if [[ -d "/c/msys64" ]] ; then
+              echo "----------------3"
               rm -fr /c/msys64
+              echo "----------------4"
             fi
+            echo "----------------5"
             choco install -y msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+            echo "----------------6"
           fi
           echo "Zmienna path:"
           echo $PATH
