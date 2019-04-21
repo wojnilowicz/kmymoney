@@ -154,7 +154,8 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - C:\msys64
+          - C:/msys64
+          - $HOME/cachedir
           - $HOME/workspace/deps-build
           - $HOME/workspace/deps-install
           - $HOME/workspace/kmymoney-build
@@ -173,6 +174,17 @@ matrix:
           echo "123" > /c/msys64/cachedFile.txt
           echo "----------------3"
           ls -lh /c/msys64
+          echo "----------------4"
+
+          echo "----------------0"
+          ls -lh $HOME/
+          mkdir -p $HOME/cachedir
+          echo "----------------1"
+          ls -lh $HOME/cachedir
+          echo "----------------2"
+          echo "123" > $HOME/cachedir/cachedFile.txt
+          echo "----------------3"
+          ls -lh $HOME/cachedir
           echo "----------------4"
 
           #if [[ ! -d "/c/msys64/usr/bin" ]] ; then
