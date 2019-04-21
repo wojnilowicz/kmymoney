@@ -5,7 +5,7 @@ elseif(MINGW)
   set (project_dependencies ext_zlib ext_iconv)
   set (qt_platform_specific_option "")
 else()
-  set (project_dependencies "" )
+  set (project_dependencies ext_iconv )
   set (qt_platform_specific_option "")
 endif ()
 

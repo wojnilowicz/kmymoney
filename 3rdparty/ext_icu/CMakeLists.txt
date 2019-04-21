@@ -1,8 +1,8 @@
 ExternalProject_Add(
   ext_icu
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.icu-project.org/files/icu4c/64.1/icu4c-64_1-src.tgz
-  URL_MD5 f150be2231c13bb45206d79e0242372b
+  URL http://download.icu-project.org/files/icu4c/64.2/icu4c-64_2-src.tgz
+  URL_MD5 a3d18213beec454e3cdec9a3116d6b05
 
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-move-to-bin.mingw.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-actually-move-to-bin.mingw.patch
@@ -18,6 +18,7 @@ ExternalProject_Add(
     --prefix=${UNIX_INSTALL_PREFIX}
     --build=${AT_SYSTEM_TYPE}
     --host=${AT_SYSTEM_TYPE}
+    --with-data-packaging=library
     --disable-draft
     --enable-rpath
     --disable-extras

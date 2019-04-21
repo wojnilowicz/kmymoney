@@ -37,7 +37,7 @@ cmake -G "MSYS Makefiles" \
 
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_pkgconfig -- -j${CPU_COUNT}
-
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 cmake --build . --target ext_gettext -- -j${CPU_COUNT}
 cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 cmake --build . --target ext_png -- -j${CPU_COUNT}
