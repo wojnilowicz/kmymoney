@@ -106,7 +106,6 @@ ExternalProject_Add(
 )
 
 # kdeclarative uses QQmlDebuggingEnabler, so -no-qml-debug cannot be passed
-
 ExternalProject_Add(
   ext_qtdeclarative
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -116,7 +115,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
-          COMMAND bash -c "find ${DEPS_INSTALL_PREFIX}/lib/pkgconfig -type f -name Qt5*.pc -exec sed -i 's/Qt5\(.*\)d$*/Qt5\1/g' {} \;"
+          COMMAND bash -c "find ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig -type f -name Qt5*.pc -exec sed -i 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtxmlpatterns ext_qtsvg
