@@ -163,7 +163,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=50
+        - RUNTIME_TIMEOUT=5
         - |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -215,7 +215,7 @@ matrix:
         #- rm -fr /c/deps-build/*
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          timeout ${REMAINING_TIME}m powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || CONTINUE_WITH_NEXT_STEP=false
+          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || CONTINUE_WITH_NEXT_STEP=false
 
       script:
         - echo "script phase"
