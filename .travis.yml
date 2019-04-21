@@ -162,22 +162,30 @@ matrix:
       install:
         - echo "katalog domowy:"
         - echo $HOME/workspace
-        - python --version
         #- choco install -y nsis
-        - choco install -y python
-        - python --version
         - |
           ls -lh /c
           if [[ ! -d /c/msys64/usr/bin ]] ; then
+            ls -lh /c/msys64
             if [[ -d /c/msys64 ]] ; then
               rm -fr /c/msys64
             fi
             choco install -y msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
           fi
+          echo "Zmienna path:"
+          echo $PATH
           ls -lh /c
+          ls -lh /c/msys64
 
 
-          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps
+        - python --version
+        - choco install -y python
+        - echo "-------------"
+        - python --version
+        - echo "-------------"
+        - pip3 install meson
+        #- powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps
+
         #- export PATH="/c/msys64/usr/bin:$PATH"
         #- bash -lc "pacman -Ss git"
         #- bash -lc "pacman -S --needed --noconfirm make patch"
