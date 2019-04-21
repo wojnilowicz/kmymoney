@@ -178,7 +178,8 @@ matrix:
 
           # Workaround broken casher implementation that extracts absolute paths to the current working directory
           # See https://github.com/travis-ci/casher/pull/38
-          for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "c/$path" ]; then echo "Restoring C:/$path"; mv "c/$path/"* "C:/$path"; fi; done
+          echo ls -lh .
+          for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "./c/$path" ]; then echo "Restoring C:/$path"; mv "./c/$path/"* "C:/$path"; fi; done
 
           # Update checksums to avoid invalidating the cache (saves 2-3mins).
           if [ -d "c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
