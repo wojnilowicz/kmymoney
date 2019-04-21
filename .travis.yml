@@ -157,14 +157,15 @@ matrix:
         directories:
           - /c/msys64
           - /c/deps-build
-          #- $HOME/cachedir
-          #- $HOME/workspace/deps-build
-          #- $HOME/workspace/deps-install
-          #- $HOME/workspace/kmymoney-build
+          - /c/deps-install
+          - /c/kmymoney-build
 
       before_install:
+        - START_TIME=$(date +%s)
+        - RUNTIME_TIMEOUT=40
         - |
-          cinst -y --no-progress nsis
+
+          #cinst -y --no-progress nsis python
 
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -177,60 +178,27 @@ matrix:
 
           # Workaround broken casher implementation that extracts absolute paths to the current working directory
           # See https://github.com/travis-ci/casher/pull/38
-          for path in msys64 deps-build ; do if [ -d "c/$path" ]; then echo "Restoring C:/$path"; mv "c/$path/"* "C:/$path"; fi; done
+          for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "c/$path" ]; then echo "Restoring C:/$path"; mv "c/$path/"* "C:/$path"; fi; done
 
           # Update checksums to avoid invalidating the cache (saves 2-3mins).
-          if [ -d Qt ]; then md5deep64 -o f -r "C:/wireshark-libs" "C:/Qt" | sort > ~/.casher/md5sums_before; fi
+          if [ -d "c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
+
+          #pip3.exe install meson
+          if [[ ! -d "/c/msys64/usr/bin" ]] ; then
+            if [[ -d "/c/msys64" ]] ; then
+              rm -fr /c/msys64
+            fi
+            #cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+          fi
+          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
+
       install:
-        - |
-          echo "----------------0"
-          echo "----------------0"
-          ls -lh /c
-          mkdir -p /c/msys64
-          echo "Check cached directory:"
-          ls -lh /c/msys64
-          echo "----------------2"
-          echo "123" > /c/msys64/cachedFile.txt
-          echo "Check directory after its warming up:"
-          ls -lh /c/msys64
-          echo "----------------4"
-
-
-          echo "Check TRAVIS_BUILD_DIR:"
-          ls -lh $TRAVIS_BUILD_DIR
-          ls -lh $TRAVIS_BUILD_DIR/c
-
-          #if [[ ! -d "/c/msys64/usr/bin" ]] ; then
-            #echo "----------------1"
-            #ls -lh "/c/msys64"
-            #echo "----------------2"
-            #if [[ -d "/c/msys64" ]] ; then
-              #echo "----------------3"
-              #rm -fr /c/msys64
-              #echo "----------------4"
-            #fi
-            #echo "----------------5"
-            #choco install -y msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
-            #echo "----------------6"
+        - echo "install phase"
+        #- |
+          #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
+          #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
+            #timeout ${REMAINING_TIME} powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
           #fi
-          #echo "Zmienna path:"
-          #echo $PATH
-          #ls -lh /c
-          #ls -lh /c/msys64
-
-
-        #- python --version
-        #- choco install -y python
-        #- echo "-------------"
-        #- python --version
-        #- echo "-------------"
-        #- /c/Python37/Scripts/pip3.exe install meson
-        #- powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps
-
-        #- export PATH="/c/msys64/usr/bin:$PATH"
-        #- bash -lc "pacman -Ss git"
-        #- bash -lc "pacman -S --needed --noconfirm make patch"
-        #- $TRAVIS_BUILD_DIR/packaging/windows/exe/build.sh deps $HOME/workspace $TRAVIS_BUILD_DIR
 
       script:
         - echo "script phase"
