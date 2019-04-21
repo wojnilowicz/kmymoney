@@ -162,12 +162,9 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - echo "Start time:"
-        - echo ${START_TIME}
         - RUNTIME_TIMEOUT=40
         - |
-
-          #cinst -y --no-progress nsis python
+          cinst -y --no-progress nsis python
 
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -196,20 +193,17 @@ matrix:
             if [[ -d "/c/msys64" ]] ; then
               rm -fr /c/msys64
             fi
-            #cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+            cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
 
 
       install:
         - echo "install phase"
-        - timeout --version
-        - timeout --help
-        - timeout 2 echo "123"
         #- |
           #REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
           #if (( ${REMAINING_TIME} >= 5 )) && $CONTINUE_WITH_NEXT_STEP ; then
-            #timeout ${REMAINING_TIME} powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
+            #timeout ${REMAINING_TIME}m powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps || CONTINUE_WITH_NEXT_STEP=false
           #fi
 
       script:
