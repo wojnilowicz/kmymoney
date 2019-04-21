@@ -6,6 +6,8 @@ if ( $args[0]="pacman-deps" ) {
   bash -lc "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja perl"
 } elseif ($args[0]="update-msys2") {
   bash -lc "pacman -Syu"
+  bash -lc "pacman -Su"
+
 } else {
   bash /$buildUnix/packaging/windows/exe/build.sh $args[0] /c /$buildUnix
 }
