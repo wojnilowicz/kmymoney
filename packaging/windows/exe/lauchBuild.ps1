@@ -18,7 +18,7 @@ if ( $args[0] -eq "pacman-deps") {
   bash -lc "pacman -Su --noconfirm"
 
 } else {
-  bash /$buildUnix/packaging/windows/exe/build.sh $args[0] /c /$buildUnix $args[1]
+  bash -lc "/$buildUnix/packaging/windows/exe/build.sh $args[0] /c /$buildUnix $args[1]"
 }
 
 
