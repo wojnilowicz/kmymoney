@@ -73,9 +73,9 @@ ${CMAKE_PREFIX_PATH:-}
 export CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
-  timeout ${REMAINING_TIME}m $KMYMONEY_SOURCES/packaging/windows/exe/build-deps.sh || true
+  timeout ${REMAINING_TIME}m sh $KMYMONEY_SOURCES/packaging/windows/exe/build-deps.sh || true
 elif [ $BUILD_TYPE == "kmymoney" ];then
-  timeout ${REMAINING_TIME}m $KMYMONEY_SOURCES/packaging/windows/exe/build-kmymoney.sh || true
+  timeout ${REMAINING_TIME}m sh $KMYMONEY_SOURCES/packaging/windows/exe/build-kmymoney.sh || true
 elif [ $BUILD_TYPE == "image" ];then
-  timeout ${REMAINING_TIME}m $KMYMONEY_SOURCES/packaging/windows/exe/build-image.sh || true
+  timeout ${REMAINING_TIME}m sh $KMYMONEY_SOURCES/packaging/windows/exe/build-image.sh || true
 fi
