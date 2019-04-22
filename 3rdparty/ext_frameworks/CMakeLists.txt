@@ -40,20 +40,22 @@
 ExternalProject_Add(
   ext_extra_cmake_modules
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/extra-cmake-modules-5.55.0.tar.xz
-  URL_MD5 f8efb80c1c3c4bfe3ada218fa1eb6daa
+  URL http://download.kde.org/stable/frameworks/5.57/extra-cmake-modules-5.57.0.tar.xz
+  URL_MD5 b1815b93489fbed46b1512c2567a889e
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
 )
 
 ExternalProject_Add(
   ext_breezeicons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/breeze-icons-5.55.0.tar.xz
-  URL_MD5 6830eded1a3222a3dd91ba16d9fd8f60
+  URL http://download.kde.org/stable/frameworks/5.57/breeze-icons-5.57.0.tar.xz
+  URL_MD5 a378501cbbfd78829e4b36747f4a5ce7
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DBINARY_ICONS_RESOURCE=ON
              -DSKIP_INSTALL_ICONS=ON
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -61,9 +63,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_karchive
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/karchive-5.55.0.tar.xz
-  URL_MD5 9feb5965a5438ea7900b10b6734b6b5d
+  URL http://download.kde.org/stable/frameworks/5.57/karchive-5.57.0.tar.xz
+  URL_MD5 059c3b6e24c30655ccf2bd91ef7af733
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -77,9 +80,10 @@ endif ()
 ExternalProject_Add(
   ext_kcodecs
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kcodecs-5.55.0.tar.xz
-  URL_MD5 9cf8636f8ecd5699dc4cff2cd003bdaa
+  URL http://download.kde.org/stable/frameworks/5.57/kcodecs-5.57.0.tar.xz
+  URL_MD5 a4f0d3fb375fb15e108166ee68d6c7a3
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
@@ -87,9 +91,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kconfig
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kconfig-5.55.0.tar.xz
-  URL_MD5 83c4f3c39797bb014ae3d8addda3ee84
+  URL http://download.kde.org/stable/frameworks/5.57/kconfig-5.57.0.tar.xz
+  URL_MD5 765a8599190cc7ebaebfb7d062e359a8
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -97,9 +102,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kdbusaddons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kdbusaddons-5.55.0.tar.xz
-  URL_MD5 fbcc4a6e4daaf8dbbb623c8e58f48748
+  URL http://download.kde.org/stable/frameworks/5.57/kdbusaddons-5.57.0.tar.xz
+  URL_MD5 2fd487f58c349e7c5adcb4f96bd5948c
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -107,9 +113,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kcoreaddons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kcoreaddons-5.55.0.tar.xz
-  URL_MD5 b84b0d269fbbf63dba84ba7b345ab77f
+  URL http://download.kde.org/stable/frameworks/5.57/kcoreaddons-5.57.0.tar.xz
+  URL_MD5 1825368e29fe50930a4d2be1769ed48b
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -117,9 +124,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kguiaddons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kguiaddons-5.55.0.tar.xz
-  URL_MD5 86cdc362ac9b086762725ce50ad02254
+  URL http://download.kde.org/stable/frameworks/5.57/kguiaddons-5.57.0.tar.xz
+  URL_MD5 74b61e8ef3efdfd834caf258c223a9c9
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -127,9 +135,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_ki18n
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/ki18n-5.55.0.tar.xz
-  URL_MD5 e22ba2c4be9a642d52202941f311092f
+  URL http://download.kde.org/stable/frameworks/5.57/ki18n-5.57.0.tar.xz
+  URL_MD5 2178c765e29675b21a044fc074a01246
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ext_gettext
 )
@@ -137,9 +146,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kitemmodels
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kitemmodels-5.55.0.tar.xz
-  URL_MD5 045f5c3b771e03c4d7d3ed8a61cce555
+  URL http://download.kde.org/stable/frameworks/5.57/kitemmodels-5.57.0.tar.xz
+  URL_MD5 9c268db88630f1d62b5da51131c81a60
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -147,9 +157,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kitemviews
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kitemviews-5.55.0.tar.xz
-  URL_MD5 57f6924d2811f47b7805529f66a74f8b
+  URL http://download.kde.org/stable/frameworks/5.57/kitemviews-5.57.0.tar.xz
+  URL_MD5 fc44f88d4dca7147887142f1a272711d
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -157,9 +168,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kwidgetsaddons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kwidgetsaddons-5.55.0.tar.xz
-  URL_MD5 cec11096084112885bb70c8af54b6c18
+  URL http://download.kde.org/stable/frameworks/5.57/kwidgetsaddons-5.57.0.tar.xz
+  URL_MD5 b85e32d16c9d4c46a31a28ca63160c4d
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -169,16 +181,16 @@ if (APPLE)
 elseif(UNIX)
   set(project_dependencies ext_qtx11extras )
 elseif(MINGW)
-#  set(project_dependencies ext_qtwinextras ext_kdewin )
-  set(project_dependencies ext_kdewin )
+  set(project_dependencies ext_qtwinextras ext_kdewin )
 endif ()
 
 ExternalProject_Add(
   ext_kwindowsystem
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kwindowsystem-5.55.0.tar.xz
-  URL_MD5 47b9fdf114802c1618be3a808d3fb5f9
+  URL http://download.kde.org/stable/frameworks/5.57/kwindowsystem-5.57.0.tar.xz
+  URL_MD5 1789e26654314ce785a1d7618f5a59ae
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
@@ -192,9 +204,11 @@ endif ()
 ExternalProject_Add(
   ext_solid
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/solid-5.55.0.tar.xz
-  URL_MD5 d9d13af96a11f19b68a8787b07a9a8c4
+  URL http://download.kde.org/stable/frameworks/5.57/solid-5.57.0.tar.xz
+  URL_MD5 d3155b3f6301645173273c898bae488f
+  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/solid.diff
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ${project_dependencies}
 )
@@ -202,9 +216,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_sonnet
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/sonnet-5.55.0.tar.xz
-  URL_MD5 9c2820d220904d527568ac3fd0ef901a
+  URL http://download.kde.org/stable/frameworks/5.57/sonnet-5.57.0.tar.xz
+  URL_MD5 af5d91569b7f978417fb1859e62a4984
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -212,9 +227,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_syntaxhighlighting
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/syntax-highlighting-5.55.0.tar.xz
-  URL_MD5 c06977ee3f710c38da1bef4d5751fd7a
+  URL http://download.kde.org/stable/frameworks/5.57/syntax-highlighting-5.57.0.tar.xz
+  URL_MD5 b979ea0b6b2d6fa27f61c152dada814a
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -222,9 +238,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kholidays
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://download.kde.org/stable/frameworks/5.55/kholidays-5.55.0.tar.xz
-  URL_MD5 a28376dc7e56982df710307bef1a63e8
+  URL https://download.kde.org/stable/frameworks/5.57/kholidays-5.57.0.tar.xz
+  URL_MD5 f4656e414e5d17f6efd203a0583d83d5
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -233,10 +250,11 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kactivities
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kactivities-5.55.0.tar.xz
-  URL_MD5 e643d57385e5bddb12cba895af11f93e
+  URL http://download.kde.org/stable/frameworks/5.57/kactivities-5.57.0.tar.xz
+  URL_MD5 a17a913ae89cdf8b959ed49b1a97512e
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DKACTIVITIES_LIBRARY_ONLY=ON
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kconfig ext_kcoreaddons ext_kwindowsystem
 )
@@ -244,9 +262,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kauth
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kauth-5.55.0.tar.xz
-  URL_MD5 9caa8c9db684df909a404c987b20bcd2
+  URL http://download.kde.org/stable/frameworks/5.57/kauth-5.57.0.tar.xz
+  URL_MD5 3e88ca2dbc20c47dab00c40b747e0899
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons
 )
@@ -254,9 +273,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kcompletion
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kcompletion-5.55.0.tar.xz
-  URL_MD5 51cfb4f5aafea5e85fb962da96e7eac3
+  URL http://download.kde.org/stable/frameworks/5.57/kcompletion-5.57.0.tar.xz
+  URL_MD5 f33439a380b21163c1f04c780f7c820a
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kwidgetsaddons ext_kconfig
 )
@@ -264,9 +284,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kcrash
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kcrash-5.55.0.tar.xz
-  URL_MD5 44f4b49602863fcfbaa2b142d913ebe2
+  URL http://download.kde.org/stable/frameworks/5.57/kcrash-5.57.0.tar.xz
+  URL_MD5 4a806db956de0a3c76612fa2156fae34
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons ext_kwindowsystem
 )
@@ -274,9 +295,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kjobwidgets
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kjobwidgets-5.55.0.tar.xz
-  URL_MD5 550af897cf2b536c0b3370c414f2e607
+  URL http://download.kde.org/stable/frameworks/5.57/kjobwidgets-5.57.0.tar.xz
+  URL_MD5 be37764f55cb5deed630da21af9385a9
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons ext_kwidgetsaddons
 )
@@ -288,6 +310,7 @@ ExternalProject_Add(
   URL_MD5 ed828952beaa140d1c025513febd8e5d
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
               -DPHONON_BUILD_PHONON4QT5=ON
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
@@ -295,9 +318,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_knotifications
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/knotifications-5.55.0.tar.xz
-  URL_MD5 c6f26a73d4ea4835afbc07dd30f24f1b
+  URL http://download.kde.org/stable/frameworks/5.57/knotifications-5.57.0.tar.xz
+  URL_MD5 a5381274fb940b1ce06850c2c8995b5e
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kwindowsystem ext_kconfig ext_kcodecs ext_kcoreaddons ext_phonon
 )
@@ -305,9 +329,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kpackage
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kpackage-5.55.0.tar.xz
-  URL_MD5 d49e0c95cc12e210705f843b8c8ae624
+  URL http://download.kde.org/stable/frameworks/5.57/kpackage-5.57.0.tar.xz
+  URL_MD5 121f814f4ad12c56928ce7b857ea87b7
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_karchive ext_ki18n ext_kcoreaddons
 )
@@ -315,9 +340,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kconfigwidgets
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kconfigwidgets-5.55.0.tar.xz
-  URL_MD5 5f36ce8b06f046d14309afba6307531d
+  URL http://download.kde.org/stable/frameworks/5.57/kconfigwidgets-5.57.0.tar.xz
+  URL_MD5 676fdcd53f6a5b43a729881304c3fbbd
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kauth ext_kcoreaddons ext_kcodecs ext_kconfig ext_kguiaddons ext_ki18n ext_kwidgetsaddons
 )
@@ -325,9 +351,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kiconthemes
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kiconthemes-5.55.0.tar.xz
-  URL_MD5 fcabfaf2a08be0bee4317dd7b48a46ac
+  URL http://download.kde.org/stable/frameworks/5.57/kiconthemes-5.57.0.tar.xz
+  URL_MD5 a0812ab8df20b5e85cccd117378caa21
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_karchive ext_ki18n ext_kcoreaddons ext_kconfigwidgets ext_kwidgetsaddons ext_kitemviews
 )
@@ -335,9 +362,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kservice
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kservice-5.55.0.tar.xz
-  URL_MD5 2b7a006d241718cb3c411a42c67c84b4
+  URL http://download.kde.org/stable/frameworks/5.57/kservice-5.57.0.tar.xz
+  URL_MD5 556b7cc6960cee88256acf40fd756a2b
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kconfig ext_kcoreaddons ext_kcrash ext_kdbusaddons ext_ki18n
 )
@@ -345,9 +373,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kemoticons
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kemoticons-5.55.0.tar.xz
-  URL_MD5 a088d5a2316ce177c17823a7383216e3
+  URL http://download.kde.org/stable/frameworks/5.57/kemoticons-5.57.0.tar.xz
+  URL_MD5 f4fce4280e9f0c6330d385710a68d686
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_karchive ext_kconfig ext_kservice ext_kcoreaddons
 )
@@ -355,9 +384,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_ktextwidgets
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/ktextwidgets-5.55.0.tar.xz
-  URL_MD5 104ea71b7a1495649a6c2b10ec76d49a
+  URL http://download.kde.org/stable/frameworks/5.57/ktextwidgets-5.57.0.tar.xz
+  URL_MD5 4d7fd58963b27fb64c80365e9e366caa
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ext_kcompletion ext_kconfig ext_kconfigwidgets ext_ki18n ext_kiconthemes ext_kservice ext_kwidgetsaddons ext_kwindowsystem ext_sonnet
 )
@@ -365,9 +395,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kglobalaccel
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kglobalaccel-5.55.0.tar.xz
-  URL_MD5 b7efe78d929ce60c2f6d6f91ffb99da5
+  URL http://download.kde.org/stable/frameworks/5.57/kglobalaccel-5.57.0.tar.xz
+  URL_MD5 2c750aaf52b8178abca68ac437e41487
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kconfig ext_kcoreaddons ext_kcrash ext_kdbusaddons ext_kwindowsystem
 )
@@ -375,9 +406,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kxmlgui
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kxmlgui-5.55.0.tar.xz
-  URL_MD5 ee8eb1f361e86568f8d63e3eef52c3d9
+  URL http://download.kde.org/stable/frameworks/5.57/kxmlgui-5.57.0.tar.xz
+  URL_MD5 5716ffbd7ad51c55544e1cf924cb1dcc
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons ext_kitemviews ext_kconfig ext_kconfigwidgets ext_ki18n ext_kiconthemes ext_ktextwidgets ext_kwidgetsaddons ext_kwindowsystem ext_kglobalaccel
 )
@@ -385,9 +417,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kbookmarks
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kbookmarks-5.55.0.tar.xz
-  URL_MD5 2c6edfead8cbea6eb513b69bd81f352f
+  URL http://download.kde.org/stable/frameworks/5.57/kbookmarks-5.57.0.tar.xz
+  URL_MD5 afdb9602598bdebfa1a01c2ebd0c1565
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kconfig ext_kcoreaddons ext_kcodecs ext_kconfigwidgets ext_kiconthemes ext_kwidgetsaddons ext_kxmlgui
 )
@@ -395,9 +428,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kwallet
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kwallet-5.55.0.tar.xz
-  URL_MD5 e9aea329a955d888363452ef57dd351b
+  URL http://download.kde.org/stable/frameworks/5.57/kwallet-5.57.0.tar.xz
+  URL_MD5 96323e110c0a2f04414c6cedf6603ea0
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_gcrypt ext_gpgme ext_kcoreaddons ext_kconfig ext_kwindowsystem ext_ki18n ext_kconfigwidgets ext_knotifications ext_kservice ext_kwidgetsaddons ext_kiconthemes ext_kdbusaddons
 )
@@ -405,9 +439,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kio
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kio-5.55.0.tar.xz
-  URL_MD5 5ea8d5b98580eea963e20466fd0949cd
+  URL http://download.kde.org/stable/frameworks/5.57/kio-5.57.0.tar.xz
+  URL_MD5 d21d5e216aabd0bc5836e5a073d7857d
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ext_karchive ext_kconfig ext_kcoreaddons ext_kdbusaddons ext_ki18n ext_kservice ext_solid ext_kwindowsystem ext_kwidgetsaddons ext_kcompletion ext_kconfigwidgets ext_kiconthemes ext_kitemviews ext_kjobwidgets ext_kbookmarks ext_kwallet
 )
@@ -415,9 +450,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kdeclarative
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kdeclarative-5.55.0.tar.xz
-  URL_MD5 df0b9df0c1241debaeae2acc634ce917
+  URL http://download.kde.org/stable/frameworks/5.57/kdeclarative-5.57.0.tar.xz
+  URL_MD5 a9af38c4d6f819cd71006c5e58ef7da3
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kconfig ext_ki18n ext_kiconthemes ext_kio ext_kwidgetsaddons ext_kwindowsystem ext_kglobalaccel ext_kguiaddons ext_kpackage
 )
@@ -425,9 +461,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kcmutils
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kcmutils-5.55.0.tar.xz
-  URL_MD5 b6903266cb40093a903e3f745c0b45dc
+  URL http://download.kde.org/stable/frameworks/5.57/kcmutils-5.57.0.tar.xz
+  URL_MD5 8863d6867d344e85295220f7fb8fc8b6
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kitemviews ext_kconfigwidgets ext_kcoreaddons ext_ki18n ext_kiconthemes ext_kservice ext_kxmlgui ext_kdeclarative
 )
@@ -435,9 +472,10 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kimageformats
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://download.kde.org/stable/frameworks/5.55/kimageformats-5.55.0.tar.xz
-  URL_MD5 6d89478ffa273724e47d937cf88715ef
+  URL http://download.kde.org/stable/frameworks/5.57/kimageformats-5.57.0.tar.xz
+  URL_MD5 c46aaf66f3ac9100b09f829f40e6cce8
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kitemviews
 )

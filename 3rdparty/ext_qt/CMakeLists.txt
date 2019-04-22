@@ -188,5 +188,5 @@ ExternalProject_Add(
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_qtbase ext_qtdeclarative ext_qtwebchannel ext_qtlocation
+  DEPENDS ext_xml ext_qtbase ext_qtdeclarative ext_qtwebchannel
 )

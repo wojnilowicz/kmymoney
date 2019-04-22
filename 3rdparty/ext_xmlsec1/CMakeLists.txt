@@ -3,10 +3,19 @@
 ExternalProject_Add(
   ext_xmlsec1
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.27.tar.gz
-  URL_MD5 508bee7e4f1b99f2d50aaa7d38ede56e
+  URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.28.tar.gz
+  URL_MD5 69b8d95c009a404462e19f335e650241
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --host=${AT_SYSTEM_TYPE} ${AT_SHARED_ONLY} --without-openssl --without-nss --disable-crypto-dl
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    --prefix=${CMAKE_INSTALL_PREFIX}
+    --host=${AT_SYSTEM_TYPE}
+    ${AT_SHARED_ONLY}
+    ${AT_LESS_PROCESSING}
+    --disable-mans
+    --disable-docs
+    --without-openssl
+    --without-nss
+    --disable-crypto-dl
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}

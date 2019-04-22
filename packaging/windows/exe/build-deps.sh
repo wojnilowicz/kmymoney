@@ -37,9 +37,7 @@ cmake -G "MSYS Makefiles" \
 
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_pkgconfig -- -j${CPU_COUNT}
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 cmake --build . --target ext_gettext -- -j${CPU_COUNT}
-cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 cmake --build . --target ext_png -- -j${CPU_COUNT}
 
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
@@ -49,10 +47,13 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
+  bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
+  cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
+fi
+
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
-cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
-# cmake --build . --target ext_qtwebchannel -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT}
