@@ -12,14 +12,20 @@ $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower(
 # $args[1] is timeout for build script
 
 if ( $args[0] -eq "pacman-deps") {
-  bash -lc "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja perl"
+  bash -c "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja perl"
 } elseif ($args[0] -eq "update-msys2") {
-  bash -lc "pacman -Syu --noconfirm"
-  bash -lc "pacman -Su --noconfirm"
+  bash -c "pacman -Syu --noconfirm"
+  bash -c "pacman -Su --noconfirm"
 
 } else {
 #   bash -lc "/$buildUnix/packaging/windows/exe/build.sh " + $args[0] " /c /$buildUnix " + $args[1]
-  bash /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix 5
+#   bash /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix 5
+
+  bash -c "timeout " + $args[1] + "m /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix || true"
+  Stop-Process -Name make -ErrorAction SilentlyContinue
+  Stop-Process -Name ninja -ErrorAction SilentlyContinue
+  Stop-Process -Name sh -ErrorAction SilentlyContinue
+  Stop-Process -Name cmake -ErrorAction SilentlyContinue
 }
 
 

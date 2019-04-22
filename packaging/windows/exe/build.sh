@@ -9,8 +9,6 @@ set -eux
 BUILD_TYPE=$1
 export WORKSPACE_PATH=$2
 export KMYMONEY_SOURCES=$3
-REMAINING_TIME=5
-REMAINING_TIME="${REMAINING_TIME:-0}"
 
 # We want to use $prefix/deps/usr/ for all our dependencies
 if [ $BUILD_TYPE == "deps" ] || [ $BUILD_TYPE == "kmymoney" ] || [ $BUILD_TYPE == "image" ];then
@@ -73,9 +71,9 @@ ${CMAKE_PREFIX_PATH:-}
 export CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
-  timeout ${REMAINING_TIME}m source $KMYMONEY_SOURCES/packaging/windows/exe/build-deps.sh || true
+  $KMYMONEY_SOURCES/packaging/windows/exe/build-deps.sh
 elif [ $BUILD_TYPE == "kmymoney" ];then
-  timeout ${REMAINING_TIME}m source $KMYMONEY_SOURCES/packaging/windows/exe/build-kmymoney.sh || true
+  $KMYMONEY_SOURCES/packaging/windows/exe/build-kmymoney.sh
 elif [ $BUILD_TYPE == "image" ];then
-  timeout ${REMAINING_TIME}m source $KMYMONEY_SOURCES/packaging/windows/exe/build-image.sh || true
+  $KMYMONEY_SOURCES/packaging/windows/exe/build-image.sh
 fi
