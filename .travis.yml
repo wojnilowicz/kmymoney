@@ -163,7 +163,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=35
+        - RUNTIME_TIMEOUT=28
         - |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
