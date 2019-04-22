@@ -9,7 +9,7 @@ set -eux
 BUILD_TYPE=$1
 export WORKSPACE_PATH=$2
 export KMYMONEY_SOURCES=$3
-REMAINING_TIME=$4
+REMAINING_TIME=5
 REMAINING_TIME="${REMAINING_TIME:-0}"
 
 # We want to use $prefix/deps/usr/ for all our dependencies
