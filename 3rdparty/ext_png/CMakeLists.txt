@@ -5,6 +5,6 @@ ExternalProject_Add( ext_png
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DPNG_TESTS=OFF
-  BUILD_IN_SOURCE 1
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
 )

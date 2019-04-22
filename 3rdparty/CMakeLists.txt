@@ -39,6 +39,14 @@ else()
   set (CLEANUP_COMMAND "")
 endif()
 
+if($ENV{TRAVIS_OS_NAME} AND $ENV{TRAVIS_OS_NAME} STREQUAL "windows")
+  message( STATUS "Setting BUILD_IN_SOURCE to 1 due to Travis treating build directory as source directory for CMake projects.")
+  set (BUILD_IN_SOURCE BUILD_IN_SOURCE 1)
+else()
+  set (BUILD_IN_SOURCE BUILD_IN_SOURCE 0)
+endif()
+
+
 # Tools must be obtained to work with:
 include(ExternalProject)
 

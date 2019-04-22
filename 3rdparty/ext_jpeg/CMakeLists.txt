@@ -6,6 +6,7 @@ ExternalProject_Add(
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DENABLE_STATIC=OFF
+  ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_nasm
