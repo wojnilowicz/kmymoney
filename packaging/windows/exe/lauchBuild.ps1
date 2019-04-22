@@ -21,7 +21,7 @@ if ( $args[0] -eq "pacman-deps") {
 #   bash -lc "/$buildUnix/packaging/windows/exe/build.sh " + $args[0] " /c /$buildUnix " + $args[1]
 #   bash /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix 5
 
-  bash -c "timeout " + $args[1] + "m /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix || true"
+  bash -c "timeout 15m /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix || true"
   Stop-Process -Name make -ErrorAction SilentlyContinue
   Stop-Process -Name ninja -ErrorAction SilentlyContinue
   Stop-Process -Name cmake -ErrorAction SilentlyContinue
