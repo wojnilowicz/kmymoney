@@ -6,4 +6,5 @@ ExternalProject_Add( ext_kdewin
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
+  DEPENDS ext_qtbase
 )

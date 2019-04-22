@@ -42,7 +42,6 @@ cmake --build . --target ext_gettext -- -j${CPU_COUNT}
 cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 cmake --build . --target ext_png -- -j${CPU_COUNT}
 
-cmake --build . --target ext_kdewin -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
@@ -56,12 +55,13 @@ cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebchannel -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
- cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
- cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
- cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
- cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
+cmake --build . --target ext_kdewin -- -j${CPU_COUNT}
+cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
+cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
+cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
+cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 
- cmake --build . --target ext_gmp -- -j${CPU_COUNT}
+cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 # cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 # cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
