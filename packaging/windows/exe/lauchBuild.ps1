@@ -1,5 +1,5 @@
 Write-Host $Env:Path
-$Env:Path="C:\Python37\Scripts;C:\Python37;C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\Program Files\Git\cmd"
+$Env:Path="C:\msys64\mingw64\bin;C:\Python37\Scripts;C:\Python37;C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin"
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower().Trim("/")
 # $args[0] could be:
@@ -13,7 +13,7 @@ $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower(
 
 if ( $args[0] -eq "pacman-deps") {
   Write-Host "In pacman-deps"
-  bash -c "pacman -S --needed --noconfirm make patch"
+  bash -c "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja"
 } elseif ($args[0] -eq "update-msys2") {
   bash -c "pacman -Syu --noconfirm"
   bash -c "pacman -Su --noconfirm"
