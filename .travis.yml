@@ -186,7 +186,7 @@ matrix:
           mkdir -p /c/kmymoney-build
 
         - |
-          Update checksums to avoid invalidating the cache (saves 2-3mins).
+          #Update checksums to avoid invalidating the cache (saves 2-3mins).
           if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
 
         - |
