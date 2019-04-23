@@ -36,11 +36,27 @@ cmake -G "MSYS Makefiles" \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --target ext_pkgconfig -- -j${CPU_COUNT}
-cmake --build . --target ext_gettext -- -j${CPU_COUNT}
-cmake --build . --target ext_png -- -j${CPU_COUNT}
-
+cmake --build . --target ext_zlib -- -j${CPU_COUNT}
+cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 # cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
+
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
+  if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
+  cmake --build . --target ext_icu -- -j${CPU_COUNT}
+fi
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
+  if [ -v TRAVIS ]; then cinst -y --no-progress python; fi;
+  cmake --build . --target ext_icu -- -j${CPU_COUNT}
+fi
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a ]; then
+  if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
+  cmake --build . --target ext_openssl -- -j${CPU_COUNT}
+  if [ -v TRAVIS ]; then pacman -R --noconfirm perl; fi; # unistall so that it's not cached
+fi
+
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
   bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &

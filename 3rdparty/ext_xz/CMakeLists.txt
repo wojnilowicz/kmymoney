@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL http://tukaani.org/xz/xz-5.2.4.tar.xz
   URL_MD5 003e4d0b1b1899fc6e3000b24feddf7c
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure ${AT_CONFIGURE_ARGS}
     --prefix=${UNIX_INSTALL_PREFIX}
     --host=${AT_SYSTEM_TYPE}
     ${AT_SHARED_ONLY}

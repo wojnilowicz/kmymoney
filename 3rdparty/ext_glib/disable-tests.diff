@@ -1,0 +1,12 @@
+diff -ruN glib-2.61.0.orig/meson.build glib-2.61.0/meson.build
+--- glib-2.61.0.orig/meson.build	2019-04-15 13:47:57.000000000 +0200
++++ glib-2.61.0/meson.build	2019-04-23 17:24:42.894062100 +0200
+@@ -2045,7 +2045,7 @@
+ subdir('gmodule')
+ subdir('gio')
+ subdir('fuzzing')
+-subdir('tests')
++#subdir('tests')
+ 
+ # xgettext is optional (on Windows for instance)
+ if find_program('xgettext', required : get_option('nls')).found()

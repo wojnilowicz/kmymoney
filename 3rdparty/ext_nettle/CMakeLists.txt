@@ -1,15 +1,18 @@
 ExternalProject_Add(
   ext_nettle
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL http://www.lysator.liu.se/~nisse/archive/nettle-3.4.tar.gz
-  URL_MD5 dc0f13028264992f58e67b4e8915f53d
+  URL http://www.lysator.liu.se/~nisse/archive/nettle-3.4.1.tar.gz
+  URL_MD5 9bdebb0e2f638d3b9d91f7fc264b70c1
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${CMAKE_INSTALL_PREFIX}
+    --prefix=${UNIX_INSTALL_PREFIX}
     --host=${AT_SYSTEM_TYPE}
     ${AT_SHARED_ONLY}
+    ${AT_LESS_PROCESSING}
     --enable-public-key
+    --disable-gcov
     --disable-documentation
+    --disable-mini-gmp
     --with-lib-path=${UNIX_INSTALL_PREFIX}/lib
     --with-include-path=${UNIX_INSTALL_PREFIX}/include
 

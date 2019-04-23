@@ -1,11 +1,3 @@
-if(APPLE)
-  set (project_dependencies "")
-  set (qt_platform_specific_option "")
-elseif(UNIX OR MINGW)
-  set (project_dependencies ext_iconv )
-  set (qt_platform_specific_option --with-libiconv-prefix=${UNIX_INSTALL_PREFIX})
-endif ()
-
 # --disable-nls won't build libintl
 ExternalProject_Add(
   ext_gettext
@@ -32,10 +24,10 @@ ExternalProject_Add(
     --enable-c++
     --enable-relocatable
     --with-included-gettext
-#    ${qt_platform_specific_option}
+
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_xml ext_glib ${project_dependencies}
+  DEPENDS ext_glib
 )

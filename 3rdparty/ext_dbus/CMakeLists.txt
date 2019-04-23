@@ -7,6 +7,7 @@ ExternalProject_Add( ext_dbus
   PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.11.4-20160903.diff
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.12.12-launchd.diff
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-fix_data_dir.diff
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus.diff
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DDBUS_BUILD_TESTS=OFF

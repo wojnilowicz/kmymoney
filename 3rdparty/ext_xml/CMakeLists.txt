@@ -1,12 +1,5 @@
 # --without-catalog is requirement of QWebEngine
-if(APPLE)
-  set (project_dependencies "")
-  set (qt_platform_specific_option "")
-elseif (UNIX OR MINGW)
-  set (project_dependencies ext_iconv)
-  set (qt_platform_specific_option --with-iconv=${UNIX_INSTALL_PREFIX})
-endif ()
-
+# --with-c14n --with-xptr --with-sax1 --with-output are required by xmlsec1
 ExternalProject_Add(
   ext_xml
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -20,15 +13,26 @@ ExternalProject_Add(
     --prefix=${UNIX_INSTALL_PREFIX}
     --host=${AT_SYSTEM_TYPE}
     ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
-    --without-python
+   ${AT_LESS_PROCESSING}
+    --with-c14n
+    --without-catalog
+    --without-debug
+    --without-docbook
     --with-icu
-    --with-catalog
-    ${qt_platform_specific_option}
+    --without-legacy
+    --with-output
+    --without-python
+    --without-regexps
+    --with-sax1
+    --without-schemas
+    --without-schematron
+    --without-xinclude
+    --with-xptr
+    --without-modules
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_xz ext_icu ${project_dependencies}
+  DEPENDS ext_xz ext_icu
 )

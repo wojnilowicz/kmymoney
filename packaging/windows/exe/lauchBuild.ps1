@@ -1,5 +1,5 @@
 Write-Host $Env:Path
-$Env:Path="C:\msys64\mingw64\bin;C:\Python37\Scripts;C:\Python37;C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\Program Files\Git\cmd"
+$Env:Path="C:\Python37\Scripts;C:\Python37;C:\msys64\usr\bin;C:\Program Files\CMake\bin;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\Program Files\Git\cmd"
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower().Trim("/")
 # $args[0] could be:
@@ -12,15 +12,12 @@ $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower(
 # $args[1] is timeout for build script
 
 if ( $args[0] -eq "pacman-deps") {
-  bash -c "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja perl"
+  bash -c "pacman -S --needed --noconfirm make patch ninja"
 } elseif ($args[0] -eq "update-msys2") {
   bash -c "pacman -Syu --noconfirm"
   bash -c "pacman -Su --noconfirm"
 
 } else {
-#   bash -lc "/$buildUnix/packaging/windows/exe/build.sh " + $args[0] " /c /$buildUnix " + $args[1]
-#   bash /$buildUnix/packaging/windows/exe/build.sh deps /c /$buildUnix 5
-
   bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix"
   Stop-Process -Name make -ErrorAction SilentlyContinue
   Stop-Process -Name ninja -ErrorAction SilentlyContinue

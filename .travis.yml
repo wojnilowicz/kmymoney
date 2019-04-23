@@ -155,15 +155,15 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - /c/msys64
-          - /c/Python37
+          #- /c/msys64
+          #- /c/Python37
           - /c/deps-build
           - /c/deps-install
           - /c/kmymoney-build
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=26
+        - RUNTIME_TIMEOUT=30
         - |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -179,15 +179,15 @@ matrix:
           if [ -d "$TRAVIS_BUILD_DIR/c" ]; then mv "$TRAVIS_BUILD_DIR/c/"* "/c/"; fi;
           #for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "./c/$path" ]; then echo "Restoring C:/$path"; mv "./c/$path/"* "C:/#$path"; fi; done
         - |
-          mkdir -p /c/msys64
-          mkdir -p /c/Python37
+          #mkdir -p /c/msys64
+          #mkdir -p /c/Python37
           mkdir -p /c/deps-build
           mkdir -p /c/deps-install
           mkdir -p /c/kmymoney-build
 
-        #- |
-          #Update checksums to avoid invalidating the cache (saves 2-3mins).
-          #if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/msys64" "C:/Python37" "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
+        - |
+          Update checksums to avoid invalidating the cache (saves 2-3mins).
+          if [ -d "/c/msys64" ]; then md5deep64 -o f -r "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
 
         - |
           if [[ ! -d "/c/msys64/usr/bin" ]] ; then
@@ -200,14 +200,14 @@ matrix:
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
 
-        - |
-          if [[ ! -f "/c/Python37/python.exe" ]] ; then
-            if [[ -d "/c/Python37" ]] ; then
-              rm -fr /c/Python37
-            fi
-            cinst -y --no-progress python
-            /c/Python37/Scripts/pip3.exe install meson
-          fi
+        #- |
+          #if [[ ! -f "/c/Python37/python.exe" ]] ; then
+            #if [[ -d "/c/Python37" ]] ; then
+              #rm -fr /c/Python37
+            #fi
+            #cinst -y --no-progress python
+            #/c/Python37/Scripts/pip3.exe install meson
+          #fi
         #- export PATH="/c/Python37/Scripts:/c/Python37/bin:/c/msys64/usr/bin:/c/Program Files/CMake/bin:/c/ProgramData/chocolatey/lib\mingw/tools/install/mingw64/bin:$PATH"
 
       install:

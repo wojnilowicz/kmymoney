@@ -1,5 +1,6 @@
 # aqbanking checks only for xmlsec1-gnutls >= 1.0.0 so we don't need openssl and nss
 # we need gcrypt though because xmlsec-gnutls library requires xmlsec-gcrypt
+set (gcrypt_lib "-L${UNIX_INSTALL_PREFIX}/lib -lgcrypt")
 ExternalProject_Add(
   ext_xmlsec1
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -7,7 +8,7 @@ ExternalProject_Add(
   URL_MD5 69b8d95c009a404462e19f335e650241
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${CMAKE_INSTALL_PREFIX}
+    --prefix=${UNIX_INSTALL_PREFIX}
     --host=${AT_SYSTEM_TYPE}
     ${AT_SHARED_ONLY}
     ${AT_LESS_PROCESSING}
@@ -16,9 +17,11 @@ ExternalProject_Add(
     --without-openssl
     --without-nss
     --disable-crypto-dl
+    LDFLAGS=${gcrypt_lib}
+
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_xslt ext_gcrypt ext_gnutls
+  DEPENDS ext_gcrypt ext_gnutls ext_xml #ext_xslt
 )

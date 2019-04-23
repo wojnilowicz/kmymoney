@@ -1,0 +1,12 @@
+diff -ruN dbus-1.12.12.orig/cmake/CMakeLists.txt dbus-1.12.12/cmake/CMakeLists.txt
+--- dbus-1.12.12.orig/cmake/CMakeLists.txt	2017-10-30 13:26:18.000000000 +0100
++++ dbus-1.12.12/cmake/CMakeLists.txt	2019-04-22 15:22:09.733805900 +0200
+@@ -661,7 +661,7 @@
+ #
+ # create pkgconfig file
+ #
+-if(UNIX)
++if(UNIX OR MSYS)
+     set(PLATFORM_LIBS pthread ${LIBRT})
+     include(FindPkgConfig QUIET)
+     if(PKG_CONFIG_FOUND)

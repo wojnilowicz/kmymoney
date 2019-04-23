@@ -4,7 +4,7 @@ ExternalProject_Add(
   URL https://www.gnupg.org/ftp/gcrypt/libgpg-error/libgpg-error-1.36.tar.bz2
   URL_MD5 eff437f397e858a9127b76c0d87fa5ed
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure ${AT_CONFIGURE_ARGS}
     --prefix=${UNIX_INSTALL_PREFIX}
     --host=${AT_SYSTEM_TYPE}
     ${AT_SHARED_ONLY}

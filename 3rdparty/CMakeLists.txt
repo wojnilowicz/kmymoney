@@ -25,6 +25,7 @@ if(NOT MAKE_EXECUTABLE)
   message(FATAL_ERROR "No gmake, nmake, mingw32-make or make available.")
 endif()
 
+set (AT_CONFIGURE_ARGS --silent)
 set (MAKE_ARGS --silent -j${CMAKE_CPU_COUNT})
 
 # For performance reason, cache install and don't cache build and source directory on Travis CI, which defines CI=true

@@ -21,8 +21,6 @@ ExternalProject_Add(
  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
-#         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qsql_mysql.diff
-
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     -prefix ${CMAKE_INSTALL_PREFIX}
@@ -37,16 +35,18 @@ ExternalProject_Add(
     -icu
     -ssl
     -openssl-runtime
-    -recheck-all
+    -no-sql-odbc
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
+    PNG_PREFIX=${CMAKE_INSTALL_PREFIX}
+    DBUS_PREFIX=${CMAKE_INSTALL_PREFIX}
     ${qt_platform_specific_option}
 
   BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
   INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_openssl ext_xslt ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
+  DEPENDS ext_openssl ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
 )
 
 ExternalProject_Add(
