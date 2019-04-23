@@ -13,7 +13,7 @@ $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower(
 
 if ( $args[0] -eq "pacman-deps") {
   Write-Host "In pacman-deps"
-  bash -c "pacman -S --needed --noconfirm make patch mingw-w64-x86_64-ninja"
+  bash -c "pacman -S --needed --noconfirm pkg-config make patch mingw-w64-x86_64-ninja"
 } elseif ($args[0] -eq "update-msys2") {
   bash -c "pacman -Syu --noconfirm"
   bash -c "pacman -Su --noconfirm"
