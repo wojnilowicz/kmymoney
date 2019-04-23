@@ -199,6 +199,9 @@ matrix:
             #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 update-msys2
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
+          export PKG_CONFIG_PATH="/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH"
+          echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.profile
+          echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.bashrc
 
         #- |
           #if [[ ! -f "/c/Python37/python.exe" ]] ; then
