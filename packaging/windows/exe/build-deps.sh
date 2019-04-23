@@ -53,7 +53,7 @@ fi
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a ]; then
   if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
   cmake --build . --target ext_openssl -- -j${CPU_COUNT}
-  if [ -v TRAVIS ]; then pacman -R --noconfirm perl; fi; # unistall so that it's not cached
+  if [ -v TRAVIS ]; then pacman -R --noconfirm perl gdbm libgdbm db; fi; # unistall so that it's not cached
 fi
 
 cmake --build . --target ext_dbus -- -j${CPU_COUNT}
