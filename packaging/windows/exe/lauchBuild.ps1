@@ -12,7 +12,8 @@ $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower(
 # $args[1] is timeout for build script
 
 if ( $args[0] -eq "pacman-deps") {
-  bash -c "pacman -S --needed --noconfirm make patch ninja"
+  Write-Host "In pacman-deps"
+  bash -c "pacman -S --needed --noconfirm make patch"
 } elseif ($args[0] -eq "update-msys2") {
   bash -c "pacman -Syu --noconfirm"
   bash -c "pacman -Su --noconfirm"
