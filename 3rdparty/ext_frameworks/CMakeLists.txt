@@ -159,7 +159,11 @@ ExternalProject_Add(
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL http://download.kde.org/stable/frameworks/5.57/kitemviews-5.57.0.tar.xz
   URL_MD5 fc44f88d4dca7147887142f1a272711d
-  CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+  CMAKE_ARGS  -DCMAKE_BUILD_TYPE=Release
+              -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+              -DBUILD_TESTING=FALSE
+              -DCMAKE_MAKE_PROGRAM=${CMAKE_MAKE_PROGRAM}
+#   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
