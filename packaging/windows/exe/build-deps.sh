@@ -73,7 +73,6 @@ cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT}
-cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
@@ -90,4 +89,5 @@ cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 # cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
 # cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 # cmake --build . --target ext_ical -- -j${CPU_COUNT}
+cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}
