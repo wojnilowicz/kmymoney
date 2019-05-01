@@ -1,9 +1,5 @@
 # Write-Host $Env:Path
-$Env:Path="C:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\Python37-x64\Scripts;C:\Python37-x64;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
-
-Get-ChildItem -Path "C:\msys64\mingw64\bin"
-
-# C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin
+$Env:Path="C:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
 
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:APPVEYOR_BUILD_FOLDER -replace "\\","/") -replace ":","").ToLower().Trim("/")
@@ -18,7 +14,7 @@ $buildUnix= (($Env:APPVEYOR_BUILD_FOLDER -replace "\\","/") -replace ":","").ToL
 
 if ( $args[0] -eq "pacman-deps") {
   Write-Host "In pacman-deps"
-  bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja"
+  bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja mingw-w64-x86_64-python3-pip"
 } elseif ($args[0] -eq "update-msys2") {
   bash -c "pacman -Syu --noconfirm"
   bash -c "pacman -Su --noconfirm"
