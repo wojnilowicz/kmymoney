@@ -44,7 +44,8 @@ cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
-  if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
+  if [ -v TRAVIS ]; then cinst -y --no-progress python; fi;
+  if [ -v TRAVIS ] || [ -v APPVEYOR ]; then pip3.exe install meson; fi;
   cmake --build . --target ext_glib -- -j${CPU_COUNT}
 fi
 
