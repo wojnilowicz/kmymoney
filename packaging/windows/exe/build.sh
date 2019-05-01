@@ -42,29 +42,13 @@ mkdir -p $DOWNLOADS_DIR
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Setup variables needed to help everything find what we build
-#export LD_LIBRARY_PATH=\
-#$DEPS_INSTALL_PREFIX/lib:\
-#$DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu:\
-#$DEPS_INSTALL_PREFIX/openssl/lib:\
-#${LD_LIBRARY_PATH:-}
-
-#/d/msys64/mingw64/bin:\
 export PATH=\
 $DEPS_INSTALL_PREFIX/bin:\
-$DEPS_INSTALL_PREFIX/openssl/bin:\
 ${PATH:-}
 
 export PKG_CONFIG_PATH=\
 $DEPS_INSTALL_PREFIX/share/pkgconfig:\
-$DEPS_INSTALL_PREFIX/lib/pkgconfig:\
-$DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
-
-export CMAKE_PREFIX_PATH=\
-$DEPS_INSTALL_PREFIX\;\
-$DEPS_INSTALL_PREFIX/openssl\;\
-${CMAKE_PREFIX_PATH:-}
 
 # Get available processors count
 export CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
