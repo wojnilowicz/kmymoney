@@ -10,15 +10,6 @@ cache:
   - c:\deps-build
   - c:\deps-install
 
-environment:
-  - COMPILER: msys2
-    PLATFORM: x64
-    MSYS2_ARCH: x86_64
-    MSYS2_DIR: msys64
-    MSYSTEM: MINGW64
-    BIT: 64
-    BUILDTOOL: cmake
-
 install:
   - ps: Write-Host "Hello world"
   - cmd: powershell -ExecutionPolicy Bypass -File APPVEYOR_BUILD_FOLDER/packaging/windows/exe/lauchBuild2.ps1 pacman-deps
