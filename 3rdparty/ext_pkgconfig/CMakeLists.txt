@@ -8,15 +8,10 @@ ExternalProject_Add(
   URL_MD5 f6e931e319531b736fadc017f470e68a
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     GLIB_LIBS=${glib_libs}
     GLIB_CFLAGS=${glib_cflags}
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
   DEPENDS ext_glib
 )

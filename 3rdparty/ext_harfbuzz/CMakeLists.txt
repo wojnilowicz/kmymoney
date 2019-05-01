@@ -7,9 +7,11 @@ ExternalProject_Add(
   URL https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.0.0.tar.bz2
   URL_MD5 6d1373dba3e8540c448c6a562f2e0a00
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} ${AT_HOST} ${AT_SHARED_ONLY} --with-icu=yes --disable-gtk-doc-html
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    ${AT_GLOBAL_PROFILE}
+    --with-icu=yes
+    --disable-gtk-doc-html
+
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_icu

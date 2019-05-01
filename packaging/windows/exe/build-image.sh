@@ -5,13 +5,6 @@
 # Halt on errors and be verbose about what we are doing
 set -eu
 
-# Switch directory in order to put all build files in the right place
-cd $CMAKE_BUILD_PREFIX
-
-QT_DIR=$DEPS_INSTALL_PREFIX
-
-KMYMONEY_DMG=$KMYMONEY_INSTALL_PREFIX/Applications/KDE
-
 # Helper functions
 countArgs () {
     echo "${#}"
@@ -32,16 +25,13 @@ add_lib_to_list() {
 
 sourceLibPaths=(
 $DEPS_INSTALL_PREFIX/bin
-/e/msys64/mingw64/bin
 )
 
-# Find all @rpath and Absolute to buildroot path libs
-# Add to libs_used
-# converts absolute buildroot path to @rpath
+# Function expects to be started from bin directory
 find_needed_libs () {
     echo "Analizing libraries with ldd..." >&2
     local libs_used="" # input lib_lists founded
-    for libFile in $(find $KMYMONEY_INSTALL_PREFIX -type f -name "*.exe" -or -type f -name "*.dll"); do
+    for libFile in $(find .. -type f -name "*.exe" -or -type f -name "*.dll"); do
         lddResult=$(ldd ${libFile} | awk '{print $3}')
 
         resultArray=(${lddResult}) # convert to array
@@ -112,27 +102,21 @@ kmymoney_findmissinglibs() {
 
 createNSIS () {
   cd ${CMAKE_BUILD_PREFIX}
-  cp -pv $KMYMONEY_SOURCES/packaging/windows/exe/NullsoftInstaller.nsi $CMAKE_BUILD_PREFIX
-  cp -pv $KMYMONEY_SOURCES/COPYING $CMAKE_BUILD_PREFIX
-  if [ ! -d $CMAKE_BUILD_PREFIX/bin ]; then
-    cp -pr $KMYMONEY_INSTALL_PREFIX/bin $CMAKE_BUILD_PREFIX
-  fi
-  if [ ! -d $CMAKE_BUILD_PREFIX/qif ]; then
-    mkdir -p $CMAKE_BUILD_PREFIX/qif/plugin
-    mv $CMAKE_BUILD_PREFIX/bin/kmymoney/*qif* $CMAKE_BUILD_PREFIX/qif/plugin
-    mkdir -p $CMAKE_BUILD_PREFIX/qif/service
-    mv $CMAKE_BUILD_PREFIX/bin/data/kservices5/*qif* $CMAKE_BUILD_PREFIX/qif/service
-  fi
+
+  # Extract KMymoney's components
+  mkdir -p qif/plugin
+  mv bin/kmymoney/*qif* qif/plugin
+  mkdir -p qif/service
+  mv bin/data/kservices5/*qif* qif/service
 
   appName="KMyMoneyNEXT"
   installerBaseName="${appName}-${VERSION}-x86_64"
   IMAGE_BUILD_DIR_WINPATH=$(echo "$CMAKE_BUILD_PREFIX" | sed -e 's/^\///' -e 's/\//\\\\/g' -e 's/^./\0:/')
-  echo "------------------------------------"
-  echo $IMAGE_BUILD_DIR_WINPATH
+
   iconName="kmymoney.ico"
   iconFilePath="${IMAGE_BUILD_DIR_WINPATH}\\\\${iconName}"
   licenseFilePath="${IMAGE_BUILD_DIR_WINPATH}\\\\COPYING"
-#  png2ico ${iconName} "${KMYMONEY_INSTALL_PREFIX}/bin/data/icons/hicolor/64x64/apps/kmymoney.png"
+  png2ico ${iconName} "${KMYMONEY_INSTALL_PREFIX}/bin/data/icons/hicolor/64x64/apps/kmymoney.png"
 
   declare -A defines
 
@@ -146,32 +130,84 @@ createNSIS () {
   ["version"]="${VERSION}"
   ["website"]="https://wojnilowicz.github.io/kmymoneynext"
   ["licenseFile"]="${licenseFilePath}"
-
   )
 
   for key in "${!defines[@]}"; do
-    sed -i "s|@{${key}}|${defines[$key]}|g" $CMAKE_BUILD_PREFIX/NullsoftInstaller.nsi
+    sed -i "s|@{${key}}|${defines[$key]}|g" NullsoftInstaller.nsi
   done
 
-#  makensis.exe NullsoftInstaller.nsi
+  makensis.exe NullsoftInstaller.nsi
 
   echo "Done!" >&2
 }
 
-#echo "Copying libs..."
-#cp -fv $DEPS_INSTALL_PREFIX/lib/libicudt64.dll $KMYMONEY_INSTALL_PREFIX/bin/icudt64.dll
-#cp -fv $DEPS_INSTALL_PREFIX/lib/libgpgme* $KMYMONEY_INSTALL_PREFIX/bin
-#cp -fv $DEPS_INSTALL_PREFIX/lib/libkdewin* $KMYMONEY_INSTALL_PREFIX/bin
-#cp -fv $DEPS_INSTALL_PREFIX/lib/libssl* $KMYMONEY_INSTALL_PREFIX/bin
+# Copy installed KMyMoney to adjust its file locations
+rm -fr $CMAKE_BUILD_PREFIX
+cp $KMYMONEY_INSTALL_PREFIX $CMAKE_BUILD_PREFIX
+cd $CMAKE_BUILD_PREFIX
 
-#echo "Copying share..."
-#cp -fv $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/bin/data/icontheme.rcc
-#cp -fv $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* $KMYMONEY_INSTALL_PREFIX/bin/data/kservicetypes5
+echo "Copying libs..."
+cp -v $DEPS_INSTALL_PREFIX/bin/libpq.dll bin
 
-#echo "Copying plugins..."
-#mkdir -p $KMYMONEY_INSTALL_PREFIX/bin/kmymoney
-#cp -fv $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney/* $KMYMONEY_INSTALL_PREFIX/bin/kmymoney/
-#cp -frv $DEPS_INSTALL_PREFIX/plugins/sqldrivers $KMYMONEY_INSTALL_PREFIX/bin
+echo "Copying shares..."
+if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
+fi
+
+cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
+
+mkdir -p share
+for i in gwenhywfar aqbanking ktoblzcheck
+do
+  if [ -d $DEPS_INSTALL_PREFIX/share/${i} ]; then
+    cp -r $DEPS_INSTALL_PREFIX/share/${i} share
+  fi
+done
+
+echo "Copying plugins..."
+cp -r $DEPS_INSTALL_PREFIX/plugins/sqldrivers bin
+mv -v lib/plugins/kmymoney bin
+
+if [ -d lib/plugins/sqldrivers ]; then
+  mv -v lib/plugins/sqldrivers/* bin/sqldrivers
+fi
+
+for i in gwenhywfar aqbanking
+do
+  if [ -d $DEPS_INSTALL_PREFIX/lib/${i} ]; then
+    cp -r $DEPS_INSTALL_PREFIX/lib/${i} lib
+  fi
+done
+
+# windeployqt fails without icudt64.dll, so workaround
+cp -fv  $DEPS_INSTALL_PREFIX/lib/libicudt64.dll\
+       $DEPS_INSTALL_PREFIX/bin/icudt64.dll
+windeployqt $KMYMONEY_INSTALL_PREFIX/bin/kmymoney.exe \
+           --verbose=2 \
+           --release \
+           --qmldir=${DEPS_INSTALL_PREFIX}/qml \
+           --no-translations \
+           --compiler-runtime
+# Get rid of the workaround
+rm $DEPS_INSTALL_PREFIX/bin/icudt64.dll
+
+# replace stub libicudt64.dll with the real one
+cd $CMAKE_BUILD_PREFIX
+rm bin/libicudt64.dll
+mv bin/icudt64.dll bin/libicudt64.dll
+
+# Must be invoked from bin, otherwise libraries appear as "??? -> ???"
+cd $CMAKE_BUILD_PREFIX/bin
+kmymoney_findmissinglibs
+
+# Remove redundant files and directories
+cd $CMAKE_BUILD_PREFIX
+rm -fr include
+rm -fr lib/plugins
+find . -type f \( -name *.dll.a -or -name *.la \) -exec rm {} \;
+
+# Strip libraries
+find . -type f \( -name *.dll -or -name *.exe \) -exec strip {} \;
 
 cd $KMYMONEY_SOURCES
 KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
@@ -186,14 +222,4 @@ else
 fi
 
 cd $CMAKE_BUILD_PREFIX
-
-#windeployqt $KMYMONEY_INSTALL_PREFIX/bin/kmymoney.exe \
-#            --verbose=2 \
-#            --release \
-#            --qmldir=${DEPS_INSTALL_PREFIX}/qml \
-#            --no-translations \
-#            --compiler-runtime
-
-#kmymoney_findmissinglibs
-
 createNSIS

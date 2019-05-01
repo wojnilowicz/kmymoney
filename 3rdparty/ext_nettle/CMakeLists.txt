@@ -5,10 +5,7 @@ ExternalProject_Add(
   URL_MD5 9bdebb0e2f638d3b9d91f7fc264b70c1
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     --enable-public-key
     --disable-gcov
     --disable-documentation
@@ -16,8 +13,6 @@ ExternalProject_Add(
     --with-lib-path=${UNIX_INSTALL_PREFIX}/lib
     --with-include-path=${UNIX_INSTALL_PREFIX}/include
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_gmp

@@ -1,3 +1,5 @@
+# without --host=x86_64 gmp builds with optimizations for skylake and that prevents running KMyMoney on pre-skylake CPUs
+
 if(MINGW)
   ExternalProject_Add(
     ext_gmp
@@ -6,14 +8,9 @@ if(MINGW)
     URL_MD5 8ddbb26dc3bd4e2302984debba1406a5
 
     CONFIGURE_COMMAND ./configure
-      --prefix=${UNIX_INSTALL_PREFIX}
-      --host=${AT_SYSTEM_TYPE}
-      ${AT_SHARED_ONLY}
-      ${AT_LESS_PROCESSING}
+      ${AT_GLOBAL_PROFILE}
       --enable-cxx
-    BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
     BUILD_IN_SOURCE 1
-    INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
     ${CLEANUP_COMMAND}
   )
 else()
@@ -24,13 +21,8 @@ else()
     URL_MD5 8ddbb26dc3bd4e2302984debba1406a5
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
-      --prefix=${UNIX_INSTALL_PREFIX}
-      --host=${AT_SYSTEM_TYPE}
-      ${AT_SHARED_ONLY}
-      ${AT_LESS_PROCESSING}
+      ${AT_GLOBAL_PROFILE}
       --enable-cxx
-    BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-    INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
     ${CLEANUP_COMMAND}
   )
-endif ()
+endif()

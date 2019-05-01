@@ -4,15 +4,10 @@ ExternalProject_Add(
   URL https://www.gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.3.tar.bz2
   URL_MD5 226c504ea78a232224bf3b6846b3adb9
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure ${AT_CONFIGURE_ARGS}
+    ${AT_GLOBAL_PROFILE}
     --disable-doc
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_gpgerror

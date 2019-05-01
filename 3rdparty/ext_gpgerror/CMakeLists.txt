@@ -5,17 +5,12 @@ ExternalProject_Add(
   URL_MD5 eff437f397e858a9127b76c0d87fa5ed
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure ${AT_CONFIGURE_ARGS}
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     --disable-doc
     --disable-tests
     --disable-nls
     --disable-languages
     --without-readline
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 )

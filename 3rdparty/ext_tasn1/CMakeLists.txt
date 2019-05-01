@@ -4,8 +4,9 @@ ExternalProject_Add(
   URL http://ftp.gnu.org/gnu/libtasn1/libtasn1-4.13.tar.gz
   URL_MD5 ce2ba4d3088119b48e7531a703669c52
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --host=${AT_SYSTEM_TYPE} ${AT_SHARED_ONLY}
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    ${AT_GLOBAL_PROFILE}
+
   ${CLEANUP_COMMAND}
 )
+

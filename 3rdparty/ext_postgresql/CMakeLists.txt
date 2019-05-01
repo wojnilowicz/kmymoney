@@ -1,17 +1,46 @@
+# client-only installation is described on https://www.postgresql.org/docs/11/install-procedure.html
+# without PKG_CONFIG_PATH set, backward slashes are used and that causes build errors
+# without MAKELEVEL=0 set, some headers cannot be found
+# building src/common and src/port is workaround for mingw
+
 ExternalProject_Add(
   ext_postgresql
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://ftp.postgresql.org/pub/source/v11.0/postgresql-11.0.tar.bz2
-  URL_MD5 338ede84c0443db02ff6e8c4c8cbc5e9
+  URL https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2
+  URL_MD5 19d43be679cb0d55363feb8926af3a0f
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --with-libxml --with-libxslt --with-icu --with-tcl --enable-thread-safety --without-readline --with-openssl --with-libraries=${CMAKE_INSTALL_PREFIX}/lib --with-includes=${CMAKE_INSTALL_PREFIX}/include CPPFLAGS=${AT_CPP_FLAGS} LDFLAGS=${AT_LD_FLAGS}
-  BUILD_COMMAND rsync -a --ignore-existing src/backend/utils/ src/include/utils/
-  COMMAND       rsync -a --ignore-existing src/backend/catalog/ src/include/catalog/
-  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/bin install
-  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/include install
-  COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} -C src/interfaces install
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff
+  CONFIGURE_COMMAND ./configure
+                    ${AT_GLOBAL_PROFILE}
+                    --disable-nls
+                    --disable-debug
+                    --disable-profiling
+                    --disable-coverage
+                    --with-icu
+                    --without-tcl
+                    --without-perl
+                    --without-python
+                    --enable-thread-safety
+                    --without-readline
+                    --without-bonjour
+                    --with-openssl
+                    --without-selinux
+                    --without-systemd
+                    --with-libraries=${UNIX_INSTALL_PREFIX}/lib
+                    --with-includes=${UNIX_INSTALL_PREFIX}/include
+                    --without-libxml
+                    --without-libxslt
+                    --with-zlib
+                    PKG_CONFIG_PATH=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
+
+  BUILD_COMMAND $(MAKE) -C src/common MAKELEVEL=0
+        COMMAND $(MAKE) -C src/port MAKELEVEL=0
+        COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
+        COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
+        COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
+
   INSTALL_COMMAND ""
-  UPDATE_COMMAND ""
+
   BUILD_IN_SOURCE 1
-  DEPENDS ext_readline ext_tcl ext_xslt ext_openssl
+  DEPENDS ext_icu ext_openssl
 )

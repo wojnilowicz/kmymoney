@@ -8,7 +8,7 @@ set -eux
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
- cd $DOWNLOADS_DIR
+cd $DOWNLOADS_DIR
 # wget https://www.python.org/ftp/python/3.7.3/python-3.7.3-amd64.exe
 # ./python-3.7.3-amd64.exe /quiet TargetDir=$DEPS_INSTALL_PREFIX/python
 # export PATH=$DEPS_INSTALL_PREFIX/python:$PATH
@@ -27,18 +27,21 @@ cd $CMAKE_BUILD_PREFIX
 # fi
 
 cd $CMAKE_BUILD_PREFIX
+
+# Those flags will be propageted to Autotools and CMake
+export CXXFLAGS="-O2 -DNDEBUG"
+export CFLAGS="-O2 -DNDEBUG"
+
 # Configure the dependencies for building
 cmake -G "MSYS Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
-      -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
-# cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
   if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
@@ -72,8 +75,9 @@ cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
+cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
-cmake --build . --target ext_kdewin -- -j${CPU_COUNT}
+cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSystem
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}

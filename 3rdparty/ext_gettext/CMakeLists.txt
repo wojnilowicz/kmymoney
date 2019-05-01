@@ -5,12 +5,9 @@ ExternalProject_Add(
   URL http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.gz
   URL_MD5 97e034cf8ce5ba73a28ff6c3c0638092
 
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-tools.diff
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-tools.diff
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     --disable-java
     --disable-native-java
     --disable-curses
@@ -25,8 +22,6 @@ ExternalProject_Add(
     --enable-relocatable
     --with-included-gettext
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_glib

@@ -1,0 +1,12 @@
+diff -ruN icu.orig/source/configure icu/source/configure
+--- icu.orig/source/configure	2019-04-17 21:42:15.000000000 +0200
++++ icu/source/configure	2019-04-27 13:36:36.249929100 +0200
+@@ -9138,7 +9138,7 @@
+       touch data/rules.mk
+     fi
+     echo "Spawning Python to generate test/testdata/rules.mk..."
+-    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
++    PYTHONPATH="$srcdir/test/testdata;$srcdir/data" $PYTHON -m buildtool \
+         --mode gnumake \
+         --seqmode parallel \
+         --src_dir "$srcdir/test/testdata" \

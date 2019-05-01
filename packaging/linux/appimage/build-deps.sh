@@ -10,7 +10,7 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Configure the dependencies for building
-cmake -GNinja \
+cmake -G"Unix Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \

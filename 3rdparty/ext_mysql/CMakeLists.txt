@@ -1,8 +1,8 @@
 ExternalProject_Add(
   ext_mysql
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-boost-8.0.12.tar.gz
-  URL_MD5 82ba7cc22755f77635768c6e6d184161
+  URL https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-boost-8.0.16.tar.gz
+  URL_MD5 6b9b8e7a26789935a491b4d7e53a7145
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
               -DWITH_BOOST=<SOURCE_DIR>/boost
@@ -16,7 +16,7 @@ ExternalProject_Add(
 
   BUILD_COMMAND "" # on default whole server would be built
   INSTALL_COMMAND ""
-  DEPENDS ext_ncurses ext_openssl
+  DEPENDS ext_xz ext_icu ext_openssl #ext_ncurses
 )
 
 # build and install client only

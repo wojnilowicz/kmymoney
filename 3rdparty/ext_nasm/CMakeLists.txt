@@ -4,8 +4,12 @@ ExternalProject_Add(
   URL https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.xz
   URL_MD5 7d0f554cacd6c5021b3cda3ba9f2474c
 
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --host=${AT_SYSTEM_TYPE} ${AT_SHARED_ONLY}
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure ${AT_CONFIGURE_ARGS}
+    ${AT_GLOBAL_PROFILE}
+    --disable-gdb
+    --disable-ccache
+
   ${CLEANUP_COMMAND}
 )
+
+

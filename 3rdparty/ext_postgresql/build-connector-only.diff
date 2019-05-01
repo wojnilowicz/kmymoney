@@ -1,0 +1,40 @@
+diff -ruN postgresql-11.2.orig/src/bin/Makefile postgresql-11.2/src/bin/Makefile
+--- postgresql-11.2.orig/src/bin/Makefile	2019-02-11 22:17:27.000000000 +0100
++++ postgresql-11.2/src/bin/Makefile	2019-04-27 23:05:30.667217200 +0200
+@@ -14,29 +14,14 @@
+ include $(top_builddir)/src/Makefile.global
+ 
+ SUBDIRS = \
+-	initdb \
+-	pg_archivecleanup \
+-	pg_basebackup \
+-	pg_config \
+-	pg_controldata \
+-	pg_ctl \
+-	pg_dump \
+-	pg_resetwal \
+-	pg_rewind \
+-	pg_test_fsync \
+-	pg_test_timing \
+-	pg_upgrade \
+-	pg_verify_checksums \
+-	pg_waldump \
+-	pgbench \
+-	psql \
+-	scripts
++    pg_dump \
++    psql
+ 
+-ifeq ($(PORTNAME), win32)
+-SUBDIRS += pgevent
+-else
+-ALWAYS_SUBDIRS += pgevent
+-endif
++#ifeq ($(PORTNAME), win32)
++#SUBDIRS += pgevent
++#else
++#ALWAYS_SUBDIRS += pgevent
++#endif
+ 
+ $(recurse)
+ $(recurse_always)

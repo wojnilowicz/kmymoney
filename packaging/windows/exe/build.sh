@@ -61,7 +61,6 @@ $DEPS_INSTALL_PREFIX/lib/pkgconfig:\
 $DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
 
-
 export CMAKE_PREFIX_PATH=\
 $DEPS_INSTALL_PREFIX\;\
 $DEPS_INSTALL_PREFIX/openssl\;\

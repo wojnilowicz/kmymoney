@@ -6,10 +6,9 @@ ExternalProject_Add(
   URL_MD5 98c889aaf8d23910d2b92d65be2e737a
 
   # otherwise shlib gets invoked with PATH variable converted to Windows style paths
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ncurses_mingw.diff
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/ncurses_mingw.diff
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
+    ${AT_GLOBAL_PROFILE}
     --enable-overwrite
     --enable-pc-files
     --without-tests
@@ -26,10 +25,7 @@ ExternalProject_Add(
     --without-normal
     --disable-widec
     --enable-rpath
-    --with-pkg-config-libdir=${UNIX_INSTALL_PREFIX}/lib/pkgconfig #${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
-
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+    --with-pkg-config-libdir=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
 
   ${CLEANUP_COMMAND}
 )

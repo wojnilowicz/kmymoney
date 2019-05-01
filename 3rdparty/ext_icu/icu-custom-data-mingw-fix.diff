@@ -1,0 +1,14 @@
+diff -ruN icu.orig/source/data/buildtool/__main__.py icu/source/data/buildtool/__main__.py
+--- icu.orig/source/data/buildtool/__main__.py	2019-04-17 21:42:15.000000000 +0200
++++ icu/source/data/buildtool/__main__.py	2019-04-27 13:34:45.152607200 +0200
+@@ -215,8 +215,8 @@
+ 
+     if args.mode == "gnumake":
+         makefile_vars = {
+-            "SRC_DIR": "$(srcdir)",
+-            "IN_DIR": "$(srcdir)",
++            "SRC_DIR": "$(srcdir)/",
++            "IN_DIR": "$(srcdir)/",
+             "INDEX_NAME": "res_index"
+         }
+         makefile_env = ["ICUDATA_CHAR", "OUT_DIR", "TMP_DIR"]

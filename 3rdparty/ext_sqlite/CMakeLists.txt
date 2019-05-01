@@ -1,25 +1,28 @@
-set(sqlite_cFlags "-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_DISABLE_DIRSYNC=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1")
+# sqlite3 configuration set according to Qt 3rdparty build script
+# withouth CPPFLAGS and LDFLAGS static zlib from mingw is picked up
+
+set(SQLITE_C_FLAGS "${C_FLAGS} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_OMIT_LOAD_EXTENSION=1 -DSQLITE_OMIT_COMPLETE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1")
+if(UNIX)
+  set(SQLITE_C_FLAGS "${SQLITE_C_FLAGS} DHAVE_USLEEP=1")
+endif()
 
 ExternalProject_Add(
   ext_sqlite
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-  URL https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz
-  URL_MD5 1f72631ce6e8efa5b4a6e55a43b3bdc0
+  URL https://www.sqlite.org/2019/sqlite-autoconf-3280000.tar.gz
+  URL_MD5 3c68eb400f8354605736cd55400e1572
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --disable-static
-    --enable-shared
+    ${AT_GLOBAL_PROFILE}
     --enable-fts3
-    --disable-static-shell
-    --enable-session
+    --enable-fts5
     --enable-json1
-    CFLAGS=${sqlite_cFlags}
+    --enable-rtree
+    --disable-static-shell
+    --disable-session
+    CFLAGS=${SQLITE_C_FLAGS}
+    CPPFLAGS=${AT_CPPFLAGS}
+    LDFLAGS=${AT_LDFLAGS}
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 )
-
-
-#--enable-silent-rules --disable-dependency-tracking

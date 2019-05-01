@@ -38,7 +38,7 @@ bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & #MacOS 
 pip3 install meson
 cmake --build . --target ext_xml -- -j${CPU_COUNT}
 cmake --build . --target ext_gettext -- -j${CPU_COUNT}
-cmake --build . --target ext_bison -- -j${CPU_COUNT}
+cmake --build . --target ext_bison -- -j${CPU_COUNT} # required by solid
 cmake --build . --target ext_flex -- -j${CPU_COUNT}
 cmake --build . --target ext_xslt -- -j${CPU_COUNT}
 cmake --build . --target ext_png -- -j${CPU_COUNT}

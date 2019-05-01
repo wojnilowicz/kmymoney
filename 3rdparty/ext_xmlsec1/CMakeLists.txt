@@ -8,10 +8,7 @@ ExternalProject_Add(
   URL_MD5 69b8d95c009a404462e19f335e650241
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-    ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     --disable-mans
     --disable-docs
     --without-openssl
@@ -19,9 +16,7 @@ ExternalProject_Add(
     --disable-crypto-dl
     LDFLAGS=${gcrypt_lib}
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_gcrypt ext_gnutls ext_xml #ext_xslt
+  DEPENDS ext_gcrypt ext_gnutls ext_xml
 )

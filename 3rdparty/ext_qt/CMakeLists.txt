@@ -18,9 +18,9 @@ ExternalProject_Add(
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
   URL_MD5 fe47852113fc27581dbc0cf71644d6f1
- PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
-       COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
-       COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
+ PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
+       COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
+       COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     -prefix ${CMAKE_INSTALL_PREFIX}
@@ -28,6 +28,8 @@ ExternalProject_Add(
     -confirm-license
     -verbose
     -release
+    -shared
+    -no-static
     -nomake examples
     -nomake tests
     -nomake tools
@@ -35,19 +37,30 @@ ExternalProject_Add(
     -icu
     -ssl
     -openssl-runtime
+    -dbus
+    -dbus-runtime
     -no-sql-odbc
+    -sql-psql
+    -sql-mysql
+    -system-sqlite
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
     LIBPNG_PREFIX=${CMAKE_INSTALL_PREFIX}
+    LIBJPEG_PREFIX=${CMAKE_INSTALL_PREFIX}
     DBUS_PREFIX=${CMAKE_INSTALL_PREFIX}
+    SQLITE_PREFIX=${CMAKE_INSTALL_PREFIX}
+    PSQL_PREFIX=${CMAKE_INSTALL_PREFIX}
+    MYSQL_INCDIR=${CMAKE_INSTALL_PREFIX}/include/mariadb
+    MYSQL_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
+    MYSQL_LIBS="-llibmariadb"
+
     ${qt_platform_specific_option}
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_openssl ext_sqlite ext_icu ext_png #ext_mysql #ext_postgresql
+  DEPENDS ext_openssl ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
 )
+
 
 ExternalProject_Add(
   ext_qtsvg
@@ -56,8 +69,6 @@ ExternalProject_Add(
   URL_MD5 f8fa6e39584ed631f2795d8d80d5229c
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase
@@ -70,11 +81,9 @@ ExternalProject_Add(
   URL_MD5 d2e4776ca7ca1bbb39330adffa17a65f
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
- DEPENDS ext_qtbase
+  DEPENDS ext_qtbase
 )
 
 ExternalProject_Add(
@@ -84,8 +93,6 @@ ExternalProject_Add(
   URL_MD5 0ccaa6be759513650158d552c6130529
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase
@@ -98,8 +105,18 @@ ExternalProject_Add(
   URL_MD5 f1f6b4c1253d2b833e849663c7661110
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
+  ${CLEANUP_COMMAND}
+
+  DEPENDS ext_qtbase
+)
+
+ExternalProject_Add(
+  ext_qtspeech
+  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtspeech-everywhere-src-5.12.3.tar.xz
+  URL_MD5 1aa38a37cd52a4a0403fc41715992070
+
+  CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase
@@ -113,9 +130,6 @@ ExternalProject_Add(
   URL_MD5 2f8e8a30507adbec8f4c10fa56b06027
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
-          COMMAND bash -c "find ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig -type f -name Qt5*.pc -exec sed -i 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtxmlpatterns ext_qtsvg
@@ -128,8 +142,6 @@ ExternalProject_Add(
   URL_MD5 4069ca615b14c0c2b5be8744c9a75633
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} -j2
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} -j2 install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtdeclarative
@@ -142,8 +154,6 @@ ExternalProject_Add(
   URL_MD5 1e10104f161cccecbb9c1c2638b1a719
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtdeclarative
@@ -156,8 +166,6 @@ ExternalProject_Add(
   URL_MD5 66ef1fe02a59abdd5ad20152618475b1
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtdeclarative
@@ -170,8 +178,6 @@ ExternalProject_Add(
   URL_MD5 bd4e964b35ab060a733262a8c3243718
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR>
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_qtbase ext_qtdeclarative
@@ -184,9 +190,18 @@ ExternalProject_Add(
   URL_MD5 9841599435095b16f12870bd48ef5342
 
   CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> #-- -system-webengine-icu #-no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc -no-webengine-pepper-plugins
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_xml ext_qtbase ext_qtdeclarative ext_qtwebchannel
 )
+
+if(MINGW)
+  ExternalProject_Add_Step(
+    ext_qtdeclarative correctcmake
+    COMMAND bash -c "find . -type f -name Qt5*.pc -exec sed -i \
+    -e 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
+
+    DEPENDEES install
+    WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+  )
+endif()

@@ -1,0 +1,42 @@
+diff -ruN gwenhywfar-4.20.0.orig/gui/qt5/Makefile.am gwenhywfar-4.20.0/gui/qt5/Makefile.am
+--- gwenhywfar-4.20.0.orig/gui/qt5/Makefile.am	2017-08-07 21:02:10.000000000 +0200
++++ gwenhywfar-4.20.0/gui/qt5/Makefile.am	2019-04-30 07:25:26.849150300 +0200
+@@ -19,6 +19,7 @@
+   qt5_gui_dialog.hpp
+ 
+ libgwengui_qt5_la_LIBADD=$(QT_LIBS) $(top_builddir)/src/$(gwenhywfar_internal_libname) $(builddir)/../cpp/libgwengui-cpp.la
++libgwengui_qt5_la_LDFLAGS = -no-undefined
+ libgwengui_qt5_la_SOURCES=\
+   qt5dialogbox.cpp \
+   qt5_gui.cpp \
+diff -ruN gwenhywfar-4.20.0.orig/gui/qt5/Makefile.in gwenhywfar-4.20.0/gui/qt5/Makefile.in
+--- gwenhywfar-4.20.0.orig/gui/qt5/Makefile.in	2018-02-23 16:35:33.000000000 +0100
++++ gwenhywfar-4.20.0/gui/qt5/Makefile.in	2019-04-30 07:44:52.326026100 +0200
+@@ -150,6 +150,10 @@
+ am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
+ am__v_lt_0 = --silent
+ am__v_lt_1 = 
++libgwengui_qt5_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CXX \
++	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CXXLD) \
++	$(AM_CXXFLAGS) $(CXXFLAGS) $(libgwengui_qt5_la_LDFLAGS) \
++	$(LDFLAGS) -o $@
+ PROGRAMS = $(noinst_PROGRAMS)
+ am_libtest_OBJECTS = libtest.$(OBJEXT)
+ libtest_OBJECTS = $(am_libtest_OBJECTS)
+@@ -495,6 +499,7 @@
+   qt5_gui_dialog.hpp
+ 
+ libgwengui_qt5_la_LIBADD = $(QT_LIBS) $(top_builddir)/src/$(gwenhywfar_internal_libname) $(builddir)/../cpp/libgwengui-cpp.la
++libgwengui_qt5_la_LDFLAGS = -no-undefined
+ libgwengui_qt5_la_SOURCES = \
+   qt5dialogbox.cpp \
+   qt5_gui.cpp \
+@@ -620,7 +625,7 @@
+ 	}
+ 
+ libgwengui-qt5.la: $(libgwengui_qt5_la_OBJECTS) $(libgwengui_qt5_la_DEPENDENCIES) $(EXTRA_libgwengui_qt5_la_DEPENDENCIES) 
+-	$(AM_V_CXXLD)$(CXXLINK) -rpath $(libdir) $(libgwengui_qt5_la_OBJECTS) $(libgwengui_qt5_la_LIBADD) $(LIBS)
++	$(AM_V_CXXLD)$(libgwengui_qt5_la_LINK) -rpath $(libdir) $(libgwengui_qt5_la_OBJECTS) $(libgwengui_qt5_la_LIBADD) $(LIBS)
+ 
+ clean-noinstPROGRAMS:
+ 	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \

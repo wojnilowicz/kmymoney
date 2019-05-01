@@ -1,0 +1,24 @@
+diff -ruN mariadb-connector-c-3.0.9-src.orig/CMakeLists.txt mariadb-connector-c-3.0.9-src/CMakeLists.txt
+--- mariadb-connector-c-3.0.9-src.orig/CMakeLists.txt	2019-02-08 16:36:35.000000000 +0100
++++ mariadb-connector-c-3.0.9-src/CMakeLists.txt	2019-04-26 20:16:37.353698200 +0200
+@@ -394,7 +394,7 @@
+ INCLUDE(${CC_SOURCE_DIR}/plugins/CMakeLists.txt)
+ ADD_SUBDIRECTORY(include)
+ ADD_SUBDIRECTORY(libmariadb)
+-IF(NOT WIN32)
++IF(NOT WIN32 OR MSYS)
+   ADD_SUBDIRECTORY(mariadb_config)
+ ENDIF()
+ 
+diff -ruN mariadb-connector-c-3.0.9-src.orig/libmariadb/CMakeLists.txt mariadb-connector-c-3.0.9-src/libmariadb/CMakeLists.txt
+--- mariadb-connector-c-3.0.9-src.orig/libmariadb/CMakeLists.txt	2019-02-08 16:36:35.000000000 +0100
++++ mariadb-connector-c-3.0.9-src/libmariadb/CMakeLists.txt	2019-04-26 19:49:40.088919300 +0200
+@@ -447,7 +447,7 @@
+         DESTINATION ${INSTALL_LIBDIR})
+ 
+ 
+-IF(WIN32)
++IF(WIN32 AND NOT MSYS)
+    # On Windows, install PDB
+    INSTALL(FILES $<TARGET_PDB_FILE:libmariadb> DESTINATION "${INSTALL_LIBDIR}"
+            CONFIGURATIONS Debug RelWithDebInfo

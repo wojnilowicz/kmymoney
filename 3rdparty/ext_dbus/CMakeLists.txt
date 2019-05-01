@@ -1,13 +1,14 @@
-ExternalProject_Add( ext_dbus
+ExternalProject_Add(
+  ext_dbus
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
   SOURCE_SUBDIR cmake
   URL https://dbus.freedesktop.org/releases/dbus/dbus-1.12.12.tar.gz
   URL_MD5 ea11069521beeee4e47f0086596a43c8
 
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.11.4-20160903.diff
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.12.12-launchd.diff
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-fix_data_dir.diff
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus.diff
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.11.4-20160903.diff
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.12.12-launchd.diff
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-fix_data_dir.diff
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus.diff
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DDBUS_BUILD_TESTS=OFF
@@ -18,7 +19,20 @@ ExternalProject_Add( ext_dbus
              -DDBUS_SESSION_BUS_LISTEN_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SESSION_BUS_CONNECT_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SYSTEM_BUS_DEFAULT_ADDRESS:STRING=autolaunch:scope=*install-path
+
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_expat ext_glib
 )
+
+# Without this Qt cannot find dbus easilly
+if(MINGW)
+  ExternalProject_Add_Step(
+  ext_dbus copyincludes
+  COMMAND cp -fr dbus-1.0/dbus .
+  COMMAND cp -fr ${CMAKE_INSTALL_PREFIX}/lib/dbus-1.0/include/dbus .
+
+  DEPENDEES install
+  WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/include
+  )
+endif()

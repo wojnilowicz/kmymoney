@@ -1,0 +1,55 @@
+diff -ruN gwenhywfar-4.20.0.orig/configure gwenhywfar-4.20.0/configure
+--- gwenhywfar-4.20.0.orig/configure	2018-02-23 16:35:36.000000000 +0100
++++ gwenhywfar-4.20.0/configure	2019-04-30 00:05:50.456635500 +0200
+@@ -22522,35 +22522,10 @@
+     am_have_qt_makefile=`mktemp`
+     # http://qt-project.org/doc/qt-5/qmake-variable-reference.html#qt
+     cat > $am_have_qt_pro << EOF
+-qtHaveModule(axcontainer):       QT += axcontainer
+-qtHaveModule(axserver):          QT += axserver
+-qtHaveModule(concurrent):        QT += concurrent
++win32: CONFIG -= debug_and_release
++win32: QMAKE_PROJECT_DEPTH = 0
+ qtHaveModule(core):              QT += core
+-qtHaveModule(dbus):              QT += dbus
+-qtHaveModule(declarative):       QT += declarative
+-qtHaveModule(designer):          QT += designer
+ qtHaveModule(gui):               QT += gui
+-qtHaveModule(help):              QT += help
+-qtHaveModule(multimedia):        QT += multimedia
+-qtHaveModule(multimediawidgets): QT += multimediawidgets
+-qtHaveModule(network):           QT += network
+-qtHaveModule(opengl):            QT += opengl
+-qtHaveModule(printsupport):      QT += printsupport
+-qtHaveModule(qml):               QT += qml
+-qtHaveModule(qmltest):           QT += qmltest
+-qtHaveModule(x11extras):         QT += x11extras
+-qtHaveModule(script):            QT += script
+-qtHaveModule(scripttools):       QT += scripttools
+-qtHaveModule(sensors):           QT += sensors
+-qtHaveModule(serialport):        QT += serialport
+-qtHaveModule(sql):               QT += sql
+-qtHaveModule(svg):               QT += svg
+-qtHaveModule(testlib):           QT += testlib
+-qtHaveModule(uitools):           QT += uitools
+-qtHaveModule(webkit):            QT += webkit
+-qtHaveModule(webkitwidgets):     QT += webkitwidgets
+-qtHaveModule(xml):               QT += xml
+-qtHaveModule(xmlpatterns):       QT += xmlpatterns
+ qtHaveModule(widgets):           QT += widgets
+ percent.target = %
+ percent.commands = @echo -n "\$(\$(@))\ "
+@@ -22586,7 +22561,12 @@
+     QT_LUPDATE=`which lupdate`
+ 
+     # Get Qt version from qmake
+-    QT_DIR=`$QT_QMAKE --version | grep -o -E /.+`
++    QT_DIR=`$QT_QMAKE -query QT_INSTALL_PREFIX`
++    if test "$OSYSTEM" = "windows"; then
++      QT_LIBS="-L`$QT_QMAKE -query QT_INSTALL_LIBS` -lQt5Widgets -lQt5Gui -lQt5Core"
++      QT_INCDIR=`$QT_QMAKE -query QT_INSTALL_HEADERS`
++      QT_CXXFLAGS="$CXXFLAGS -I$QT_INCDIR -I$QT_INCDIR/QtWidgets -I$QT_INCDIR/QtGui -I$QT_INCDIR/QtCore"
++    fi
+ 
+     # All variables are defined, report the result
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: $have_qt:

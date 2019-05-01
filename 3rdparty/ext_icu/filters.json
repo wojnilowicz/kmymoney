@@ -1,0 +1,18 @@
+{
+  "localeFilter": {
+    "filterType": "locale",
+    "includeChildren": false,
+    "whitelist": [
+      "en_US",
+      "en_GB"
+    ]
+  },
+  "featureFilters": {
+    "unit_tree": {
+      "filterType": "exclude"
+    },
+    "coll_tree": {
+      "filterType": "exclude"
+    }
+  }
+}

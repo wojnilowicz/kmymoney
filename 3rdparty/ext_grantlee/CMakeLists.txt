@@ -1,3 +1,4 @@
+# TextDocument is required by kpimtextedit
 ExternalProject_Add(
   ext_grantlee
   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
@@ -5,5 +6,11 @@ ExternalProject_Add(
   URL_MD5 cf959612f577114ad7c9e3456bc41a62
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
+             -DBUILD_TEMPLATES=OFF
+             -DBUILD_TEXTDOCUMENT=ON
+             -DBUILD_MAIN_PLUGINS=OFF
+             -DBUILD_I18N_PLUGIN=OFF
+             -DBUILD_SCRIPT_PLUGIN=OFF
+             -DBUILD_TESTS=OFF
   ${CLEANUP_COMMAND}
 )

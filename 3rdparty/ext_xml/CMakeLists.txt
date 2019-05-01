@@ -6,14 +6,11 @@ ExternalProject_Add(
   URL http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz
   URL_MD5 c04a5a0a042eaa157e8e8c9eabe76bd6
 
-  PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xml.diff
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mingw_xml.diff
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xml.diff
+        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mingw_xml.diff
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-    --host=${AT_SYSTEM_TYPE}
-    ${AT_SHARED_ONLY}
-   ${AT_LESS_PROCESSING}
+    ${AT_GLOBAL_PROFILE}
     --with-c14n
     --without-catalog
     --without-debug
@@ -30,8 +27,6 @@ ExternalProject_Add(
     --with-xptr
     --without-modules
 
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_xz ext_icu

@@ -54,14 +54,14 @@
 ;--------------------------------
 ;Pages
 
-  ;!insertmacro MUI_PAGE_WELCOME
-  ;!insertmacro MUI_PAGE_LICENSE "@{licenseFile}"
+  !insertmacro MUI_PAGE_WELCOME
+  !insertmacro MUI_PAGE_LICENSE "@{licenseFile}"
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MULTIUSER_PAGE_INSTALLMODE
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
-  ;!insertmacro MUI_PAGE_FINISH
+  !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_CONFIRM
@@ -103,7 +103,9 @@ Section "Core" coreComponentID
   ;Add files to be packaged in installer
   File /a "@{iconFile}"
   SetOutPath "$INSTDIR"
-  File /r "iconengines"
+  File /r "bin"
+  File /r "lib"
+  File /r "share"
 
 SectionEnd
 

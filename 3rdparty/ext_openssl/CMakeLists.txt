@@ -13,8 +13,9 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${platform_specific_option}
     --prefix=${CMAKE_INSTALL_PREFIX}
     --openssldir=${CMAKE_INSTALL_PREFIX}/ssl
-    no-tests
-  BUILD_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS}
-  INSTALL_COMMAND ${MAKE_EXECUTABLE} ${MAKE_ARGS} install_sw
+    no-tests no-deprecated no-ui no-static-engine
+
+  INSTALL_COMMAND $(MAKE) install_sw
   ${CLEANUP_COMMAND}
 )
+
