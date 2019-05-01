@@ -9,6 +9,7 @@ branches:
     - /^(?i:continuous)$/
     - /^(?i:continuous-linux)$/
     - /^(?i:continuous-osx)$/
+    - appveyor-builds
 
 matrix:
   include:
