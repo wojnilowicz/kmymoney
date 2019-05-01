@@ -165,7 +165,7 @@ matrix:
         - START_TIME=$(date +%s)
         - |
           RUNTIME_TIMEOUT=25
-          if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=25; fi;
+          if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=27; fi;
           if [ ! -f "/c/deps-install/bin/libpng16.dll" ]; then RUNTIME_TIMEOUT=35; fi;
           if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
           echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
