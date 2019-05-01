@@ -1,5 +1,5 @@
 # Write-Host $Env:Path
-$Env:Path="C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin;C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Python37\Scripts;C:\Python37;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
+$Env:Path="C:\mingw-w64\x86_64-8.1.0-posix-seh-rt_v6-rev0\mingw64\bin;C:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\Python37-x64\Scripts;C:\Python37-x64;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
 
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:APPVEYOR_BUILD_FOLDER -replace "\\","/") -replace ":","").ToLower().Trim("/")
