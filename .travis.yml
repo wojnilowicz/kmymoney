@@ -163,8 +163,9 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - RUNTIME_TIMEOUT=25
-        - if [ ! -f "/c/deps-install/bin/libpng16.dll" ]; then RUNTIME_TIMEOUT=42; fi;
+        - RUNTIME_TIMEOUT=30
+        - if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=33; fi;
+        - if [ ! -f "/c/deps-install/bin/libpng16.dll" ]; then RUNTIME_TIMEOUT=43; fi;
         - |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
