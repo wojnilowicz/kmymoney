@@ -10,6 +10,8 @@ cache:
   - c:\deps-build
   - c:\deps-install
 
+build: off
+
 install:
   - ps: Write-Host "Hello world"
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 pacman-deps
