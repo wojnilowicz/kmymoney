@@ -8,7 +8,7 @@ project(kmymoney-and-all-its-deps)
 # Example usage: cmake $KMYMONEY_SOURCES/3rdparty -DEXT_DOWNLOAD_DIR=/dev2/d -DCMAKE_INSTALL_PREFIX=/dev2/i
 
 
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.1.3)
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")
@@ -79,9 +79,7 @@ set(AT_GLOBAL_PROFILE
 
 set(PROJECT_GLOBAL_PROFILE
     DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-    LOG_DIR ${EXT_DOWNLOAD_DIR}
-    LOG_DOWNLOAD TRUE
-    LOG_OUTPUT_ON_FAILURE TRUE
+    DOWNLOAD_NO_PROGRESS 1
 )
 
 set(PATCH_EXECUTABLE patch)
