@@ -1,7 +1,7 @@
 # Without --enable-term-driver there are linking errors on MinGW.
 ExternalProject_Add(
   ext_ncurses
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz
   URL_MD5 98c889aaf8d23910d2b92d65be2e737a
 

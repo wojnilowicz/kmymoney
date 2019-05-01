@@ -6,7 +6,7 @@ endif()
 
 ExternalProject_Add(
   ext_opensp
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://downloads.sourceforge.net/project/openjade/opensp/1.5.2/OpenSP-1.5.2.tar.gz
   URL_MD5 670b223c5d12cee40c9137be86b6c39b
 

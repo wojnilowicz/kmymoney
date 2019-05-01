@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_unistring
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://ftp.gnu.org/gnu/libunistring/libunistring-0.9.10.tar.xz
   URL_MD5 db08bb384e81968957f997ec9808926e
 

@@ -3,7 +3,7 @@
 
 ExternalProject_Add(
   ext_harfbuzz
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.freedesktop.org/software/harfbuzz/release/harfbuzz-2.0.0.tar.bz2
   URL_MD5 6d1373dba3e8540c448c6a562f2e0a00
 

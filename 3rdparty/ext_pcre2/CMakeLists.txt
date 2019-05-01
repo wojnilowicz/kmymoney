@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_pcre2
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://ftp.pcre.org/pub/pcre/pcre2-10.32.zip
   URL_MD5 e0e5b1f7e425b73dcdcea0e08a85da31
 

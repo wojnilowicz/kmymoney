@@ -3,7 +3,7 @@ set (glib_cflags "-I${UNIX_INSTALL_PREFIX}/include/glib-2.0 -I${UNIX_INSTALL_PRE
 
 ExternalProject_Add(
   ext_pkgconfig
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://pkg-config.freedesktop.org/releases/pkg-config-0.29.2.tar.gz
   URL_MD5 f6e931e319531b736fadc017f470e68a
 

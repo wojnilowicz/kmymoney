@@ -6,7 +6,7 @@ endif()
 
 ExternalProject_Add(
   ext_tcl
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/tcltk/tcl/archive/core-8-6-9.zip
   URL_MD5 f402cc573e6b486b65bda0dcbd74000a
 

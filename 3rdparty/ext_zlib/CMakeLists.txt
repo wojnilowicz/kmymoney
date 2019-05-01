@@ -3,7 +3,7 @@
 if(MINGW)
   ExternalProject_Add(
     ext_zlib
-    DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+    ${PROJECT_GLOBAL_PROFILE}
     URL https://zlib.net/zlib-1.2.11.tar.gz
     URL_MD5 1c9f62f0778697a09d36121ead88e08e
     CONFIGURE_COMMAND ""
@@ -21,7 +21,7 @@ if(MINGW)
 else()
   ExternalProject_Add(
     ext_zlib
-    DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+    ${PROJECT_GLOBAL_PROFILE}
     URL https://zlib.net/zlib-1.2.11.tar.gz
     URL_MD5 1c9f62f0778697a09d36121ead88e08e
 

@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_readline
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://ftp.gnu.org/gnu/readline/readline-8.0.tar.gz
   URL_MD5 7e6c1f16aee3244a69aba6e438295ca3
 

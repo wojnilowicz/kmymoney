@@ -3,7 +3,7 @@ set(ofx_openSPLibDir "${UNIX_INSTALL_PREFIX}/lib")
 
 ExternalProject_Add(
   ext_ofx
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://downloads.sourceforge.net/project/libofx/libofx/libofx-0.9.14.tar.gz
   URL_MD5 b92b35b6f90e2a9d693367af397670f9
 

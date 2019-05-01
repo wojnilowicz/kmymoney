@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_xz
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://tukaani.org/xz/xz-5.2.4.tar.xz
   URL_MD5 003e4d0b1b1899fc6e3000b24feddf7c
 

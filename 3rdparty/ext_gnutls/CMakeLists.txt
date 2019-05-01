@@ -3,7 +3,7 @@
 # gwenhywfar requires gnutls_certificate_set_dh_params, so enable-cxx and enable-dhe is required
 ExternalProject_Add(
   ext_gnutls
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz
   URL_MD5 92a8049e618afa60e2c852da1884c457
 

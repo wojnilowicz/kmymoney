@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_flex
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/westes/flex/files/981163/flex-2.6.4.tar.gz
   URL_MD5 2882e3179748cc9f9c23ec593d6adc8d
 

@@ -2,7 +2,7 @@
 # "make -j1" prevents "cannot find the library libaqhbci.la or unhandled argument libaqhbci.la"
 ExternalProject_Add(
   ext_aqbanking
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.aquamaniac.de/rdm/attachments/download/27/aqbanking-5.7.8.tar.gz
   URL_MD5 6aceeaad3a1000f22f08986e68946db3
 

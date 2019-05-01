@@ -3,7 +3,7 @@
 set (gcrypt_lib "-L${UNIX_INSTALL_PREFIX}/lib -lgcrypt")
 ExternalProject_Add(
   ext_xmlsec1
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.28.tar.gz
   URL_MD5 69b8d95c009a404462e19f335e650241
 

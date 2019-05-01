@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_png
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://kent.dl.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.xz
   URL_MD5 015e8e15db1eecde5f2eb9eb5b6e59e9
 

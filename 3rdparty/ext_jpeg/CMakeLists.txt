@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_jpeg
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-2.0.2.tar.gz
   URL_MD5 79f76fbfb0c6109631332762d10e16d2
 

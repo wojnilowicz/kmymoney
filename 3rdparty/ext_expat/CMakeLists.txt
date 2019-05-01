@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_expat
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/libexpat/libexpat/releases/download/R_2_2_6/expat-2.2.6.tar.bz2
   URL_MD5 ca047ae951b40020ac831c28859161b2
 

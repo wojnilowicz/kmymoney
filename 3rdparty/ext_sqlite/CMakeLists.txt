@@ -8,7 +8,7 @@ endif()
 
 ExternalProject_Add(
   ext_sqlite
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.sqlite.org/2019/sqlite-autoconf-3280000.tar.gz
   URL_MD5 3c68eb400f8354605736cd55400e1572
 

@@ -3,7 +3,7 @@
 
 ExternalProject_Add(
   ext_freetype
-	DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+	${PROJECT_GLOBAL_PROFILE}
 	URL https://quantum-mirror.hu/mirrors/pub/gnusavannah/freetype/freetype-2.9.1.tar.bz2
   URL_MD5 60ef7d8160cd4bf8cb118ee9d65367ca
 

@@ -2,7 +2,7 @@
 # --with-c14n --with-xptr --with-sax1 --with-output are required by xmlsec1
 ExternalProject_Add(
   ext_xml
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz
   URL_MD5 c04a5a0a042eaa157e8e8c9eabe76bd6
 

@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_xslt
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://xmlsoft.org/sources/libxslt-1.1.33.tar.gz
   URL_MD5 b3bd254a03e46d58f8ad1e4559cd2c2f
 

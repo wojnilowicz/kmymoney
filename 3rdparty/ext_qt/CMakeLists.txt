@@ -15,7 +15,7 @@ endif ()
 
 ExternalProject_Add(
   ext_qtbase
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
   URL_MD5 fe47852113fc27581dbc0cf71644d6f1
  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
@@ -64,7 +64,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtsvg
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtsvg-everywhere-src-5.12.3.tar.xz
   URL_MD5 f8fa6e39584ed631f2795d8d80d5229c
 
@@ -76,7 +76,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qttools
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qttools-everywhere-src-5.12.3.tar.xz
   URL_MD5 d2e4776ca7ca1bbb39330adffa17a65f
 
@@ -88,7 +88,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtlocation
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtlocation-everywhere-src-5.12.3.tar.xz
   URL_MD5 0ccaa6be759513650158d552c6130529
 
@@ -100,7 +100,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtxmlpatterns
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtxmlpatterns-everywhere-src-5.12.3.tar.xz
   URL_MD5 f1f6b4c1253d2b833e849663c7661110
 
@@ -112,7 +112,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtspeech
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtspeech-everywhere-src-5.12.3.tar.xz
   URL_MD5 1aa38a37cd52a4a0403fc41715992070
 
@@ -125,7 +125,7 @@ ExternalProject_Add(
 # kdeclarative uses QQmlDebuggingEnabler, so -no-qml-debug cannot be passed
 ExternalProject_Add(
   ext_qtdeclarative
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtdeclarative-everywhere-src-5.12.3.tar.xz
   URL_MD5 2f8e8a30507adbec8f4c10fa56b06027
 
@@ -137,7 +137,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtx11extras
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtx11extras-everywhere-src-5.12.3.tar.xz
   URL_MD5 4069ca615b14c0c2b5be8744c9a75633
 
@@ -149,7 +149,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtwinextras
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwinextras-everywhere-src-5.12.3.tar.xz
   URL_MD5 1e10104f161cccecbb9c1c2638b1a719
 
@@ -161,7 +161,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtmacextras
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtmacextras-everywhere-src-5.12.3.tar.xz
   URL_MD5 66ef1fe02a59abdd5ad20152618475b1
 
@@ -173,7 +173,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtwebchannel
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebchannel-everywhere-src-5.12.3.tar.xz
   URL_MD5 bd4e964b35ab060a733262a8c3243718
 
@@ -185,7 +185,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_qtwebengine
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebengine-everywhere-src-5.12.3.tar.xz
   URL_MD5 9841599435095b16f12870bd48ef5342
 

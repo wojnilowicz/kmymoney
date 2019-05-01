@@ -1,7 +1,7 @@
 # TextDocument is required by kpimtextedit
 ExternalProject_Add(
   ext_grantlee
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/steveire/grantlee/archive/v5.1.0.zip
   URL_MD5 cf959612f577114ad7c9e3456bc41a62
 

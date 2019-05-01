@@ -10,7 +10,7 @@ endif()
 
 ExternalProject_Add(
   ext_gwenhywfar
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz
   URL_MD5 0744255cae68adca6dff81d3a9f3932d
 

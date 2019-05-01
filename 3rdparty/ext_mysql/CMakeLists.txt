@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_mysql
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://cdn.mysql.com//Downloads/MySQL-8.0/mysql-boost-8.0.16.tar.gz
   URL_MD5 6b9b8e7a26789935a491b4d7e53a7145
 

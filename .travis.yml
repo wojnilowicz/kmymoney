@@ -153,13 +153,11 @@ matrix:
     - os: windows
       filter_secrets: false
       cache:
-        timeout: 1000
+        timeout: 2000
         directories:
-          #- /c/msys64
-          #- /c/Python37
           - /c/deps-build
           - /c/deps-install
-          - /c/kmymoney-build
+          #- /c/kmymoney-build
 
       before_install:
         - START_TIME=$(date +%s)
@@ -169,30 +167,16 @@ matrix:
           if [ ! -f "/c/deps-install/bin/libpng16.dll" ]; then RUNTIME_TIMEOUT=35; fi;
           if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
           echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
-        - |
+        #- |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
           # Entries in the Machine PATH might contain trailing slashes, drop those.
           # Apply Process paths before Machine to ensure /bin appears before others (otherwise casher will break and stall).
-          export PATH="$(powershell -Command '("Process", "Machine" | % {
-            [Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
-          } | Select -Unique | % { cygpath $_ }) -Join ":"')"
-          echo "PATH=$PATH"
-        - |
-          # Workaround broken casher implementation that extracts absolute paths to the current working directory
-          # See https://github.com/travis-ci/casher/pull/38
-          if [ -d "$TRAVIS_BUILD_DIR/c" ]; then mv "$TRAVIS_BUILD_DIR/c/"* "/c/"; fi;
-          #for path in msys64 deps-build deps-install kmymoney-build ; do if [ -d "./c/$path" ]; then echo "Restoring C:/$path"; mv "./c/$path/"* "C:/#$path"; fi; done
-        - |
-          #mkdir -p /c/msys64
-          #mkdir -p /c/Python37
-          mkdir -p /c/deps-build
-          mkdir -p /c/deps-install
-          mkdir -p /c/kmymoney-build
+          #export PATH="$(powershell -Command '("Process", "Machine" | % {
+            #[Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
+          #} | Select -Unique | % { cygpath $_ }) -Join ":"')"
+          #echo "PATH=$PATH"
 
-        - |
-          #Update checksums to avoid invalidating the cache (saves 2-3mins).
-          if [ -d "/c/deps-build" ]; then md5deep64 -o f -r "C:/deps-build" "C:/deps-install" "C:/kmymoney-build" | sort > ~/.casher/md5sums_before; fi
 
         - |
           if [[ ! -d "/c/msys64/usr/bin" ]] ; then
@@ -204,30 +188,16 @@ matrix:
             #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 update-msys2
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
           fi
-          export PKG_CONFIG_PATH="/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH"
-          echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.profile
-          echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.bashrc
-
-        #- |
-          #if [[ ! -f "/c/Python37/python.exe" ]] ; then
-            #if [[ -d "/c/Python37" ]] ; then
-              #rm -fr /c/Python37
-            #fi
-            #cinst -y --no-progress python
-            #/c/Python37/Scripts/pip3.exe install meson
-          #fi
-        #- export PATH="/c/Python37/Scripts:/c/Python37/bin:/c/msys64/usr/bin:/c/Program Files/CMake/bin:/c/ProgramData/chocolatey/lib\mingw/tools/install/mingw64/bin:$PATH"
+          #export PKG_CONFIG_PATH="/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH"
+          #echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.profile
+          #echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.bashrc
 
       install:
-        - echo "install phase"
-        #- rm -fr /c/deps-build/*
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
           powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || CONTINUE_WITH_NEXT_STEP=false
 
-      script:
-        - echo "script phase"
-        - ps -ef
+      script: false
 
       before_cache:
         - rm -fr /c/msys64/var/cache/pacman/pkg/*

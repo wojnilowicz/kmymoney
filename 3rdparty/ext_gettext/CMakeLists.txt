@@ -1,7 +1,7 @@
 # --disable-nls won't build libintl
 ExternalProject_Add(
   ext_gettext
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://ftp.gnu.org/pub/gnu/gettext/gettext-0.19.8.1.tar.gz
   URL_MD5 97e034cf8ce5ba73a28ff6c3c0638092
 

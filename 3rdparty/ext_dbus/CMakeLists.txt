@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_dbus
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   SOURCE_SUBDIR cmake
   URL https://dbus.freedesktop.org/releases/dbus/dbus-1.12.12.tar.gz
   URL_MD5 ea11069521beeee4e47f0086596a43c8

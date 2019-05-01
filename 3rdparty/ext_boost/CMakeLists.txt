@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_boost
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.bz2
   URL_MD5 7fbd1890f571051f2a209681d57d486a
 

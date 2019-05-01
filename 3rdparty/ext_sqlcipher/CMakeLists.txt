@@ -7,7 +7,7 @@ endif()
 
 ExternalProject_Add(
   ext_sqlcipher
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/sqlcipher/sqlcipher/archive/v4.1.0.tar.gz
   URL_MD5 d159eab5c7dd0349d4ab500490e6f6f9
 

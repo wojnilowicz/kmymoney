@@ -9,7 +9,7 @@ endif()
 
 ExternalProject_Add(
   ext_mariadb
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://downloads.mariadb.org/interstitial/connector-c-3.0.9/mariadb-connector-c-3.0.9-src.tar.gz
   URL_MD5 e7fdb17e26e779f4bd15b6a32e1c8472
 

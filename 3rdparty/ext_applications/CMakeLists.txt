@@ -2,7 +2,7 @@
 
 #ExternalProject_Add(
 #  ext_akonadi
-#  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+#  ${PROJECT_GLOBAL_PROFILE}
 #  URL https://download.kde.org/stable/applications/19.04.0/src/akonadi-19.04.0.tar.xz
 #  URL_MD5 28d4caac890840df6e6197c6fa443dc2
 
@@ -14,7 +14,7 @@
 
 ExternalProject_Add(
   ext_kpimtextedit
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.kde.org/stable/applications/19.04.0/src/kpimtextedit-19.04.0.tar.xz
   URL_MD5 13199f2e20b3686d35cde3e5139f6731
 
@@ -26,7 +26,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_kidentitymanagement
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.kde.org/stable/applications/19.04.0/src/kidentitymanagement-19.04.0.tar.xz
   URL_MD5 e3ed4155f6c4e5a700e104dd7b0556f4
 
@@ -38,7 +38,7 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_kcontacts
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://download.kde.org/stable/applications/19.04.0/src/kcontacts-19.04.0.tar.xz
   URL_MD5 2b347429c3b49749bed2df411ebd0e65
 

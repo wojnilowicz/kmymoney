@@ -6,7 +6,7 @@ endif ()
 
 ExternalProject_Add(
   ext_glib
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://ftp.acc.umu.se/pub/gnome/sources/glib/2.61/glib-2.61.0.tar.xz
   URL_MD5 2a2148436b63088ea77243f1222e5e10
 

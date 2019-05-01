@@ -10,7 +10,7 @@ endif()
 
 ExternalProject_Add(
   ext_icu
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://download.icu-project.org/files/icu4c/64.2/icu4c-64_2-src.tgz
   URL_MD5 a3d18213beec454e3cdec9a3116d6b05
 

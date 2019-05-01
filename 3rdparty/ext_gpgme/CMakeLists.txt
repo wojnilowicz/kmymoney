@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_gpgme
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.gnupg.org/ftp/gcrypt/gpgme/gpgme-1.13.0.tar.bz2
   URL_MD5 e511a0d95c507ab87e713140c82fc7d0
 

@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_nettle
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL http://www.lysator.liu.se/~nisse/archive/nettle-3.4.1.tar.gz
   URL_MD5 9bdebb0e2f638d3b9d91f7fc264b70c1
 

@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_nasm
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://www.nasm.us/pub/nasm/releasebuilds/2.14/nasm-2.14.tar.xz
   URL_MD5 7d0f554cacd6c5021b3cda3ba9f2474c
 

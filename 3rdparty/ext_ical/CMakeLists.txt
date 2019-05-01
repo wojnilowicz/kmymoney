@@ -1,6 +1,6 @@
 ExternalProject_Add(
   ext_ical
-  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+  ${PROJECT_GLOBAL_PROFILE}
   URL https://github.com/libical/libical/archive/v3.0.4.zip
   URL_MD5 cafd73f1e8e55d8139394c99e8ca00b0
 
