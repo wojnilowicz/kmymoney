@@ -199,13 +199,13 @@ ExternalProject_Add(
   DEPENDS ext_xml ext_qtbase ext_qtdeclarative ext_qtwebchannel
 )
 
-if(MINGW)
-  ExternalProject_Add_Step(
-    ext_qtdeclarative correctcmake
-    COMMAND bash -c "find . -type f -name 'Qt5*.pc' -exec sed -i \
-    -e 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
-
-    DEPENDEES install
-    WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
-  )
-endif()
+# if(MINGW)
+#   ExternalProject_Add_Step(
+#     ext_qtdeclarative correctcmake
+#     COMMAND bash -c "find . -type f -name 'Qt5*.pc' -exec sed -i \
+#     -e 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
+#
+#     DEPENDEES install
+#     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib/pkgconfig
+#   )
+# endif()
