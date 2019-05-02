@@ -19,7 +19,7 @@ if ( $args[0] -eq "pacman-deps") {
   bash -c "pacman -Su --noconfirm"
 
 } else {
-  bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix"
+  bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix || true"
   Stop-Process -Name make -ErrorAction SilentlyContinue
   Stop-Process -Name ninja -ErrorAction SilentlyContinue
   Stop-Process -Name sh -ErrorAction SilentlyContinue
