@@ -22,6 +22,7 @@ if ( $args[0] -eq "pacman-deps") {
   bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix"
   Stop-Process -Name make -ErrorAction SilentlyContinue
   Stop-Process -Name ninja -ErrorAction SilentlyContinue
-  Stop-Process -Name cmake -ErrorAction SilentlyContinue
   Stop-Process -Name sh -ErrorAction SilentlyContinue
+  Wait-Process -Timeout 60 -Name cmake # CMake might be unpacking, so wait for it to avoid caching issues
+  Stop-Process -Name cmake -ErrorAction SilentlyContinue
 }
