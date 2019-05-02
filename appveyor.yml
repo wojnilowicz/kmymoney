@@ -14,7 +14,7 @@ build: off
 
 install:
   - ps: Write-Host "Hello world"
-  - ps: Remove-Item "C:/deps-build/ext_kdewin/ext_kdewin-prefix/src/ext_kdewin" -Force  -Recurse -ErrorAction SilentlyContinue
+  - ps: Remove-Item "C:/deps-build/ext_kdewin" -Force  -Recurse -ErrorAction SilentlyContinue
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 pacman-deps
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 deps 45
           
