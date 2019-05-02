@@ -202,7 +202,7 @@ ExternalProject_Add(
 if(MINGW)
   ExternalProject_Add_Step(
     ext_qtdeclarative correctcmake
-    COMMAND bash -c "find . -type f -name Qt5*.pc -exec sed -i \
+    COMMAND bash -c "find . -type f -name 'Qt5*.pc' -exec sed -i \
     -e 's/Qt5\\(.*\\)d$*/Qt5\\1/g' {} \\+"
 
     DEPENDEES install
