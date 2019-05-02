@@ -1,0 +1,12 @@
+diff -ruN kdewin-0.6.3.orig/src/inet.c kdewin-0.6.3/src/inet.c
+--- kdewin-0.6.3.orig/src/inet.c	2018-11-27 08:46:16.000000000 +0100
++++ kdewin-0.6.3/src/inet.c	2019-05-02 20:58:13.491386000 +0200
+@@ -37,7 +37,7 @@
+ 	return 1;
+ }
+ 
+-#if __MINGW32__ || !defined(NTDDI_VERSION) || (NTDDI_VERSION < NTDDI_LONGHORN)
++#if _MSC_VER >= 1900
+ /* backward compatibility functions to prevent symbol not found runtime errors with older kde releases */
+ #undef kde_inet_pton
+ #undef inet_pton
