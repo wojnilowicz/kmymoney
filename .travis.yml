@@ -168,19 +168,15 @@ matrix:
           if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=28; fi;
           if [ ! -f "/c/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase/configure" ]; then RUNTIME_TIMEOUT=35; fi;
           if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
-          RUNTIME_TIMEOUT=5
           echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
         - |
           cd /c
           mkdir -p workaround
-          bash -c "for i in {1..2};do sleep 9m; echo \"Still unpacking\"; done;" &
+          bash -c "for i in {1..2};do sleep 5m; echo \"Still unpacking\"; done;" &
           if [ -f workaround/myCache.tar ]; then
-            ls -la deps-install
-            ls -la deps-build
-            echo "Cache size: $(du -h workaround/myCache.tar | cut -f1)"
+            echo "Cache size (compressed): $(du -h ~/.casher/fetch.tgz | cut -f1)"
+            echo "Cache size (uncompressed): $(du -h workaround/myCache.tar | cut -f1)"
             tar xf workaround/myCache.tar
-            ls -la deps-install
-            ls -la deps-build
           fi
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
