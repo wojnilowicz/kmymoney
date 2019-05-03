@@ -90,7 +90,7 @@ include(ExternalProject)
 # Dependency ordered list of external projects
 add_subdirectory(ext_zlib)
 add_subdirectory(ext_iconv)
-if (APPLE OR MINGW)
+if (APPLE)
   add_subdirectory(ext_bison)
   add_subdirectory(ext_flex)
 endif()
