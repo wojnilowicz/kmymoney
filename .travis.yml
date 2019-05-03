@@ -195,7 +195,7 @@ matrix:
 
       install:
         - rm -f ~/.casher/md5sums_before
-        - rm -f ~/.casher/fetch.tbz
+        - rm -f ~/.casher/fetch.tgz
         - touch ~/.casher/md5sums_before
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
