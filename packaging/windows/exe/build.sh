@@ -47,6 +47,7 @@ $DEPS_INSTALL_PREFIX/bin:\
 ${PATH:-}
 
 export PKG_CONFIG_PATH=\
+$DEPS_INSTALL_PREFIX/lib/pkgconfig:\
 $DEPS_INSTALL_PREFIX/share/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
 
