@@ -78,6 +78,9 @@ createNSIS () {
   mkdir -p qif/service
   mv bin/data/kservices5/*qif* qif/service
 
+  cp -v $KMYMONEY_SOURCES/packaging/windows/exe/NullsoftInstaller.nsi .
+  cp -v $KMYMONEY_SOURCES/COPYING .
+
   appName="KMyMoneyNEXT"
   installerBaseName="${appName}-${VERSION}-x86_64"
   IMAGE_BUILD_DIR_WINPATH=$(echo "$IMAGE_BUILD_PREFIX" | sed -e 's/^\///' -e 's/\//\\\\/g' -e 's/^./\0:/')
