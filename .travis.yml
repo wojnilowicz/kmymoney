@@ -161,7 +161,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - MAX_TIME=45
+        - MAX_TIME=50
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
@@ -169,16 +169,12 @@ matrix:
         - CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIME ) / 60 ))
         - CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
         - if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
-        - RUNTIME_TIMEOUT=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $CACHE_UNCOMPRESS_TIME ))
+        - SAFETY_TIME=5
+        - BUILD_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $CACHE_UNCOMPRESS_TIME - $SAFETY_TIME ))
+        - if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then BUILD_TIME=43; fi;
         - echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
         - echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
-        - echo "RUNTIME_TIMEOUT ${RUNTIME_TIMEOUT}"
-        - |
-          RUNTIME_TIMEOUT=25
-          if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=28; fi;
-          if [ ! -f "/c/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase/configure" ]; then RUNTIME_TIMEOUT=35; fi;
-          if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
-          echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
+        - echo "BUILD_TIME ${BUILD_TIME}"
 
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
@@ -197,22 +193,22 @@ matrix:
 
       install:
         - |
-          REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          IS_CACHE_BUILT=false
-          if (( ${REMAINING_TIME} >= 0 )); then
-            IS_CACHE_BUILT=true
-            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || IS_CACHE_BUILT=false
+          if [ -f /c/deps-build/cache_is_built ]; then IS_CACHE_BUILT=true; else IS_CACHE_BUILT=false; fi;
+          REMAINING_TIME=$(( $BUILD_TIME - ( $(date +%s) - $START_TIME ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == false ]; then
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME}
           fi
 
       script: false
 
       before_cache:
-        - rm -f ~/.casher/md5sums_before
-        - rm -f ~/.casher/fetch.tgz
-        - touch ~/.casher/md5sums_before
-        - rm -f /c/workaround/myCache.tar
-        - rm -f /c/workaround/msys64.tar
         - echo "IS_CACHE_BUILT ${IS_CACHE_BUILT}"
+        - |
+          if [ ${IS_CACHE_BUILT} == false ]; then
+          rm -f ~/.casher/md5sums_before
+          rm -f ~/.casher/fetch.tgz
+          touch ~/.casher/md5sums_before
+
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
         - cd /c
         - travis_wait tar cf workaround/deps-install.tar deps-install

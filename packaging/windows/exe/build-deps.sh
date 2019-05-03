@@ -100,3 +100,5 @@ cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 # cmake --build . --target ext_ical -- -j${CPU_COUNT}
 cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}
+
+touch $CMAKE_BUILD_PREFIX/cache_is_built
