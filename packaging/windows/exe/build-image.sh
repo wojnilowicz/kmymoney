@@ -129,8 +129,7 @@ fi
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
 
 mkdir -p share
-for i in gwenhywfar aqbanking ktoblzcheck
-do
+for i in gwenhywfar aqbanking ktoblzcheck; do
  if [ -d $DEPS_INSTALL_PREFIX/share/${i} ]; then
    cp -r $DEPS_INSTALL_PREFIX/share/${i} share
  fi
@@ -145,8 +144,8 @@ if [ -d lib/plugins/sqldrivers ]; then
  mv -v lib/plugins/sqldrivers/* bin/sqldrivers
 fi
 
-for i in gwenhywfar aqbanking
-do
+mkdir -p lib
+for i in gwenhywfar aqbanking; do
  if [ -d $DEPS_INSTALL_PREFIX/lib/${i} ]; then
    cp -r $DEPS_INSTALL_PREFIX/lib/${i} lib
  fi
