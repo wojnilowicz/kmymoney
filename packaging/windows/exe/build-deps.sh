@@ -71,7 +71,11 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 
-cmake --build . --target ext_qttools -- -j${CPU_COUNT}
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
+  bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" &
+  cmake --build . --target ext_qttools -- -j${CPU_COUNT}
+fi
+
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
