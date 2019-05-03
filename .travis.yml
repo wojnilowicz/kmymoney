@@ -174,7 +174,14 @@ matrix:
           cd /c
           mkdir -p workaround
           bash -c "for i in {1..2};do sleep 9m; echo \"Still unpacking\"; done;" &
-          if [ -f workaround/myCache.tar ]; then tar xf workaround/myCache.tar; fi;
+          if [ -f workaround/myCache.tar ]; then
+            ls -la c/deps-install
+            ls -la c/deps-build
+            echo "Cache size: $(du -h c/workaround/myCache.tar | cut -f1)"
+            tar xf workaround/myCache.tar
+            ls -la c/deps-install
+            ls -la c/deps-build
+          fi
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -222,3 +229,5 @@ matrix:
           tar cf workaround/myCache.tar deps-build deps-install
           rm -fr deps-build
           rm -fr deps-install
+          mkdir -p deps-build
+          mkdir -p deps-build
