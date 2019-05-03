@@ -197,13 +197,13 @@ ExternalProject_Add(
   DEPENDS ext_extra_cmake_modules
 )
 
+# KTextWidgets doesn't work with -DSONNET_USE_WIDGETS=OFF
 ExternalProject_Add(
   ext_sonnet
   ${PROJECT_GLOBAL_PROFILE}
   URL http://download.kde.org/stable/frameworks/5.57/sonnet-5.57.0.tar.xz
   URL_MD5 af5d91569b7f978417fb1859e62a4984
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
-             -DSONNET_USE_WIDGETS=OFF
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
