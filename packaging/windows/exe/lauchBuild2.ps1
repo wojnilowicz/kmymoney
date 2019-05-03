@@ -20,9 +20,9 @@ if ( $args[0] -eq "pacman-deps") {
   bash -c "pacman -Su --noconfirm"
 
 } elseif ($args[0] -eq "upload-image") {
-  bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
-  bash -c "export UPLOADTOOL_SUFFIX=appveyor"
-  bash -c "bash upload.sh /c/image-build/*.exe"
+#   bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
+  $Env:UPLOADTOOL_SUFFIX="windows-appveyor"
+  bash -c "bash /$buildUnix/packaging/windows/exe/upload.sh /c/image-build/*.exe"
 
 } else {
   bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix"
