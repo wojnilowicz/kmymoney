@@ -161,27 +161,26 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
+        - MAX_TIME = 45
+        - cd /c
+        - if [ -f workaround/msys64.tar ]; then travis_wait tar xf workaround/msys64.tar; fi;
+        - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
+        - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        - if [ -f workaround/myCache.tar ]; then travis_wait tar xf workaround/myCache.tar; fi;
+        - CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIME ) / 60 ))
+        - CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
+        - if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
+        - RUNTIME_TIMEOUT=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $CACHE_UNCOMPRESS_TIME ))
+        - echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
+        - echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
+        - echo "RUNTIME_TIMEOUT ${RUNTIME_TIMEOUT}"
         - |
           RUNTIME_TIMEOUT=25
           if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=28; fi;
           if [ ! -f "/c/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase/configure" ]; then RUNTIME_TIMEOUT=35; fi;
           if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
           echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
-        - |
-          cd /c
-          mkdir -p workaround
-          bash -c "for i in {1..2};do sleep 5m; echo \"Still unpacking\"; done;" &
-          if [ -f workaround/myCache.tar ]; then
-            echo "Cache size (compressed): $(du -h ~/.casher/fetch.tgz | cut -f1)"
-            echo "Cache size (uncompressed): $(du -h workaround/myCache.tar | cut -f1)"
-            travis_wait 10 tar xf workaround/myCache.tar
-          fi
-        - |
-          cd /c
-          if [ -f workaround/msys64.tar ]; then
-            echo "Cache size (uncompressed): $(du -h workaround/msys64.tar | cut -f1)"
-            travis_wait tar xf workaround/msys64.tar
-          fi
+
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -222,15 +221,14 @@ matrix:
       script: false
 
       before_cache:
-        #- rm -fr /c/msys64/var/cache/pacman/pkg/*
-        - echo "IS_CACHE_BUILT: ${IS_CACHE_BUILT}"
+        - rm -fr /c/msys64/var/cache/pacman/pkg/*
+        - rm -fr /c/msys64/msys2-base-x86_64-20180531.tar
+        - echo "IS_CACHE_BUILT ${IS_CACHE_BUILT}"
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
-        - |
-          cd /c
-          mkdir -p workaround
-          #bash -c "for i in {1..2};do sleep 9m; echo \"Still packing\"; done;" &
-          travis_wait tar cf workaround/myCache.tar deps-build deps-install
-
-        - |
-          cd /c
-          travis_wait tar cf workaround/msys64.tar msys64
+        - cd /c
+        - travis_wait tar uf workaround/msys64.tar msys64
+        - echo "Cache size (uncompressed) $(du -h workaround/msys64.tar | cut -f1)"
+        - travis_wait tar cf workaround/deps-install.tar deps-install
+        - echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
+        - travis_wait tar cf workaround/deps-build.tar deps-build
+        - echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
