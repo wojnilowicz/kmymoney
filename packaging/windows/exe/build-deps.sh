@@ -76,8 +76,9 @@ cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
-find $DEPS_INSTALL_PREFIX/lib/pkgconfig -type f -name Qt5Core.pc -exec sed -i -e 's/Qt5Cored/Qt5Core/g' {} \;
-
+sed -i -e 's/Qt5Cored/Qt5Core/g' $DEPS_INSTALL_PREFIX/lib/pkgconfig/Qt5Core.pc
+cat $DEPS_INSTALL_PREFIX/lib/pkgconfig/Qt5Core.pc
+echo $PKG_CONFIG_PATH
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSystem
