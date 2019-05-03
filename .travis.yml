@@ -175,12 +175,12 @@ matrix:
           mkdir -p workaround
           bash -c "for i in {1..2};do sleep 9m; echo \"Still unpacking\"; done;" &
           if [ -f workaround/myCache.tar ]; then
-            ls -la c/deps-install
-            ls -la c/deps-build
-            echo "Cache size: $(du -h c/workaround/myCache.tar | cut -f1)"
+            ls -la deps-install
+            ls -la deps-build
+            echo "Cache size: $(du -h workaround/myCache.tar | cut -f1)"
             tar xf workaround/myCache.tar
-            ls -la c/deps-install
-            ls -la c/deps-build
+            ls -la deps-install
+            ls -la deps-build
           fi
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
