@@ -158,6 +158,7 @@ matrix:
         directories:
           - /c/deps-build
           - /c/deps-install
+          - /c/workaround
           #- /c/kmymoney-build
 
       before_install:
@@ -167,7 +168,13 @@ matrix:
           if [ ! -f "/c/deps-install/bin/Qt5Core.dll" ]; then RUNTIME_TIMEOUT=28; fi;
           if [ ! -f "/c/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase/configure" ]; then RUNTIME_TIMEOUT=35; fi;
           if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then RUNTIME_TIMEOUT=43; fi;
+          RUNTIME_TIMEOUT=5
           echo "RUNTIME_TIMEOUT: ${RUNTIME_TIMEOUT}"
+        - |
+          cd /c
+          mkdir -p workaround
+          bash -c "for i in {1..2};do sleep 9m; echo \"Still unpacking\"; done;" &
+          if [ -f workaround/myCache.tar ]; then tar xf workaround/myCache.tar; fi;
         #- |
           # Ensure Python and the Scripts folder is available in PATH.
           # refreshenv does not seem to work in bash, so reload it manually.
@@ -199,10 +206,19 @@ matrix:
         - touch ~/.casher/md5sums_before
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
-          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || CONTINUE_WITH_NEXT_STEP=false
+          if [ ${REMAINING_TIME} -gt 3 ]; then
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME} || CONTINUE_WITH_NEXT_STEP=false
+          fi
 
       script: false
 
       before_cache:
-        - rm -fr /c/msys64/var/cache/pacman/pkg/*
+        #- rm -fr /c/msys64/var/cache/pacman/pkg/*
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
+        - |
+          cd /c
+          mkdir -p workaround
+          bash -c "for i in {1..2};do sleep 9m; echo \"Still packing\"; done;" &
+          tar cf workaround/myCache.tar deps-build deps-install
+          rm -fr deps-build
+          rm -fr deps-install
