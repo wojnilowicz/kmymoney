@@ -161,7 +161,7 @@ matrix:
 
       before_install:
         - START_TIME=$(date +%s)
-        - MAX_TIME = 45
+        - MAX_TIME=45
         - cd /c
         - if [ -f workaround/msys64.tar ]; then travis_wait tar xf workaround/msys64.tar; fi;
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
