@@ -1,5 +1,5 @@
 Write-Host $Env:Path
-$Env:Path="C:\Program Files\NSIS;C:\Program Files (x86)\NSIS;C:\Python37-x64;C:\Python37-x64\Scripts;C:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
+$Env:Path="C:\Program Files (x86)\NSIS;C:\Python37-x64;C:\Python37-x64\Scripts;C:\msys64\mingw64\bin;C:\msys64\usr\bin;C:\Program Files (x86)\CMake\bin;C:\Program Files\Git\cmd"
 
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:APPVEYOR_BUILD_FOLDER -replace "\\","/") -replace ":","").ToLower().Trim("/")
@@ -22,7 +22,7 @@ if ( $args[0] -eq "pacman-deps") {
 } elseif ($args[0] -eq "upload-image") {
   bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
   bash -c "export UPLOADTOOL_SUFFIX=appveyor"
-  bash -c "upload.sh /c/image-build/*.exe"
+  bash -c "bash upload.sh /c/image-build/*.exe"
 
 } else {
   bash -c "timeout $($args[1])m /$buildUnix/packaging/windows/exe/build.sh $($args[0]) /c /$buildUnix"
