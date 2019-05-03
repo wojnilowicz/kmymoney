@@ -18,4 +18,7 @@ install:
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 pacman-deps
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 deps 50
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 kmymoney 50
+  - cmd: cinst -y --no-progress nsis
+  - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 image 50
+  - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\lauchBuild2.ps1 upload-image 50
           
