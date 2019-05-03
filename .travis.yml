@@ -222,7 +222,8 @@ matrix:
 
       before_cache:
         - rm -fr /c/msys64/var/cache/pacman/pkg/*
-        - rm -fr /c/msys64/msys2-base-x86_64-20180531.tar
+        - rm -f /c/msys64/msys2-base-x86_64-20180531.tar
+        - rm -f /c/workaround/myCache.tar
         - echo "IS_CACHE_BUILT ${IS_CACHE_BUILT}"
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
         - cd /c
