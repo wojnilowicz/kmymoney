@@ -163,7 +163,6 @@ matrix:
         - START_TIME=$(date +%s)
         - MAX_TIME=45
         - cd /c
-        - if [ -f workaround/msys64.tar ]; then travis_wait tar xf workaround/msys64.tar; fi;
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         - if [ -f workaround/myCache.tar ]; then travis_wait tar xf workaround/myCache.tar; fi;
@@ -193,23 +192,10 @@ matrix:
 
 
         - |
-          if [[ ! -d "/c/msys64/usr/bin" ]] ; then
-            if [[ -d "/c/msys64" ]] ; then
-              rm -fr /c/msys64
-            fi
-            cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
-            #updating msys2 causes CI to hang
-            #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 update-msys2
-            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
-          fi
-          #export PKG_CONFIG_PATH="/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH"
-          #echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.profile
-          #echo "export PKG_CONFIG_PATH=\"/c/deps-install/lib/pkgconfig:$PKG_CONFIG_PATH\"" >> $HOME/.bashrc
+          cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
+          powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
 
       install:
-        - rm -f ~/.casher/md5sums_before
-        - rm -f ~/.casher/fetch.tgz
-        - touch ~/.casher/md5sums_before
         - |
           REMAINING_TIME=$(( $RUNTIME_TIMEOUT - ( $(date +%s) - $START_TIME ) / 60 ))
           IS_CACHE_BUILT=false
@@ -221,14 +207,14 @@ matrix:
       script: false
 
       before_cache:
-        - rm -fr /c/msys64/var/cache/pacman/pkg/*
-        - rm -f /c/msys64/msys2-base-x86_64-20180531.tar
+        - rm -f ~/.casher/md5sums_before
+        - rm -f ~/.casher/fetch.tgz
+        - touch ~/.casher/md5sums_before
         - rm -f /c/workaround/myCache.tar
+        - rm -f /c/workaround/msys64.tar
         - echo "IS_CACHE_BUILT ${IS_CACHE_BUILT}"
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
         - cd /c
-        - travis_wait tar uf workaround/msys64.tar msys64
-        - echo "Cache size (uncompressed) $(du -h workaround/msys64.tar | cut -f1)"
         - travis_wait tar cf workaround/deps-install.tar deps-install
         - echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
         - travis_wait tar cf workaround/deps-build.tar deps-build
