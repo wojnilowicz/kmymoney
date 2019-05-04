@@ -213,6 +213,7 @@ matrix:
         - |
           REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == true ]; then
+            cinst -y --no-progress nsis
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 image ${REMAINING_TIME}
             cd /c
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh

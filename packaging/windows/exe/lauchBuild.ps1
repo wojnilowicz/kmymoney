@@ -1,5 +1,5 @@
 Write-Host $Env:Path
-$Env:Path="C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Python37\Scripts;C:\Python37;C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin"
+$Env:Path="C:\Program Files (x86)\NSIS;C:\Program Files\NSIS;C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin;C:\msys64\usr\bin;C:\msys64\mingw64\bin;C:\Python37\Scripts;C:\Python37;C:\Program Files\CMake\bin;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin"
 $homeUnix= (($Env:HOME -replace "\\","/") -replace ":","").ToLower().Trim("/")
 $buildUnix= (($Env:TRAVIS_BUILD_DIR -replace "\\","/") -replace ":","").ToLower().Trim("/")
 # $args[0] could be:
