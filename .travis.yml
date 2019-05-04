@@ -9,7 +9,8 @@ branches:
     - /^(?i:continuous)$/
     - /^(?i:continuous-linux)$/
     - /^(?i:continuous-osx)$/
-    - /^(?i:continuous-appveyor)$/
+    - /^(?i:continuous-windows-appveyor)$/
+    - /^(?i:continuous-windows-travis)$/
     - appveyor-builds
 
 matrix:
@@ -201,19 +202,41 @@ matrix:
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME}
           fi
 
-      script: false
+      script:
+        - |
+          REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == true ]; then
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 kmymoney ${REMAINING_TIME}
+          fi
+
+      after_success:
+        - |
+          REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == true ]; then
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 image ${REMAINING_TIME}
+            cd /c
+            wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            export UPLOADTOOL_SUFFIX="windows-travis"
+            bash upload.sh /c/image-build/*.exe
+          fi
 
       before_cache:
         - echo "IS_CACHE_BUILT ${IS_CACHE_BUILT}"
         - |
           if [ ${IS_CACHE_BUILT} == false ]; then
-          rm -f ~/.casher/md5sums_before
-          rm -f ~/.casher/fetch.tgz
-          touch ~/.casher/md5sums_before
-
-        - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
+            rm -f ~/.casher/md5sums_before
+            rm -f ~/.casher/fetch.tgz
+            touch ~/.casher/md5sums_before
+            find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
+          fi
         - cd /c
-        - travis_wait tar cf workaround/deps-install.tar deps-install
-        - echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
-        - travis_wait tar cf workaround/deps-build.tar deps-build
-        - echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+        - |
+          if [ ${IS_CACHE_BUILT} == false ]; then
+            travis_wait tar uf workaround/deps-install.tar deps-install
+            echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
+          fi
+        - |
+          if [ ${IS_CACHE_BUILT} == false ]; then
+            travis_wait tar cf workaround/deps-build.tar deps-build
+            echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+          fi
