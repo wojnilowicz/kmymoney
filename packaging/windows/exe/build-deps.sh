@@ -87,17 +87,17 @@ cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gmp -- -j${CPU_COUNT}
-# cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
-# cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
+cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
+cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
 # cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
 # cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
-# cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
+cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 # cmake --build . --target ext_gpgme -- -j${CPU_COUNT}
-# cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
-# cmake --build . --target ext_ofx -- -j${CPU_COUNT}
-# cmake --build . --target ext_ical -- -j${CPU_COUNT}
+cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
+cmake --build . --target ext_ofx -- -j${CPU_COUNT}
+cmake --build . --target ext_ical -- -j${CPU_COUNT}
 cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}
 
