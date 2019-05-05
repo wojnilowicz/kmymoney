@@ -12,7 +12,7 @@ if ($Env:TRAVIS) {
 
   cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\msys64'"
 
-  $Env:PATH = (
+  $Env:Path = (
     "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin",
     "C:\msys64\mingw64\bin",
     "C:\Python37\Scripts",
@@ -29,7 +29,7 @@ if ($Env:TRAVIS) {
 
 } elseif ($Env:APPVEYOR) {
 
-  $Env:PATH = (
+  $Env:Path = (
     "C:\msys64\mingw64\bin",
     "C:\msys64\usr\bin",
     "C:\Python37-x64\Scripts",
