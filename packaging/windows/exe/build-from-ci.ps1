@@ -15,6 +15,7 @@ if ($Env:TRAVIS) {
   $Env:PATH = (
     "C:\ProgramData\chocolatey\lib\mingw\tools\install\mingw64\bin",
     "C:\msys64\mingw64\bin",
+    "C:\msys64\usr\bin",
     "C:\Python37\Scripts",
     "C:\Python37",
     "C:\Program Files\CMake\bin",
