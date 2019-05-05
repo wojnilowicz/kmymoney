@@ -1,3 +1,4 @@
+# With "no-deprecated" nettle shows undefined reference to `ERR_load_crypto_strings'
 if(MINGW)
   set(platform_specific_option <SOURCE_DIR>/Configure mingw64)
 else()
@@ -13,7 +14,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ${platform_specific_option}
     --prefix=${CMAKE_INSTALL_PREFIX}
     --openssldir=${CMAKE_INSTALL_PREFIX}/ssl
-    no-tests no-deprecated no-ui no-static-engine
+    no-tests no-ui no-static-engine
 
   INSTALL_COMMAND $(MAKE) install_sw
   ${CLEANUP_COMMAND}
