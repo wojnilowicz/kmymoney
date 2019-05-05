@@ -46,25 +46,25 @@ if ($Env:TRAVIS) {
   bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja"
 }
 
-foreach ($BUILD_STAGE in @(, "kmymoney", "image")) {
+foreach ($BUILD_STAGE in @("kmymoney", "image")) {
   $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
   if ($REMAINING_TIME -gt 0) {
-
+      $Env:IS_FINISHED=1
       $COMMAND = (
         "timeout ${REMAINING_TIME}m",
         "${KMYMONEY_SOURCES}/packaging/windows/exe/build.sh",
         "${BUILD_STAGE}",
         "${WORKSPACE_PATH}",
         "${KMYMONEY_SOURCES}",
-        "|| echo 'unfinished'"
+        "|| export IS_FINISHED=0"
       ) -join " "
 
     if ($BUILD_STAGE -eq "image") {
       cinst -y --no-progress nsis
     }
 
-    $STATUS = (bash -c $COMMAND)
-    if ($STATUS -eq "unfinished") {
+    bash -c $COMMAND
+    if ($Env:IS_FINISHED -eq 0) {
       Write-Host "Building '${BUILD_STAGE}' did not finish."
       break
     }
@@ -72,10 +72,9 @@ foreach ($BUILD_STAGE in @(, "kmymoney", "image")) {
   } else {
     break
   }
-  break
 }
 
-if ($BUILD_STAGE -eq "image" -and -not $STATUS) {
+if ($BUILD_STAGE -eq "image" -and $Env:IS_FINISHED -eq 1) {
   if ($Env:TRAVIS) {
     bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
     bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
