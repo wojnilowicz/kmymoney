@@ -91,6 +91,13 @@ cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
+
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/libGrantlee_TextDocument.dll ]; then
+  if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
+  cmake --build . --target ext_grantlee -- -j${CPU_COUNT}
+  if [ -v TRAVIS ]; then pacman -R --noconfirm perl gdbm libgdbm db; fi; # unistall so that it's not cached
+fi
+
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
