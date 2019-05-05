@@ -45,8 +45,8 @@ if ($Env:TRAVIS) {
   bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja"
 }
 
-foreach ($BUILD_STAGE in @("kmymoney", "image")) {
-  $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalSeconds))
+foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
+  $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
   if ($REMAINING_TIME -gt 0) {
 
       $COMMAND = (
