@@ -76,7 +76,10 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
   cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 fi
 
-cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
+ls -la /c/deps-build/ext_qt/ext_qtwinextras-prefix/src
+rm -fr /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
+mkdir -p /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
+# cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
