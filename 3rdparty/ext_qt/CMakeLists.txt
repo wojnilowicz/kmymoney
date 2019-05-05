@@ -189,7 +189,7 @@ ExternalProject_Add(
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebengine-everywhere-src-5.12.3.tar.xz
   URL_MD5 9841599435095b16f12870bd48ef5342
 
-  CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> #-- -system-webengine-icu #-no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc -no-webengine-pepper-plugins
+  CONFIGURE_COMMAND ${CMAKE_INSTALL_PREFIX}/bin/qmake <SOURCE_DIR> -- -system-webengine-icu -no-webengine-spellchecker -no-webengine-proprietary-codecs -no-webengine-webrtc #-no-webengine-pepper-plugins
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_xml ext_qtbase ext_qtdeclarative ext_qtwebchannel

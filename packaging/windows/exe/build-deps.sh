@@ -73,8 +73,8 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
 fi
 
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
-cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
-# cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
+# cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
+cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
