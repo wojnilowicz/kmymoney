@@ -26,6 +26,7 @@ else
 fi
 
 if [ -v TRAVIS ]; then
+  CI_NAME="Travis CI"
   CI_TAG="$TRAVIS_TAG"
   CI_EVENT_TYPE="$TRAVIS_EVENT_TYPE"
   CI_COMMIT="$TRAVIS_COMMIT"
@@ -34,6 +35,7 @@ if [ -v TRAVIS ]; then
   CI_BUILD_NUMBER="$TRAVIS_BUILD_NUMBER"
   CI_JOB_ID="$TRAVIS_JOB_ID"
 elif [ -v APPVEYOR ]; then
+  CI_NAME="AppVeyor"
   CI_TAG="${APPVEYOR_REPO_TAG_NAME}"
   if [ -v APPVEYOR_PULL_REQUEST_NUMBER ]; then CI_EVENT_TYPE="pull_request"; else CI_EVENT_TYPE="push"; fi;
   CI_COMMIT="$APPVEYOR_REPO_COMMIT"
@@ -72,7 +74,7 @@ else
   fi
 fi
 
-if [ "$ARTIFACTORY_BASE_URL" != "" ]; then
+if [ "$ARTIFACTORY_BASE_URL" != "" ] && [ -v TRAVIS ]; then
   echo "ARTIFACTORY_BASE_URL set, trying to upload to artifactory"
 
   if [ "$ARTIFACTORY_API_KEY" == "" ]; then
@@ -150,11 +152,11 @@ fi
 
 if [ ! -z "$CI_REPO_SLUG" ] ; then
   # We are running on supported CI
-  echo "Running on supported CI"
-  echo "Commit: $CI_COMMIT"
+  echo "Running on $CI_NAME"
+  echo "$CI_NAME commit: $CI_COMMIT"
   REPO_SLUG="$CI_REPO_SLUG"
   if [ -z "$GITHUB_TOKEN" ] ; then
-    echo "\$GITHUB_TOKEN missing, please set it in the Travis CI/AppVeyor settings of this project"
+    echo "\$GITHUB_TOKEN missing, please set it in the $CI_NAME settings of this project"
     echo "You can get one from https://github.com/settings/tokens"
     exit 1
   fi
@@ -225,8 +227,8 @@ if [ "$CI_COMMIT" != "$target_commit_sha" ] ; then
   fi
 
   if [ ! -z "$CI_JOB_ID" ] ; then
-    if [ -z "${UPLOADTOOL_BODY+x}" ] ; then
-      BODY="Travis CI build log: ${TRAVIS_BUILD_WEB_URL}"
+    if [ -z "${UPLOADTOOL_BODY+x}" ] && [ ! -v APPVEYOR ] ; then
+      BODY="$CI_NAME build log: ${TRAVIS_BUILD_WEB_URL}"
     else
       BODY="$UPLOADTOOL_BODY"
     fi
