@@ -76,6 +76,8 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
   cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 fi
 
+cmake --build . --target ext_qtspeech
+
 ls -la /c/deps-build/ext_qt/ext_qtwinextras-prefix/src
 rm -fr /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
 mkdir -p /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
