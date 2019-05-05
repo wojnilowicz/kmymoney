@@ -47,7 +47,7 @@ if ($Env:TRAVIS) {
 }
 
 foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
-  $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalSeconds))
+  $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
   if ($REMAINING_TIME -gt 0) {
 
       $COMMAND = (
