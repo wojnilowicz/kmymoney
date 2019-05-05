@@ -41,6 +41,8 @@ function find_missing_libs (){
         echo "Adding ${lib##*/} to missing libraries." >&2
         local missing_libs+=("${lib}")
         break
+      else
+        echo "Library from unexpected source ${lib}." >&2
       fi
     done
   done
