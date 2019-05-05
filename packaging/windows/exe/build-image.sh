@@ -10,6 +10,7 @@ IMAGE_BUILD_PREFIX=${CMAKE_BUILD_PREFIX}
 sourceLibPaths=(
 $DEPS_INSTALL_PREFIX/bin
 /c/msys64/mingw64/bin
+/mingw64/bin
 )
 
 # Function expects to be started from bin directory
@@ -33,7 +34,9 @@ function find_missing_libs (){
       sort -u |
       sed '/image-build/d' |
       sed '/system32/d' |
-      sed '/SYSTEM32/d'))
+      sed '/SYSTEM32/d' |
+      sed '/WinSxS/d' |
+      ))
     
   for lib in ${needed_libs[@]:0}; do
     for souceLibPath in ${sourceLibPaths[@]}; do
