@@ -55,6 +55,7 @@ fi
 
 rm -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a
 rm -f $DEPS_INSTALL_PREFIX/bin/libssl-1_1-x64.dll
+rm -fr /c/deps-build/ext_openssl
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a ]; then
   if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
