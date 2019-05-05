@@ -48,14 +48,15 @@ if ($Env:TRAVIS) {
 foreach ($BUILD_STAGE in @("kmymoney", "image")) {
   $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
   if ($REMAINING_TIME -gt 0) {
-      $Env:IS_FINISHED=1
+      $Env:IS_FINISHED=0
+      $Env:IS_TIMEDOUT=0
       $COMMAND = (
-        "timeout ${REMAINING_TIME}m",
+        "(timeout ${REMAINING_TIME}m",
         "${KMYMONEY_SOURCES}/packaging/windows/exe/build.sh",
         "${BUILD_STAGE}",
         "${WORKSPACE_PATH}",
         "${KMYMONEY_SOURCES}",
-        "|| export IS_FINISHED=0"
+        "|| export IS_TIMEDOUT=1) && export IS_FINISHED=1"
       ) -join " "
 
     if ($BUILD_STAGE -eq "image") {
