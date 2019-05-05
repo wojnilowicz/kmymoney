@@ -58,6 +58,10 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
         "|| echo 'unfinished'"
       ) -join " "
 
+    if ($BUILD_STAGE -eq "image") {
+      cinst -y --no-progress nsis
+    }
+
     $STATUS = (bash -c $COMMAND)
     if ($STATUS -eq "unfinished") {
       Write-Host "Building '${BUILD_STAGE}' did not finish."
