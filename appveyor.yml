@@ -3,6 +3,8 @@ version: '{build}'
 branches:
   only:
     - appveyor-builds
+  except:
+    - /continuous.*/
     
 os: Visual Studio 2015
 
