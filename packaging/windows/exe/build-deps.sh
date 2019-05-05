@@ -61,8 +61,6 @@ fi
 
 cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
-sed -i -e 's/Qt5Cored/Qt5Core/g' $DEPS_INSTALL_PREFIX/lib/pkgconfig/Qt5Core.pc
-
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
   bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
