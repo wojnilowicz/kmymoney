@@ -12,6 +12,8 @@ branches:
     - /^(?i:continuous-windows-appveyor)$/
     - /^(?i:continuous-windows-travis)$/
     - appveyor-builds
+  only:
+    - travis-builds
 
 matrix:
   include:
