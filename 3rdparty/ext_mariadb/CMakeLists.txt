@@ -26,7 +26,7 @@ ExternalProject_Add(
              ${INSTALL_PLUGINDIR}
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_openssl
+  #DEPENDS ext_openssl
 )
 
 if(MSYS)

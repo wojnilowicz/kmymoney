@@ -60,7 +60,8 @@ ExternalProject_Add(
     ${qt_platform_specific_option}
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_openssl ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
+#  DEPENDS ext_openssl ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
+  DEPENDS ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
 )
 
 
