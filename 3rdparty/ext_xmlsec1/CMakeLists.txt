@@ -9,6 +9,8 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
+    --disable-mscrypto
+    --disable-mscng
     --disable-mans
     --disable-docs
     --without-openssl

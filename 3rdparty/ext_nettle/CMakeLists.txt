@@ -17,3 +17,5 @@ ExternalProject_Add(
 
   DEPENDS ext_gmp
 )
+# --enable-gcov
+# --disable-openssl
