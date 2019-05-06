@@ -84,6 +84,7 @@ cmake --build . --target ext_qtspeech
 # rm -fr /c/deps-build/ext_xmlsec1
 rm -fr /c/deps-build/ext_aqbanking
 
+ls -la /c/msys64/usr/bin
 tar --version
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
