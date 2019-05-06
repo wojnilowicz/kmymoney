@@ -13,6 +13,7 @@ ExternalProject_Add(
     --disable-mscng
     --disable-mans
     --disable-docs
+    --disable-apps
     --without-openssl
     --without-nss
     --disable-crypto-dl

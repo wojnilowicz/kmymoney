@@ -1,7 +1,7 @@
 # Without CPPFLAGS "error: libintl.h: No such file or directory"
 
 if(MINGW)
-  set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/help-setting-up-qt5.diff)
+  set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/help-setting-up-qt5.diff)
 elseif(APPLE)
   set(platform_specific_patch "")
 else()

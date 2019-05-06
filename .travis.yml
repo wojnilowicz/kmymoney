@@ -11,6 +11,7 @@ branches:
     - /^(?i:continuous-osx)$/
     - /^(?i:continuous-windows-appveyor)$/
     - /^(?i:continuous-windows-travis)$/
+    - /^(?i:continuous).*$/
     - appveyor-builds
   only:
     - travis-builds

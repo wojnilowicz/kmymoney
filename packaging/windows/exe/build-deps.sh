@@ -81,6 +81,9 @@ cmake --build . --target ext_qtspeech
 # cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
+rm -fr /c/deps-build/ext_xmlsec1
+rm -fr /c/deps-build/ext_gwenhywfar
+
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSystem
