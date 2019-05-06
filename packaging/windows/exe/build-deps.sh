@@ -53,14 +53,6 @@ if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
   cmake --build . --target ext_icu -- -j${CPU_COUNT}
 fi
 
-rm -f $DEPS_INSTALL_PREFIX/lib/libssl*
-rm -f $DEPS_INSTALL_PREFIX/lib/libcrypto*
-rm -f $DEPS_INSTALL_PREFIX/bin/libssl*
-rm -f $DEPS_INSTALL_PREFIX/bin/libcrypto*
-rm -f $DEPS_INSTALL_PREFIX/bin/openss*
-rm -fr /c/deps-build/ext_openssl
-rm -fr /c/deps-build/ext_nettle
-
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a ]; then
   if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
   cmake --build . --target ext_openssl -- -j${CPU_COUNT}
