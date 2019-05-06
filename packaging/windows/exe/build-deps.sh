@@ -81,8 +81,10 @@ cmake --build . --target ext_qtspeech
 # cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
-rm -fr /c/deps-build/ext_xmlsec1
-rm -fr /c/deps-build/ext_gwenhywfar
+# rm -fr /c/deps-build/ext_xmlsec1
+rm -fr /c/deps-build/ext_aqbanking
+
+tar --version
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
@@ -105,10 +107,10 @@ cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
 # cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
 # cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
+cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 # cmake --build . --target ext_gpgme -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
-cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 cmake --build . --target ext_ical -- -j${CPU_COUNT}
 cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}

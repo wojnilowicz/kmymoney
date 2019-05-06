@@ -14,6 +14,7 @@ ExternalProject_Add(
     LDFLAGS=${AT_LDFLAGS}
 
   BUILD_COMMAND $(MAKE) -j1
+  INSTALL_COMMAND $(MAKE) install
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_gwenhywfar ext_ktoblzcheck ext_xmlsec1 ext_gmp ext_xslt
