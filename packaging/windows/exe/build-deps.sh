@@ -53,9 +53,13 @@ if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
   cmake --build . --target ext_icu -- -j${CPU_COUNT}
 fi
 
-rm -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a
-rm -f $DEPS_INSTALL_PREFIX/bin/libssl-1_1-x64.dll
+rm -f $DEPS_INSTALL_PREFIX/lib/libssl*
+rm -f $DEPS_INSTALL_PREFIX/lib/libcrypto*
+rm -f $DEPS_INSTALL_PREFIX/bin/libssl*
+rm -f $DEPS_INSTALL_PREFIX/bin/libcrypto*
+rm -f $DEPS_INSTALL_PREFIX/bin/openss*
 rm -fr /c/deps-build/ext_openssl
+rm -fr /c/deps-build/ext_nettle
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libssl.dll.a ]; then
   if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
@@ -82,9 +86,6 @@ fi
 
 cmake --build . --target ext_qtspeech
 
-ls -la /c/deps-build/ext_qt/ext_qtwinextras-prefix/src
-rm -fr /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
-mkdir -p /c/deps-build/ext_qt/ext_qtwinextras-prefix/src/ext_qtwinextras
 # cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
