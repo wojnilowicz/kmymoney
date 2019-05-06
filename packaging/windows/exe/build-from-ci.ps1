@@ -77,8 +77,9 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
 
 if ($BUILD_STAGE -eq "image" -and $Env:IS_FINISHED -eq 1) {
   if ($Env:TRAVIS) {
-    bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
-    bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
+#     bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
+#     bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
+    bash -c "bash ${KMYMONEY_SOURCES}/packaging/windows/exe/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   } elseif ($Env:APPVEYOR) {
     bash -c "bash ${KMYMONEY_SOURCES}/packaging/windows/exe/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   }
