@@ -234,7 +234,7 @@ matrix:
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
         - cd /c
         - |
-            travis_wait tar uf workaround/deps-install.tar deps-install
+            travis_wait tar cf workaround/deps-install.tar deps-install
             echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
         - |
             travis_wait tar cf workaround/deps-build.tar deps-build
