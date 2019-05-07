@@ -76,7 +76,7 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
   }
 }
 
-if ($BUILD_STAGE -eq "image" -and -not Test-Path $TIMEDOUT_FILENAME -PathType Leaf) {
+if ($BUILD_STAGE -eq "image" -and -not (Test-Path $TIMEDOUT_FILENAME -PathType Leaf)) {
   if ($Env:TRAVIS) {
 #     bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
 #     bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
