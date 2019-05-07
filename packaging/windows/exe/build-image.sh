@@ -34,6 +34,7 @@ function find_missing_libs (){
       sort -u |
       sed '/image-build/d' |
       sed '/system32/d' |
+      sed '/System32/d' |
       sed '/SYSTEM32/d' |
       sed '/WinSxS/d'
       ))
