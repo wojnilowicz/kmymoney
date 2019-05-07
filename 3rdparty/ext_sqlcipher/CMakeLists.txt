@@ -1,9 +1,8 @@
-# without LD_FLAGS "Library crypto not found. Install openssl!""
-set (SQLITE_CFLAGS "${CFLAGS} -DSQLITE_HAS_CODEC -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_OMIT_LOAD_EXTENSION=1 -DSQLITE_OMIT_COMPLETE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1")
-
-if(UNIX)
-  set(SQLITE_CFLAGS "${SQLITE_CFLAGS} DHAVE_USLEEP=1")
-endif()
+# Without LD_FLAGS "Library crypto not found. Install openssl!""
+# Without CPPFLAGS "openssl/rand.h: No such file or directory"
+# -DHAVE_USLEEP=1 is auto-appended
+# Without "$(MAKE) -j1" lemon is not found
+set (SQLCIPHER_CFLAGS "${CFLAGS} -DSQLITE_HAS_CODEC -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_OMIT_LOAD_EXTENSION=1 -DSQLITE_OMIT_COMPLETE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1")
 
 ExternalProject_Add(
   ext_sqlcipher
@@ -21,10 +20,12 @@ ExternalProject_Add(
     --enable-rtree
     --with-crypto-lib=openssl
     --enable-tempstore=yes
+    CPPFLAGS=${AT_CPPFLAGS}
     LDFLAGS=${AT_LDFLAGS}
-    CFLAGS=${SQLITE_CFLAGS}
+    CFLAGS=${SQLCIPHER_CFLAGS}
     
+  BUILD_COMMAND $(MAKE) -j1
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_tcl
+  DEPENDS ext_tcl ext_openssl
 )

@@ -16,7 +16,7 @@ ExternalProject_Add(
     ${AT_GLOBAL_PROFILE}
     --enable-threads
     --enable-64bit
-    
+
   ${CLEANUP_COMMAND}
 )
 
@@ -24,6 +24,8 @@ if(MINGW)
   ExternalProject_Add_Step(
     ext_tcl correcttclsh
     COMMAND cp -f tclsh86.exe ${UNIX_INSTALL_PREFIX}/bin/tclsh.exe
+    COMMAND mkdir -p ${UNIX_INSTALL_PREFIX}/lib/tcl8.6
+    COMMAND cp -f <SOURCE_DIR>/library/init.tcl ${UNIX_INSTALL_PREFIX}/lib/tcl8.6
 
     DEPENDEES build
     DEPENDERS install
