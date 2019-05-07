@@ -49,15 +49,16 @@ if ($Env:TRAVIS) {
 foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
   $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
   if ($REMAINING_TIME -gt 0) {
-      $Env:IS_FINISHED=0
-      $Env:IS_TIMEDOUT=0
+      $TIMEDOUT_FILENAME="TIMEDOUT"
+      Remove-Item $TIMEDOUT_FILENAME -ErrorAction SilentlyContinue
+
       $COMMAND = (
-        "(timeout ${REMAINING_TIME}m",
+        "timeout ${REMAINING_TIME}m",
         "${KMYMONEY_SOURCES}/packaging/windows/exe/build.sh",
         "${BUILD_STAGE}",
         "${WORKSPACE_PATH}",
         "${KMYMONEY_SOURCES}",
-        "|| export IS_TIMEDOUT=1) && export IS_FINISHED=1"
+        "|| touch ${TIMEDOUT_FILENAME}"
       ) -join " "
 
     if ($BUILD_STAGE -eq "image") {
@@ -65,7 +66,7 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
     }
 
     bash -c $COMMAND
-    if ($Env:IS_FINISHED -eq 0) {
+    if (Test-Path $TIMEDOUT_FILENAME -PathType Leaf) {
       Write-Host "Building '${BUILD_STAGE}' did not finish."
       break
     }
@@ -75,7 +76,7 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
   }
 }
 
-if ($BUILD_STAGE -eq "image" -and $Env:IS_FINISHED -eq 1) {
+if ($BUILD_STAGE -eq "image" -and -not Test-Path $TIMEDOUT_FILENAME -PathType Leaf) {
   if ($Env:TRAVIS) {
 #     bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
 #     bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
