@@ -35,7 +35,7 @@ function find_missing_libs (){
       sed '/image-build/d' |
       sed '/system32/d' |
       sed '/SYSTEM32/d' |
-      sed '/WinSxS/d' |
+      sed '/WinSxS/d'
       ))
     
   for lib in ${needed_libs[@]:0}; do
