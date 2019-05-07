@@ -107,6 +107,8 @@ cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 # cmake --build . --target ext_gpgme -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
 
+ls -la $DEPS_INSTALL_PREFIX | sort -k5
+
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/libical.dll ]; then
   if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
   cmake --build . --target ext_ical -- -j${CPU_COUNT}
