@@ -81,9 +81,6 @@ cmake --build . --target ext_qtspeech
 # cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
-rm -fr /c/deps-build/ext_tcl
-rm -fr /c/deps-build/ext_sqlcipher
-
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSystem
@@ -109,7 +106,13 @@ cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 # cmake --build . --target ext_gpgme -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
-cmake --build . --target ext_ical -- -j${CPU_COUNT}
+
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/libical.dll ]; then
+  if [ -v TRAVIS ]; then pacman -S --needed --noconfirm perl; fi; # it's required for openssl configuration
+  cmake --build . --target ext_ical -- -j${CPU_COUNT}
+  if [ -v TRAVIS ]; then pacman -R --noconfirm perl gdbm libgdbm db; fi; # unistall so that it's not cached
+fi
+
 cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}
 
