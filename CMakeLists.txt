@@ -60,13 +60,12 @@ if (PkgConfig_FOUND)
   pkg_check_modules(SQLCIPHER sqlcipher)
 endif()
 
-find_package(Qt5 5.6 QUIET
-  REQUIRED COMPONENTS
-  Core DBus Widgets Svg Xml Test PrintSupport
-  OPTIONAL_COMPONENTS
-  Sql Concurrent QuickWidgets WebEngineWidgets)
+# Qt's CMake configuration file doesn't handle COMPONENTS AND OPTIONAL_COMPONENTS well in one find_package command
+set(REQUIRED_QT_VERSION 5.6)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets WebEngineWidgets)
 
-find_package(KF5 5.2 QUIET
+find_package(KF5 5.2
   REQUIRED COMPONENTS
   Archive CoreAddons Config ConfigWidgets I18n Completion KCMUtils ItemModels ItemViews Service Wallet IconThemes XmlGui TextWidgets Notifications KIO
   OPTIONAL_COMPONENTS
