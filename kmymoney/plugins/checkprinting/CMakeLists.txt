@@ -20,17 +20,13 @@ set_target_properties(checkprinting
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 target_link_libraries(checkprinting
-  Qt5::PrintSupport
-  KF5::I18n
-  kmm_mymoney
-  kmm_plugin
+  PRIVATE
+    Qt5::PrintSupport
+    KF5::I18n
+    kmm_mymoney
+    kmm_plugin
+    kmm_htmlrenderer
 )
-
-if(ENABLE_WEBENGINE)
- target_link_libraries(checkprinting Qt5::WebEngineWidgets)
-else(ENABLE_WEBENGINE)
- target_link_libraries(checkprinting KF5::WebKit)
-endif(ENABLE_WEBENGINE)
 
 install(FILES checkprinting.rc
         DESTINATION "${KXMLGUI_INSTALL_DIR}/checkprinting")
@@ -64,19 +60,15 @@ set_target_properties(kcm_checkprinting
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 target_link_libraries(kcm_checkprinting
-                      Qt5::PrintSupport
-                      KF5::I18n
-                      KF5::ConfigWidgets
-                      KF5::Completion
-                      KF5::KIOWidgets
-                      KF5::CoreAddons
-                      )
-
-if(ENABLE_WEBENGINE)
- target_link_libraries(kcm_checkprinting Qt5::WebEngineWidgets)
-else(ENABLE_WEBENGINE)
- target_link_libraries(kcm_checkprinting KF5::WebKit)
-endif(ENABLE_WEBENGINE)
+  PRIVATE
+    Qt5::PrintSupport
+    KF5::I18n
+    KF5::ConfigWidgets
+    KF5::Completion
+    KF5::KIOWidgets
+    KF5::CoreAddons
+    kmm_htmlrenderer
+)
 
 install(FILES kcm_checkprinting.desktop
         DESTINATION "${SERVICES_INSTALL_DIR}")

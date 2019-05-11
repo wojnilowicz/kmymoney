@@ -22,13 +22,9 @@ set_target_properties(reconciliationreport
                       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 
 target_link_libraries(reconciliationreport
-  Qt5::PrintSupport
-  kmm_mymoney
-  kmm_plugin
+  PRIVATE
+    Qt5::PrintSupport
+    kmm_mymoney
+    kmm_plugin
+    kmm_htmlrenderer
 )
-
-if(ENABLE_WEBENGINE)
- target_link_libraries(reconciliationreport Qt5::WebEngineWidgets)
-else(ENABLE_WEBENGINE)
- target_link_libraries(reconciliationreport KF5::WebKit)
-endif(ENABLE_WEBENGINE)

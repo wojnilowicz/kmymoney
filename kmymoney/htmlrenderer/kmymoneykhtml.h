@@ -1,9 +1,8 @@
 /***************************************************************************
-                            homeview.cpp
+                          kmymoneykhtml.h
                              -------------------
-
-    copyright            : (C) 2018 by Łukasz Wojniłowicz
-    email                : lukasz.wojnilowicz@gmail.com
+        copyright            : (C) 2019 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+                               
  ***************************************************************************/
 
 /***************************************************************************
@@ -15,7 +14,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "homeview.h"
+#ifndef KMYMONEYKHTML_H
+#define KMYMONEYKHTML_H
 
 // ----------------------------------------------------------------------------
 // QT Includes
@@ -23,41 +23,37 @@
 // ----------------------------------------------------------------------------
 // KDE Includes
 
-#include <KPluginFactory>
-#include <KLocalizedString>
-
 // ----------------------------------------------------------------------------
 // Project Includes
 
-#include "viewinterface.h"
-#include "khomeview.h"
+#include "kmymoneyhtmlrenderer.h"
 
-HomeView::HomeView(QObject *parent, const QVariantList &args) :
-  KMyMoneyPlugin::Plugin(parent, "homeview"/*must be the same as X-KDE-PluginInfo-Name*/),
-  m_view(nullptr)
-{
-  Q_UNUSED(args)
-  setComponentName("homeview", i18n("Home view"));
-  // For information, announce that we have been loaded.
-  qDebug("Plugins: homeview loaded");
+class KHTMLPart;
+namespace KParts {
+  class OpenUrlArguments;
+  class BrowserArguments;
 }
 
-HomeView::~HomeView()
+class KMyMoneyKHTML : public KMyMoneyHtmlRenderer
 {
-  qDebug("Plugins: homeview unloaded");
-}
+  public:
+    explicit KMyMoneyKHTML(QWidget *parent = nullptr);
 
-void HomeView::plug()
-{
-  m_view = new KHomeView;
-  viewInterface()->addView(m_view, i18n("Home"), View::Home);
-}
+    void setHtml(const QString &html, const QUrl &baseUrl = QUrl()) override final;
 
-void HomeView::unplug()
-{
-  viewInterface()->removeView(View::Budget);
-}
+    qreal zoomFactor() const override final;
+    void setZoomFactor(qreal factor) override final;
+    void print(QPrinter *printer) override final;
+    void setScrollBarValue(Qt::Orientation orientation, int value) override final;
+    int scrollBarValue(Qt::Orientation orientation) const override final;
+    void load(const QUrl &url) override final;
 
-K_PLUGIN_FACTORY_WITH_JSON(HomeViewFactory, "homeview.json", registerPlugin<HomeView>();)
+    QWidget *widget() const override final;
 
-#include "homeview.moc"
+  private:
+    KHTMLPart *m_part;
+
+  private Q_SLOTS:
+    void slotUrlChanged(const QUrl &url, const KParts::OpenUrlArguments&, const KParts::BrowserArguments&);
+};
+#endif

@@ -26,11 +26,7 @@
 #include "ui_kreconciliationreportdlgdecl.h"
 
 class QPrinter;
-#ifdef ENABLE_WEBENGINE
-class QWebEngineView;
-#else
-class KWebView;
-#endif
+class KMyMoneyHtmlRenderer;
 
 class KReportDlg : public QDialog, public Ui::KReconciliationReportDlgDecl
 {
@@ -44,14 +40,9 @@ protected Q_SLOTS:
   void print();
 
 private:
-  #ifdef ENABLE_WEBENGINE
-  QWebEngineView *m_summaryHTMLPart;
-  QWebEngineView *m_detailsHTMLPart;
-  #else
-  KWebView       *m_summaryHTMLPart;
-  KWebView       *m_detailsHTMLPart;
-  #endif
-  QPrinter       *m_currentPrinter;
+  KMyMoneyHtmlRenderer  *m_summaryHTMLPart;
+  KMyMoneyHtmlRenderer  *m_detailsHTMLPart;
+  QPrinter              *m_currentPrinter;
 };
 
 #endif

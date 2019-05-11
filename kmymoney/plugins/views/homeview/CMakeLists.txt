@@ -20,5 +20,10 @@ target_link_libraries(homeview
   PUBLIC
     kmm_plugin
     kmm_widgets
+    kmm_menus
     kmymoney_common
+  PRIVATE
+    kmm_htmlrenderer
+    Qt5::PrintSupport
+    KF5::KHtml
 )

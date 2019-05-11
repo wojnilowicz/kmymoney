@@ -25,11 +25,6 @@
 #include <QAction>
 #include <QFile>
 #include <QDialog>
-#ifdef ENABLE_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <KWebView>
-#endif
 #include <QPrintDialog>
 #include <QPrinter>
 #include <QStandardPaths>
@@ -51,6 +46,7 @@
 #include "mymoneyutils.h"
 #include "viewinterface.h"
 #include "selectedtransactions.h"
+#include "kmymoneyhtmlrenderer.h"
 
 #include "numbertowords.h"
 #include "pluginsettings.h"
@@ -169,11 +165,7 @@ void CheckPrinting::slotPrintCheck()
 {
   MyMoneyFile* file = MyMoneyFile::instance();
   MyMoneyMoneyToWordsConverter converter;
-  #ifdef ENABLE_WEBENGINE
-  auto htmlPart = new QWebEngineView();
-  #else
-  auto htmlPart = new KWebView();
-  #endif
+  auto htmlPart = KMyMoneyHtmlRenderer::Create();
 
   KMyMoneyRegister::SelectedTransactions::const_iterator it;
   for (it = d->m_transactions.constBegin(); it != d->m_transactions.constEnd(); ++it) {
@@ -221,11 +213,7 @@ void CheckPrinting::slotPrintCheck()
       m_currentPrinter = nullptr;
       continue;
     } else {
-      #ifdef ENABLE_WEBENGINE
-        htmlPart->page()->print(m_currentPrinter, [=] (bool) {delete m_currentPrinter; m_currentPrinter = nullptr;});
-      #else
         htmlPart->print(m_currentPrinter);
-      #endif
     }
     delete dialog;
 
@@ -234,6 +222,7 @@ void CheckPrinting::slotPrintCheck()
   }
 
   PluginSettings::setPrintedChecks(d->m_printedTransactionIdList);
+  delete htmlPart->widget();
   delete htmlPart;
 }
 

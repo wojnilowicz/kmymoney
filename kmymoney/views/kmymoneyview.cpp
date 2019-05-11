@@ -414,6 +414,9 @@ void KMyMoneyView::addView(KMyMoneyViewBase* view, const QString& name, View idV
 
   auto icon = Icon::ViewForecast;
   switch (idView) {
+    case View::Home:
+      icon = Icon::ViewHome;
+      break;
     case View::Reports:
       icon = Icon::ViewReports;
       break;

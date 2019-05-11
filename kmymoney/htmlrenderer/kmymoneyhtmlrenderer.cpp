@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kmymoneywebpage.cpp
+                          kmymoneyhtmlrenderer.cpp
                              -------------------
-        copyright            : (C) 2017 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+        copyright            : (C) 2019 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,9 +13,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <config-kmymoney.h>
-
-#include "kmymoneywebpage.h"
+#include "config-htmlrenderer.h"
+#include "kmymoneyhtmlrenderer.h"
 
 // ----------------------------------------------------------------------------
 // QT Includes
@@ -26,24 +25,25 @@
 // ----------------------------------------------------------------------------
 // Project Includes
 
-#ifdef ENABLE_WEBENGINE
-bool MyQWebEnginePage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool)
-{
-  if (type == NavigationTypeLinkClicked) {
-    emit urlChanged(url);
-    return false;
-  }
-  return true;
-}
-#else
-#include <QNetworkRequest>
-bool MyQWebEnginePage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
-{
-  Q_UNUSED(frame);
-  if (type == NavigationTypeLinkClicked) {
-    emit linkClicked(request.url());
-    return false;
-  }
-  return true;
-}
+#ifdef ENABLE_QTWEBENGINE
+#include "kmymoneyqtwebengine.h"
 #endif
+
+#ifdef ENABLE_KDEWEBKIT
+#include "kmymoneykdewebkit.h"
+#endif
+
+#ifdef ENABLE_KHTML
+#include "kmymoneykhtml.h"
+#endif
+
+KMyMoneyHtmlRenderer *KMyMoneyHtmlRenderer::Create(QWidget *parent)
+{
+#if defined(ENABLE_QTWEBENGINE)
+  return new KMyMoneyQtWebEngine(parent);
+#elif defined(ENABLE_KDEWEBKIT)
+  return new KMyMoneyKDEWebKit(parent);
+#elif defined(ENABLE_KHTML)
+  return new KMyMoneyKHTML(parent);
+#endif
+}

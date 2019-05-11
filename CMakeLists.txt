@@ -47,7 +47,7 @@ include(KMyMoneyMacros)
 
 find_package(PkgConfig)
 
-set (OPT_KF5_COMPONENTS DocTools Holidays Contacts Akonadi IdentityManagement Activities)
+set (OPT_KF5_COMPONENTS DocTools Holidays Contacts Akonadi IdentityManagement Activities WebKit KHtml)
 find_package(Gpgmepp)
 if (Gpgmepp_FOUND)
   set(GPG_FOUND TRUE)
@@ -60,13 +60,17 @@ if (PkgConfig_FOUND)
   pkg_check_modules(SQLCIPHER sqlcipher)
 endif()
 
-find_package(Qt5 5.6 REQUIRED
-  COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport
-  OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets)
+find_package(Qt5 5.6 QUIET
+  REQUIRED COMPONENTS
+  Core DBus Widgets Svg Xml Test PrintSupport
+  OPTIONAL_COMPONENTS
+  Sql Concurrent QuickWidgets WebEngineWidgets)
 
-find_package(KF5 5.2 REQUIRED
-  COMPONENTS Archive CoreAddons Config ConfigWidgets I18n Completion KCMUtils ItemModels ItemViews Service Wallet IconThemes XmlGui TextWidgets Notifications KIO
-  OPTIONAL_COMPONENTS ${OPT_KF5_COMPONENTS}
+find_package(KF5 5.2 QUIET
+  REQUIRED COMPONENTS
+  Archive CoreAddons Config ConfigWidgets I18n Completion KCMUtils ItemModels ItemViews Service Wallet IconThemes XmlGui TextWidgets Notifications KIO
+  OPTIONAL_COMPONENTS
+  ${OPT_KF5_COMPONENTS}
 )
 
 option(ENABLE_ALKIMIA "Enable Alkimia" OFF)
@@ -198,29 +202,56 @@ cmake_dependent_option(ENABLE_IBANBICDATA "Enable IBAN/BIC data support." OFF
 
 add_feature_info("IBAN/BIC data" ENABLE_IBANBICDATA "Adds predefined IBAN/BIC numbers to KMyMoney (note: doesn't work yet).")
 
-# check for optional QWebEngine
-option(ENABLE_WEBENGINE "Enable QWebEngine" OFF)
-if(ENABLE_WEBENGINE)
-  find_package(Qt5WebEngineWidgets 5.8)
-  if(Qt5WebEngineWidgets_VERSION VERSION_GREATER 5.8.99 AND Qt5WebEngineWidgets_VERSION VERSION_LESS 5.9.3)
-    message(WARNING "QWebEngine version ${Qt5WebEngineWidgets_VERSION} is known to be unstable with KMyMoney")
+if(Qt5WebEngineWidgets_FOUND)
+  if(ENABLE_KDEWEBKIT OR ENABLE_KHTML)
+    set(TEMP_VAR OFF)
+  else()
+    set(TEMP_VAR ON)
   endif()
+
+  set(ENABLE_QTWEBENGINE ${TEMP_VAR} CACHE BOOL "First choice HTML renderer.")
+else()
+  unset(ENABLE_QTWEBENGINE CACHE)
 endif()
 
-cmake_dependent_option(ENABLE_HOMEVIEW "Enable home view." ON
-                       "Qt5WebEngineWidgets_FOUND" OFF)
+if(KF5WebKit_FOUND)
+    if(ENABLE_QTWEBENGINE OR ENABLE_KHTML)
+      set(TEMP_VAR OFF)
+    else()
+      set(TEMP_VAR ON)
+    endif()
+
+    set(ENABLE_KDEWEBKIT ${TEMP_VAR} CACHE BOOL "Second choice HTML renderer.")
+else()
+  unset(ENABLE_KDEWEBKIT CACHE)
+endif()
+
+if(KF5KHtml_FOUND)
+    if(ENABLE_QTWEBENGINE OR ENABLE_KDEWEBKIT)
+      set(TEMP_VAR OFF)
+    else()
+      set(TEMP_VAR ON)
+    endif()
+
+  set(ENABLE_KHTML ${TEMP_VAR} CACHE BOOL "Last choice HTML renderer.")
+else()
+  unset(ENABLE_KHTML CACHE)
+endif()
+
+if(ENABLE_QTWEBENGINE OR ENABLE_QTWEBENGINE OR ENABLE_KHTML)
+  set(ENABLE_HTML_RENDERING ON)
+endif()
+
+cmake_dependent_option(ENABLE_HOMEVIEW "Enable home view." ON "ENABLE_HTML_RENDERING" OFF)
 add_feature_info("Home view" ENABLE_HOMEVIEW "Adds home view.")
 
-cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON
-                       "KChart_FOUND;Qt5WebEngineWidgets_FOUND" OFF)
+cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON "KChart_FOUND;ENABLE_HTML_RENDERING" OFF)
 add_feature_info("Reports view" ENABLE_REPORTSVIEW "Adds possibility to display chart and table reports.")
 
-cmake_dependent_option(ENABLE_CHECKPRINTING "Enable check printing." ON
-                       "Qt5WebEngineWidgets_FOUND" OFF)
+cmake_dependent_option(ENABLE_CHECKPRINTING "Enable check printing." ON "ENABLE_HTML_RENDERING" OFF)
 add_feature_info("Check printing" ENABLE_CHECKPRINTING "Adds possibility to print checks.")
 
-cmake_dependent_option(ENABLE_RECONCILIATIONREPORT "Enable reconciliation report." ON
-                       "Qt5WebEngineWidgets_FOUND" OFF)
+cmake_dependent_option(ENABLE_RECONCILIATIONREPORT "Enable reconciliation report." ON "ENABLE_HTML_RENDERING" OFF)
 add_feature_info("Reconciliation report" ENABLE_RECONCILIATIONREPORT "Adds possibility to report reconciliation.")
 
 # check for optional LibOFX support

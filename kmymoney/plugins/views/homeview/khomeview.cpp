@@ -42,12 +42,10 @@ KHomeView::~KHomeView()
 
 void KHomeView::slotAdjustScrollPos()
 {
-#ifndef ENABLE_WEBENGINE
   Q_D(KHomeView);
-  if (d && d->m_view && d->m_view->page() && d->m_view->page()->mainFrame()) {
-    d->m_view->page()->mainFrame()->setScrollBarValue(Qt::Vertical, d->m_scrollBarPos);
+  if (d && d->m_view) {
+    d->m_view->setScrollBarValue(Qt::Vertical, d->m_scrollBarPos);
   }
-#endif
 }
 
 void KHomeView::wheelEvent(QWheelEvent* event)
@@ -115,21 +113,17 @@ void KHomeView::showEvent(QShowEvent* event)
 void KHomeView::slotPrintView()
 {
   Q_D(KHomeView);
-  if (d->m_view) {
-    d->m_currentPrinter = new QPrinter();
-    QPointer<QPrintDialog> dialog = new QPrintDialog(d->m_currentPrinter, this);
-    dialog->setWindowTitle(QString());
-    if (dialog->exec() != QDialog::Accepted) {
-      delete d->m_currentPrinter;
-      d->m_currentPrinter = nullptr;
-      return;
-    }
-  #ifdef ENABLE_WEBENGINE
-    d->m_view->page()->print(d->m_currentPrinter, [=] (bool) {delete d->m_currentPrinter; d->m_currentPrinter = nullptr;});
-  #else
-    d->m_view->print(d->m_currentPrinter);
-  #endif
+  if (!d->m_view)
+    return;
+  d->m_currentPrinter = new QPrinter();
+  QPointer<QPrintDialog> dialog = new QPrintDialog(d->m_currentPrinter, this);
+  dialog->setWindowTitle(QString());
+  if (dialog->exec() != QDialog::Accepted) {
+    delete d->m_currentPrinter;
+    d->m_currentPrinter = nullptr;
+    return;
   }
+  d->m_view->print(d->m_currentPrinter);
 }
 
 void KHomeView::slotOpenUrl(const QUrl &url)
