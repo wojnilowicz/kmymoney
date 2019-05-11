@@ -27,6 +27,7 @@
 #   Emoticons
 #   ConfigWidgets
 #   IconThemes
+#   Parts
 #   Service
 #   TextWidgets
 #   XmlGui
@@ -36,6 +37,9 @@
 #   Declarative
 #   KCMUtils
 #   Wallet
+# Porting aids
+#   Js
+#   Html
 
 set(CMAKE_FRAMEWORKS_GLOBAL_PROFILE ${CMAKE_GLOBAL_PROFILE}
                                     -DBUILD_TESTING=FALSE
@@ -347,6 +351,27 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+  ext_kparts
+  ${PROJECT_GLOBAL_PROFILE}
+  URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/kparts-5.57.0.tar.xz
+  URL_MD5 ea1ae4cd89d10b7ec4c3ca19f2ddb5f2
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+    ext_kconfig
+    ext_kcoreaddons
+    ext_ki18n
+    ext_kiconthemes
+    ext_kio
+    ext_kjobwidgets
+    ext_kservice
+    ext_ktextwidgets
+    ext_kwidgetsaddons
+    ext_kxmlgui
+)
+
+ExternalProject_Add(
   ext_kservice
   ${PROJECT_GLOBAL_PROFILE}
   URL http://download.kde.org/stable/frameworks/5.57/kservice-5.57.0.tar.xz
@@ -465,4 +490,41 @@ ExternalProject_Add(
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kitemviews
+)
+
+ExternalProject_Add(
+  ext_kjs
+  ${PROJECT_GLOBAL_PROFILE}
+  URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/portingAids/kjs-5.57.0.tar.xz
+  URL_MD5 94bd611099b302b4b708974a639d6480
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS ext_extra_cmake_modules ext_pcre
+)
+
+ExternalProject_Add(
+  ext_khtml
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/portingAids/khtml-5.57.0.tar.xz
+  URL_MD5 425132b82608fe5b619bae07b20bf6be
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+    ext_karchive
+    ext_kcodecs
+    ext_kglobalaccel
+    ext_ki18n
+    ext_kiconthemes
+    ext_kio
+    ext_kjs
+    ext_knotifications
+    ext_sonnet
+    ext_ktextwidgets
+    ext_kwallet
+    ext_kwidgetsaddons
+    ext_kwindowsystem
+    ext_kxmlgui
+    ext_gif
 )

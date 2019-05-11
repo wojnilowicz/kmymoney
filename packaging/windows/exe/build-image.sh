@@ -129,6 +129,7 @@ echo "Copying libs..."
 cp -v $DEPS_INSTALL_PREFIX/bin/libpq.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
 
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then

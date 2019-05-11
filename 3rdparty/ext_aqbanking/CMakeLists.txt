@@ -19,7 +19,9 @@ ExternalProject_Add(
 
   DEPENDS ext_gwenhywfar ext_ktoblzcheck ext_xmlsec1 ext_gmp ext_xslt
 )
-
+# --with-plugin-searchdir=${UNIX_INSTALL_PREFIX}/bin/aqbanking
+# --with-locale-searchdir=${UNIX_INSTALL_PREFIX}/bin/data/locale
+#  --with-data-searchdir=${UNIX_INSTALL_PREFIX}/bin/data
 
 if(MINGW)
   ExternalProject_Add_Step(

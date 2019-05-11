@@ -9,3 +9,4 @@ ExternalProject_Add(
 
   ${CLEANUP_COMMAND}
 )
+#--with-bankdata-path=${UNIX_INSTALL_PREFIX}/bin/data/ktoblzcheck

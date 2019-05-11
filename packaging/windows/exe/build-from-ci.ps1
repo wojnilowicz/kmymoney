@@ -26,7 +26,7 @@ if ($Env:TRAVIS) {
 
   $Env:UPLOADTOOL_SUFFIX="windows-travis"
 
-  bash -c "pacman -S --needed --noconfirm make patch tar mingw-w64-x86_64-ninja mingw-w64-x86_64-pkg-config bison"
+  bash -c "pacman -S --needed --noconfirm make patch tar mingw-w64-x86_64-ninja mingw-w64-x86_64-pkg-config bison perl"
 
 } elseif ($Env:APPVEYOR) {
 

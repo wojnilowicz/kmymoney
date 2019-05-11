@@ -1,0 +1,49 @@
+diff -ruN giflib-5.1.9.orig/Makefile giflib-5.1.9/Makefile
+--- giflib-5.1.9.orig/Makefile	2019-03-28 19:57:23.000000000 +0100
++++ giflib-5.1.9/Makefile	2019-05-11 12:54:19.258941600 +0200
+@@ -62,19 +62,19 @@
+ 
+ LDLIBS=libgif.a -lm
+ 
+-all: libgif.so libgif.a libutil.so libutil.a $(UTILS)
++all: libgif-$(LIBMAJOR).dll libgif.a libutil-$(LIBMAJOR).dll libutil.a $(UTILS)
+ 	$(MAKE) -C doc
+ 
+ $(UTILS):: libgif.a libutil.a
+ 
+-libgif.so: $(OBJECTS) $(HEADERS)
+-	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname -Wl,libgif.so.$(LIBMAJOR) -o libgif.so $(OBJECTS)
++libgif-$(LIBMAJOR).dll: $(OBJECTS) $(HEADERS)
++	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,--out-implib,libgif.dll.a -o libgif-$(LIBMAJOR).dll $(OBJECTS)
+ 
+ libgif.a: $(OBJECTS) $(HEADERS)
+ 	$(AR) rcs libgif.a $(OBJECTS)
+ 
+-libutil.so: $(UOBJECTS) $(UHEADERS)
+-	$(CC) $(CFLAGS) -shared $(LDFLAGS) -Wl,-soname -Wl,libutil.so.$(LIBMAJOR) -o libutil.so $(UOBJECTS)
++libutil-$(LIBMAJOR).dll: $(UOBJECTS) $(UHEADERS)
++	$(CC) $(CFLAGS) -shared $(LDFLAGS) libgif-$(LIBMAJOR).dll -Wl,--out-implib,libutil.dll.a -o libutil-$(LIBMAJOR).dll $(UOBJECTS)
+ 
+ libutil.a: $(UOBJECTS) $(UHEADERS)
+ 	$(AR) rcs libutil.a $(UOBJECTS)
+@@ -94,15 +94,17 @@
+ install-bin: $(INSTALLABLE)
+ 	$(INSTALL) -d "$(DESTDIR)$(BINDIR)"
+ 	$(INSTALL) $^ "$(DESTDIR)$(BINDIR)"
++	$(INSTALL) -m 755 libgif-$(LIBMAJOR).dll "$(DESTDIR)$(BINDIR)/libgif-$(LIBMAJOR).dll"
++	$(INSTALL) -m 755 libutil-$(LIBMAJOR).dll "$(DESTDIR)$(BINDIR)/libutil-$(LIBMAJOR).dll"
+ install-include:
+ 	$(INSTALL) -d "$(DESTDIR)$(INCDIR)"
+ 	$(INSTALL) -m 644 gif_lib.h "$(DESTDIR)$(INCDIR)"
+ install-lib:
+ 	$(INSTALL) -d "$(DESTDIR)$(LIBDIR)"
++	$(INSTALL) -m 644 libgif.dll.a "$(DESTDIR)$(LIBDIR)/libgif.dll.a"
+ 	$(INSTALL) -m 644 libgif.a "$(DESTDIR)$(LIBDIR)/libgif.a"
+-	$(INSTALL) -m 755 libgif.so "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBVER)"
+-	ln -sf libgif.so.$(LIBVER) "$(DESTDIR)$(LIBDIR)/libgif.so.$(LIBMAJOR)"
+-	ln -sf libgif.so.$(LIBMAJOR) "$(DESTDIR)$(LIBDIR)/libgif.so"
++	$(INSTALL) -m 644 libutil.dll.a "$(DESTDIR)$(LIBDIR)/libutil.dll.a"
++	$(INSTALL) -m 644 libutil.a "$(DESTDIR)$(LIBDIR)/libutil.a"
+ install-man:
+ 	$(INSTALL) -d "$(DESTDIR)$(MANDIR)/man1"
+ 	$(INSTALL) -m 644 doc/*.1 "$(DESTDIR)$(MANDIR)/man1"
