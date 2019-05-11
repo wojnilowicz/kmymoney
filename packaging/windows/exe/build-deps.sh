@@ -39,6 +39,7 @@ cmake -G "MSYS Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
+du -h -d1  /c/deps-build
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
