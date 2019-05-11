@@ -27,13 +27,13 @@
 #   Emoticons
 #   ConfigWidgets
 #   IconThemes
-#   Parts
 #   Service
 #   TextWidgets
 #   XmlGui
 #   Bookmarks
 #   GlobalAccel
 #   KIO
+#   Parts
 #   Declarative
 #   KCMUtils
 #   Wallet
@@ -349,28 +349,6 @@ ExternalProject_Add(
   ${CLEANUP_COMMAND}
   DEPENDS ext_karchive ext_ki18n ext_kcoreaddons ext_kconfigwidgets ext_kwidgetsaddons ext_kitemviews
 )
-
-ExternalProject_Add(
-  ext_kparts
-  ${PROJECT_GLOBAL_PROFILE}
-  URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/kparts-5.57.0.tar.xz
-  URL_MD5 ea1ae4cd89d10b7ec4c3ca19f2ddb5f2
-  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
-  ${BUILD_IN_SOURCE}
-  ${CLEANUP_COMMAND}
-  DEPENDS
-    ext_kconfig
-    ext_kcoreaddons
-    ext_ki18n
-    ext_kiconthemes
-    ext_kio
-    ext_kjobwidgets
-    ext_kservice
-    ext_ktextwidgets
-    ext_kwidgetsaddons
-    ext_kxmlgui
-)
-
 ExternalProject_Add(
   ext_kservice
   ${PROJECT_GLOBAL_PROFILE}
@@ -457,6 +435,27 @@ ExternalProject_Add(
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ext_karchive ext_kconfig ext_kcoreaddons ext_kdbusaddons ext_ki18n ext_kservice ext_solid ext_kwindowsystem ext_kwidgetsaddons ext_kcompletion ext_kconfigwidgets ext_kiconthemes ext_kitemviews ext_kjobwidgets ext_kbookmarks ext_kwallet
+)
+
+ExternalProject_Add(
+  ext_kparts
+  ${PROJECT_GLOBAL_PROFILE}
+  URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/kparts-5.57.0.tar.xz
+  URL_MD5 ea1ae4cd89d10b7ec4c3ca19f2ddb5f2
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+    ext_kconfig
+    ext_kcoreaddons
+    ext_ki18n
+    ext_kiconthemes
+    ext_kio
+    ext_kjobwidgets
+    ext_kservice
+    ext_ktextwidgets
+    ext_kwidgetsaddons
+    ext_kxmlgui
 )
 
 ExternalProject_Add(
