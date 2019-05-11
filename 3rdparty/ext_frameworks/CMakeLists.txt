@@ -519,6 +519,7 @@ ExternalProject_Add(
     ext_kio
     ext_kjs
     ext_knotifications
+    ext_kparts
     ext_sonnet
     ext_ktextwidgets
     ext_kwallet
