@@ -171,6 +171,10 @@ matrix:
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         - if [ -f workaround/myCache.tar ]; then travis_wait tar xf workaround/myCache.tar; fi;
+        - rm -fr /c/deps-build/ext_postgresql/ext_postgresql-prefix/src/ext_postgresql/*
+        - rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
+        - rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison-build/*
+        - rm -fr /c/deps-build/ext_glib/ext_glib-prefix/src/ext_glib/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))

@@ -1,5 +1,5 @@
 if(MINGW)
-  set(platform_specific_build_prefix "export CC=x86_64-w64-mingw32-gcc &&" )
+  set(platform_specific_build_prefix export CC="x86_64-w64-mingw32-gcc" &&)
   set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/giflib-mingw.diff)
 else()
   set(platform_specific_build_prefix "" )
