@@ -126,17 +126,41 @@ cp -r $KMYMONEY_INSTALL_PREFIX $IMAGE_BUILD_PREFIX
 cd $IMAGE_BUILD_PREFIX
 
 echo "Copying libs..."
-cp -v $DEPS_INSTALL_PREFIX/bin/libpq.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libpcre* bin
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libpq* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libpq* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libofx* bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libosp* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libgwen* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libgwen* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libgif* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libgif* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libjpeg* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libjpeg* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libical* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libical* bin
+fi
 
 if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/kdeinit5.exe ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/kdeinit5.exe bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
 fi
 
 echo "Copying shares..."
@@ -168,6 +192,10 @@ mv -v lib/plugins/kmymoney/* bin/kmymoney
 if [ -d lib/plugins/sqldrivers ]; then
  mv -v lib/plugins/sqldrivers/* bin/sqldrivers
 fi
+
+mkdir -p bin/kf5/kio
+cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file.dll bin/kf5/kio
+cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http.dll bin/kf5/kio
 
 mkdir -p lib
 touch lib/emptyfile
