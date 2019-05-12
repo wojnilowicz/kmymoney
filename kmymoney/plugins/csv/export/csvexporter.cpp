@@ -40,10 +40,10 @@
 #include "viewinterface.h"
 #include <QtDebug>
 
-//#ifdef IS_APPIMAGE
+#ifdef IS_APPIMAGE
 #include <QCoreApplication>
 #include <QStandardPaths>
-//#endif
+#endif
 
 CSVExporter::CSVExporter(QObject *parent, const QVariantList &args) :
     KMyMoneyPlugin::Plugin(parent, "csvexporter"/*must be the same as X-KDE-PluginInfo-Name*/)
@@ -53,16 +53,15 @@ CSVExporter::CSVExporter(QObject *parent, const QVariantList &args) :
   const auto rcFileName = QLatin1String("csvexporter.rc");
   setComponentName(componentName, i18n("CSV exporter"));
 
-//#ifdef IS_APPIMAGE
-  const QString rcFilePath = QCoreApplication::applicationDirPath() + QLatin1String("/../Resources/kxmlgui5/") + componentName + QLatin1Char('/') + rcFileName;
-  qDebug() << "nazwa dla csvexporter " << rcFilePath;
+#ifdef IS_APPIMAGE
+  const QString rcFilePath = QCoreApplication::applicationDirPath() + QLatin1String("/../share/kxmlgui5/") + componentName + QLatin1Char('/') + rcFileName;
   setXMLFile(rcFilePath);
 
   const QString localRcFilePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + QLatin1Char('/') + componentName + QLatin1Char('/') + rcFileName;
   setLocalXMLFile(localRcFilePath);
-//#else
-//  setXMLFile(rcFileName);
-//#endif
+#else
+  setXMLFile(rcFileName);
+#endif
 
   createActions();
   // For information, announce that we have been loaded.
