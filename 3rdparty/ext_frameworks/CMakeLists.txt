@@ -8,6 +8,7 @@
 #   DBusAddons
 #   GuiAddons
 #   I18n
+#   UnitConversion
 #   ItemModels
 #   ItemViews
 #   WidgetsAddons
@@ -16,6 +17,7 @@
 #   Sonnet
 #   SyntaxHighlighting
 # Tier 2
+#   ImageFormats
 #   Activities
 #   Auth
 #   Completion
@@ -33,6 +35,9 @@
 #   Bookmarks
 #   GlobalAccel
 #   KIO
+#   Init
+#   KDED
+#   DesignerPlugin
 #   Parts
 #   Declarative
 #   KCMUtils
@@ -146,6 +151,18 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+  ext_kunitconversion
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/kunitconversion-5.57.0.tar.xz
+  URL_MD5 d023a19fa6fbff1479cc9144eb1d8393
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+   ext_ki18n
+)
+
+ExternalProject_Add(
   ext_kitemmodels
   ${PROJECT_GLOBAL_PROFILE}
   URL http://download.kde.org/stable/frameworks/5.57/kitemmodels-5.57.0.tar.xz
@@ -237,6 +254,17 @@ ExternalProject_Add(
   DEPENDS ext_extra_cmake_modules
 )
 
+ExternalProject_Add(
+  ext_kimageformats
+  ${PROJECT_GLOBAL_PROFILE}
+  URL http://download.kde.org/stable/frameworks/5.57/kimageformats-5.57.0.tar.xz
+  URL_MD5 c46aaf66f3ac9100b09f829f40e6cce8
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS ext_kitemviews
+)
+
 # without "-DKACTIVITIES_LIBRARY_ONLY=ON" ext_boost is required
 ExternalProject_Add(
   ext_kactivities
@@ -281,6 +309,21 @@ ExternalProject_Add(
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons ext_kwindowsystem
+)
+
+ExternalProject_Add(
+  ext_kdoctools
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/kdoctools-5.57.0.tar.xz
+  URL_MD5 90a180ef293a66ccf18ee79cc7f33776
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+          -MEINPROC_NO_KARCHIVE=ON
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+   ext_extra_cmake_modules
+   ext_xml
+   ext_xslt
 )
 
 ExternalProject_Add(
@@ -438,6 +481,53 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
+  ext_kinit
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/kinit-5.57.0.tar.xz
+  URL_MD5 9d6893978fcb67c4d993cd30087d0ca2
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+    ext_kservice
+    ext_kio
+    ext_ki18n
+    ext_kwindowsystem
+    ext_kcrash
+    ext_kconfig
+)
+
+ExternalProject_Add(
+  ext_kded
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/kded-5.57.0.tar.xz
+  URL_MD5 694b8640be69230123758181d7678455
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+   ext_kconfig
+   ext_kcoreaddons
+   ext_kcrash
+   ext_kdbusaddons
+   ext_kinit
+   ext_kservice
+)
+
+ExternalProject_Add(
+  ext_kdesignerplugin
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/kdesignerplugin-5.57.0.tar.xz
+  URL_MD5 8c5c4c6366999ebc72d32ed6eb88c1c4
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+  DEPENDS
+   ext_kcoreaddons
+   ext_kconfig
+)
+
+ExternalProject_Add(
   ext_kparts
   ${PROJECT_GLOBAL_PROFILE}
   URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/kparts-5.57.0.tar.xz
@@ -481,25 +571,64 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
-  ext_kimageformats
-  ${PROJECT_GLOBAL_PROFILE}
-  URL http://download.kde.org/stable/frameworks/5.57/kimageformats-5.57.0.tar.xz
-  URL_MD5 c46aaf66f3ac9100b09f829f40e6cce8
-  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
-  ${BUILD_IN_SOURCE}
-  ${CLEANUP_COMMAND}
-  DEPENDS ext_kitemviews
-)
-
-ExternalProject_Add(
   ext_kjs
   ${PROJECT_GLOBAL_PROFILE}
-  URL http://ftp.pbone.net/pub/kde/stable/frameworks/5.57/portingAids/kjs-5.57.0.tar.xz
+  URL https://download.kde.org/stable/frameworks/5.57/portingAids/kjs-5.57.0.tar.xz
   URL_MD5 94bd611099b302b4b708974a639d6480
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules ext_pcre
+)
+
+ExternalProject_Add(
+  ext_kdelibs4support
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://download.kde.org/stable/frameworks/5.57/portingAids/kdelibs4support-5.57.0.tar.xz
+  URL_MD5 dd3e37b0b374466734c6f567877f5a85
+  CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+  INSTALL_COMMAND ""
+  ${BUILD_IN_SOURCE}
+  ${CLEANUP_COMMAND}
+#  DEPENDS
+#   ext_kcompletion
+#   ext_kconfig
+#   ext_kconfigwidgets
+#   ext_kcrash
+#   ext_kdesignerplugin
+#   ext_kglobalaccel
+#   ext_kdoctools
+#   ext_kemoticons
+#   ext_kguiaddons
+#   ext_ki18n
+#   ext_kiconthemes
+#   ext_knotifications
+#   ext_kparts
+#   ext_kservice
+#   ext_ktextwidgets
+#   ext_kunitconversion
+#   ext_kwidgetsaddons
+#   ext_kwindowsystem
+#   ext_kxmlgui
+#   ext_kdbusaddons
+#   ext_kded
+#   ext_kdewin
+)
+
+if(MINGW)
+  set(platform_specific_path ${UNIX_INSTALL_PREFIX}/bin/data/kservicetypes5)
+else()
+  set(platform_specific_path ${UNIX_INSTALL_PREFIX}/share/kservicetypes5)
+endif()
+
+ExternalProject_Add_Step(
+  ext_kdelibs4support getservicetype
+  COMMAND cp qimageio_plugin.desktop ${platform_specific_path}
+
+  DEPENDEES install
+  WORKING_DIRECTORY <SOURCE_DIR>/src/kio/imageformats
 )
 
 ExternalProject_Add(
@@ -527,4 +656,5 @@ ExternalProject_Add(
     ext_kwindowsystem
     ext_kxmlgui
     ext_gif
+#     ext_kinit
 )

@@ -63,7 +63,9 @@ ExternalProject_Add(
 #  DEPENDS ext_openssl ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
   DEPENDS ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
 )
-
+# -system-pcre
+# ext_pcre2
+# PCRE2_PREFIX=${CMAKE_INSTALL_PREFIX}
 
 ExternalProject_Add(
   ext_qtsvg

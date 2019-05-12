@@ -131,12 +131,26 @@ cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
 
+if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/kdeinit5.exe ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/kdeinit5.exe bin
+fi
+
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
  cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
 fi
 
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
+cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicetypes5
+
+mkdir -p bin/data/kf5
+if [ -d $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml ]; then
+  cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
+fi
 
 mkdir -p share
 touch share/emptyfile

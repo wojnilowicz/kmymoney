@@ -84,6 +84,7 @@ cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+cmake --build . --target ext_kinit -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}

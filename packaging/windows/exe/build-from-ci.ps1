@@ -48,30 +48,34 @@ if ($Env:TRAVIS) {
 
 foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
   $REMAINING_TIME = ($CUTOFF_TIME - [math]::Round($TIMER.Elapsed.TotalMinutes))
-  if ($REMAINING_TIME -gt 0) {
-      $TIMEDOUT_FILENAME="TIMEDOUT"
-      Remove-Item $TIMEDOUT_FILENAME -ErrorAction SilentlyContinue
 
-      $COMMAND = (
-        "timeout ${REMAINING_TIME}m",
-        "${KMYMONEY_SOURCES}/packaging/windows/exe/build.sh",
-        "${BUILD_STAGE}",
-        "${WORKSPACE_PATH}",
-        "${KMYMONEY_SOURCES}",
-        "|| touch ${TIMEDOUT_FILENAME}"
-      ) -join " "
+  $TIMEDOUT_FILENAME="TIMEDOUT"
+  Remove-Item $TIMEDOUT_FILENAME -ErrorAction SilentlyContinue
 
-    if ($BUILD_STAGE -eq "image") {
-      cinst -y --no-progress nsis
-    }
+  if (($BUILD_STAGE -eq "deps" -and $REMAINING_TIME -le 0) -or
+      ($BUILD_STAGE -eq "kmymoney" -and $REMAINING_TIME -lt 10) -or
+      ($BUILD_STAGE -eq "image" -and $REMAINING_TIME -lt 5)) {
+    Write-Host "No time for building '${BUILD_STAGE}'."
+    bash -c "touch ${TIMEDOUT_FILENAME}"
+    break
+  }
 
-    bash -c $COMMAND
-    if (Test-Path $TIMEDOUT_FILENAME -PathType Leaf) {
-      Write-Host "Building '${BUILD_STAGE}' did not finish."
-      break
-    }
+  $COMMAND = (
+    "timeout ${REMAINING_TIME}m",
+    "${KMYMONEY_SOURCES}/packaging/windows/exe/build.sh",
+    "${BUILD_STAGE}",
+    "${WORKSPACE_PATH}",
+    "${KMYMONEY_SOURCES}",
+    "|| touch ${TIMEDOUT_FILENAME}"
+  ) -join " "
 
-  } else {
+  if ($BUILD_STAGE -eq "image") {
+    cinst -y --no-progress nsis
+  }
+
+  bash -c $COMMAND
+  if (Test-Path $TIMEDOUT_FILENAME -PathType Leaf) {
+    Write-Host "Building '${BUILD_STAGE}' did not finish."
     break
   }
 }
