@@ -657,4 +657,5 @@ ExternalProject_Add(
     ext_kxmlgui
     ext_gif
 #     ext_kinit
+# ext_kdelibs4support
 )
