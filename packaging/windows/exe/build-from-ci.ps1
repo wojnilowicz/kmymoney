@@ -53,8 +53,8 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
   Remove-Item $TIMEDOUT_FILENAME -ErrorAction SilentlyContinue
 
   if (($BUILD_STAGE -eq "deps" -and $REMAINING_TIME -le 0) -or
-      ($BUILD_STAGE -eq "kmymoney" -and $REMAINING_TIME -lt 10) -or
-      ($BUILD_STAGE -eq "image" -and $REMAINING_TIME -lt 5)) {
+      ($BUILD_STAGE -eq "kmymoney" -and $REMAINING_TIME -lt 2) -or
+      ($BUILD_STAGE -eq "image" -and $REMAINING_TIME -lt 2)) {
     Write-Host "No time for building '${BUILD_STAGE}'."
     bash -c "touch ${TIMEDOUT_FILENAME}"
     break

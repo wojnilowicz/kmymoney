@@ -162,7 +162,6 @@ matrix:
         timeout: 2000
         directories:
           - /c/workaround
-          #- /c/kmymoney-build
 
       before_install:
         - START_TIMESTAMP=$(date +%s)
@@ -170,11 +169,8 @@ matrix:
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        - if [ -f workaround/myCache.tar ]; then travis_wait tar xf workaround/myCache.tar; fi;
-        - rm -fr /c/deps-build/ext_postgresql/ext_postgresql-prefix/src/ext_postgresql/*
-        - rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
-        - rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison-build/*
-        - rm -fr /c/deps-build/ext_glib/ext_glib-prefix/src/ext_glib/*
+        #- rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
+        #- rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison-build/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -186,28 +182,7 @@ matrix:
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
 
-        #- |
-          # Ensure Python and the Scripts folder is available in PATH.
-          # refreshenv does not seem to work in bash, so reload it manually.
-          # Entries in the Machine PATH might contain trailing slashes, drop those.
-          # Apply Process paths before Machine to ensure /bin appears before others (otherwise casher will break and stall).
-          #export PATH="$(powershell -Command '("Process", "Machine" | % {
-            #[Environment]::GetEnvironmentVariable("PATH", $_) -Split ";" -Replace "\\$", ""
-          #} | Select -Unique | % { cygpath $_ }) -Join ":"')"
-          #echo "PATH=$PATH"
-
-
-        #- |
-          #cinst -y --no-progress msys2 --params="'/NoUpdate /InstallDir=C:\\msys64'"
-          #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 pacman-deps
-
       install: false
-        #- |
-          #if [ -f /c/deps-build/cache_is_built ]; then IS_CACHE_BUILT=true; else IS_CACHE_BUILT=false; fi;
-          #REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          #if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == false ]; then
-            #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 deps ${REMAINING_TIME}
-          #fi
 
       script:
         - |
@@ -215,24 +190,6 @@ matrix:
           if [ ${REMAINING_TIME} -gt 0 ]; then
             powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/build-from-ci.ps1 ${REMAINING_TIME} /c $TRAVIS_BUILD_DIR
           fi
-
-        #- |
-          #REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          #if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == true ]; then
-            #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 kmymoney ${REMAINING_TIME}
-          #fi
-
-      #after_success:
-        #- |
-          #REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          #if [ ${REMAINING_TIME} -gt 0 ] && [ ${IS_CACHE_BUILT} == true ]; then
-            #cinst -y --no-progress nsis
-            #powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/lauchBuild.ps1 image ${REMAINING_TIME}
-            #cd /c
-            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-            #export UPLOADTOOL_SUFFIX="windows-travis"
-            #bash upload.sh /c/image-build/*.exe
-          #fi
 
       before_cache:
         - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
