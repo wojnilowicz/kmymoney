@@ -2,8 +2,11 @@
 # withouth CPPFLAGS and LDFLAGS static zlib from mingw is picked up
 
 set(SQLITE_C_FLAGS "${C_FLAGS} -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_OMIT_LOAD_EXTENSION=1 -DSQLITE_OMIT_COMPLETE=1 -DSQLITE_ENABLE_FTS3_PARENTHESIS=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1")
-if(UNIX)
-  set(SQLITE_C_FLAGS "${SQLITE_C_FLAGS} DHAVE_USLEEP=1")
+
+if(APPLE)
+  set(install_suffix /colisionlibs)
+else()
+  set(install_suffix "")
 endif()
 
 ExternalProject_Add(
@@ -13,7 +16,13 @@ ExternalProject_Add(
   URL_MD5 3c68eb400f8354605736cd55400e1572
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    ${AT_GLOBAL_PROFILE}
+    --prefix=${UNIX_INSTALL_PREFIX}${install_suffix}
+    --build=${AT_SYSTEM_TYPE}
+    --host=${AT_SYSTEM_TYPE}
+    --disable-static
+    --enable-shared
+    --enable-silent-rules
+    $<$<BOOL:$ENV{CI}>:--disable-dependency-tracking>
     --enable-fts3
     --enable-fts5
     --enable-json1

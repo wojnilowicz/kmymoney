@@ -1,3 +1,9 @@
+if(APPLE)
+  set(platform_specific_dependencies "")
+else()
+  set(platform_specific_dependencies ext_expat)
+endif()
+
 ExternalProject_Add(
   ext_dbus
   ${PROJECT_GLOBAL_PROFILE}
@@ -22,7 +28,7 @@ ExternalProject_Add(
 
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
-  DEPENDS ext_expat ext_glib
+  DEPENDS ext_glib ${platform_specific_dependencies}
 )
 
 # Without this Qt cannot find dbus easilly

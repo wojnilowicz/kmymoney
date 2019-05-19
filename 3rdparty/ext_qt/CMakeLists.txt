@@ -6,17 +6,17 @@
 # kxmlgui uses QSslSocket and fails to build without that, so openssl must be present
 
 if (APPLE)
-  set(qt_platform_specific_option -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
 elseif(MINGW)
-  set(qt_platform_specific_option -platform win32-g++ -opengl desktop)
+  set(platform_specific_options -platform win32-g++ -opengl desktop)
 elseif(UNIX)
-  set(qt_platform_specific_option -xcb -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
-endif ()
+  set(platform_specific_options -xcb)
+endif()
 
 ExternalProject_Add(
   ext_qtbase
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short" # workaround for long names on MS Windows and Travis CI cacher
+  DOWNLOAD_NAME "short1" # workaround for long names on MS Windows and Travis CI cacher
 
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
   URL_MD5 fe47852113fc27581dbc0cf71644d6f1
@@ -45,6 +45,9 @@ ExternalProject_Add(
     -sql-psql
     -sql-mysql
     -system-sqlite
+    -system-pcre
+    -no-glib
+    -no-dtls
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -52,20 +55,16 @@ ExternalProject_Add(
     LIBJPEG_PREFIX=${CMAKE_INSTALL_PREFIX}
     DBUS_PREFIX=${CMAKE_INSTALL_PREFIX}
     SQLITE_PREFIX=${CMAKE_INSTALL_PREFIX}
+    PCRE2_PREFIX=${CMAKE_INSTALL_PREFIX}
     PSQL_PREFIX=${CMAKE_INSTALL_PREFIX}
     MYSQL_INCDIR=${CMAKE_INSTALL_PREFIX}/include/mariadb
-    MYSQL_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
-    MYSQL_LIBS="-llibmariadb"
-
-    ${qt_platform_specific_option}
+    MYSQL_LIBDIR=${CMAKE_INSTALL_PREFIX}
+    MYSQL_LIBS="-lmariadb" # mingw used  MYSQL_LIBS="-llibmariadb" but MacOS fails on this
+    ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
-#  DEPENDS ext_openssl ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
-  DEPENDS ext_sqlite ext_icu ext_png ext_jpeg ext_mariadb ext_postgresql
+  DEPENDS ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
 )
-# -system-pcre
-# ext_pcre2
-# PCRE2_PREFIX=${CMAKE_INSTALL_PREFIX}
 
 ExternalProject_Add(
   ext_qtsvg
@@ -131,7 +130,7 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtdeclarative
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short" # workaround for long names on MS Windows and Travis CI cacher
+  DOWNLOAD_NAME "short2" # workaround for long names on MS Windows and Travis CI cacher
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtdeclarative-everywhere-src-5.12.3.tar.xz
   URL_MD5 2f8e8a30507adbec8f4c10fa56b06027
 
@@ -192,7 +191,7 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtwebengine
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short" # workaround for long names on MS Windows and Travis CI cacher
+  DOWNLOAD_NAME "short3" # workaround for long names on MS Windows and Travis CI cacher
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebengine-everywhere-src-5.12.3.tar.xz
   URL_MD5 9841599435095b16f12870bd48ef5342
 

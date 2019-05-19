@@ -42,5 +42,5 @@ ExternalProject_Add(
   INSTALL_COMMAND ""
 
   BUILD_IN_SOURCE 1
-  DEPENDS ext_icu #ext_openssl
+  DEPENDS ext_icu ext_openssl
 )

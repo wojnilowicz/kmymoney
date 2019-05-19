@@ -7,6 +7,10 @@ ExternalProject_Add(
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
     --disable-doc
+    --disable-arm-crypto-support
+    --disable-neon-support
+    --disable-padlock-support
+    --enable-large-data-tests
 
   ${CLEANUP_COMMAND}
 

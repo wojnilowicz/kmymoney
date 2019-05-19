@@ -1,5 +1,24 @@
 # Without CPPFLAGS and LDFLAGS "error: GMP is required"
 # "make -j1" prevents "cannot find the library libaqhbci.la or unhandled argument libaqhbci.la"
+
+if(MINGW)
+  set(platform_specific_options 
+    --with-plugin-searchdir=bin/aqbanking
+    --with-data-searchdir=bin/data # watch out, it differs from gwenhywfar
+    --with-sysdata-searchdir=bin/data
+    --with-locale-searchdir=bin/data/locale
+  )
+elseif(APPLE)
+  set(platform_specific_options 
+    --with-plugin-searchdir=PlugIns/aqbanking
+    --with-data-searchdir=Resources # watch out, it differs from gwenhywfar
+    --with-sysdata-searchdir=Resources
+    --with-locale-searchdir=Resources/locale
+  )
+else()
+  set(platform_specific_options "")
+endif()
+
 ExternalProject_Add(
   ext_aqbanking
   ${PROJECT_GLOBAL_PROFILE}
@@ -8,8 +27,14 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
+    --disable-gwenhywfar-test
+    --enable-local-install
+    --enable-release
     --disable-debug
     --disable-warnings
+    --disable-cli
+    --disable-tutorials
+    ${platform_specific_options}
     CPPFLAGS=${AT_CPPFLAGS}
     LDFLAGS=${AT_LDFLAGS}
 
@@ -19,9 +44,6 @@ ExternalProject_Add(
 
   DEPENDS ext_gwenhywfar ext_ktoblzcheck ext_xmlsec1 ext_gmp ext_xslt
 )
-# --with-plugin-searchdir=${UNIX_INSTALL_PREFIX}/bin/aqbanking
-# --with-locale-searchdir=${UNIX_INSTALL_PREFIX}/bin/data/locale
-#  --with-data-searchdir=${UNIX_INSTALL_PREFIX}/bin/data
 
 if(MINGW)
   ExternalProject_Add_Step(
@@ -29,6 +51,16 @@ if(MINGW)
     COMMAND bash -c "find . -type f -name aqbanking-config.cmake -exec sed -i \
     -e 's+'${UNIX_INSTALL_PREFIX}'+'${CMAKE_INSTALL_PREFIX}'+g' \
     -e 's+lib/libaqbanking.so+lib/libaqbanking.dll.a+g' \
+    {} \\+"
+
+    DEPENDEES install
+    WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/lib/cmake
+  )
+elseif(APPLE)
+  ExternalProject_Add_Step(
+    ext_aqbanking correctcmake
+    COMMAND bash -c "find . -type f -name aqbanking-config.cmake -exec sed -i '' \
+    -e 's+lib/libaqbanking.so+lib/libaqbanking.dylib+g' \
     {} \\+"
 
     DEPENDEES install

@@ -1,5 +1,15 @@
-# --without-catalog is requirement of QWebEngine
-# --with-c14n --with-xptr --with-sax1 --with-output are required by xmlsec1
+if(MINGW)
+  set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mingw_xml.diff)
+else()
+  set(platform_specific_patch "")
+endif()
+
+if(APPLE)
+  set(platform_specific_options --with-schemas --with-xinclude )
+else()
+  set(platform_specific_options --without-schemas --without-xinclude )
+endif()
+
 ExternalProject_Add(
   ext_xml
   ${PROJECT_GLOBAL_PROFILE}
@@ -7,25 +17,24 @@ ExternalProject_Add(
   URL_MD5 c04a5a0a042eaa157e8e8c9eabe76bd6
 
   PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xml.diff
-        COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/mingw_xml.diff
+        ${platform_specific_patch}
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
-    --with-c14n
-    --without-catalog
+    --with-c14n # required by xmlsec1
+    --without-catalog # required to be disabled by QWebEngine
     --without-debug
     --without-docbook
     --with-icu
     --without-legacy
-    --with-output
+    --with-output # required by xmlsec1
     --without-python
     --without-regexps
-    --with-sax1
-    --without-schemas
+    --with-sax1 # required by xmlsec1
     --without-schematron
-    --without-xinclude
-    --with-xptr
+    --with-xptr # required by xmlsec1
     --without-modules
+    ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
 

@@ -10,6 +10,7 @@ ExternalProject_Add(
     --disable-gcov
     --disable-documentation
     --disable-mini-gmp
+    --disable-openssl
     --with-lib-path=${UNIX_INSTALL_PREFIX}/lib
     --with-include-path=${UNIX_INSTALL_PREFIX}/include
 
@@ -17,5 +18,3 @@ ExternalProject_Add(
 
   DEPENDS ext_gmp
 )
-# --enable-gcov
-# --disable-openssl

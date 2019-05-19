@@ -1,9 +1,3 @@
-if(APPLE)
-  set (platform_specific_option -Diconv=native)
-else()
-  set (platform_specific_option "")
-endif ()
-
 ExternalProject_Add(
   ext_glib
   ${PROJECT_GLOBAL_PROFILE}
@@ -22,9 +16,11 @@ ExternalProject_Add(
                           -Dgtk_doc=false
                           -Dinstalled_tests=false
                           -Dnls=disabled
-                          ${platform_specific_option}
+                          -Dinternal_pcre=false
+
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ninja -C _build
   INSTALL_COMMAND ninja -C _build install
+  ${CLEANUP_COMMAND}
+  DEPENDS ext_pcre
 )
-

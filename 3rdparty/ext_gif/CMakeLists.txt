@@ -3,7 +3,14 @@ if(MINGW)
   set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/giflib-mingw.diff)
 else()
   set(platform_specific_build_prefix "" )
-  set(platform_specific_patch "")
+  set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/giflib-macos.diff)
+#set(platform_specific_patch "")
+endif()
+
+if(APPLE)
+  set(install_suffix /colisionlibs)
+else()
+  set(install_suffix "")
 endif()
 
 ExternalProject_Add(
@@ -15,6 +22,6 @@ ExternalProject_Add(
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ${platform_specific_build_prefix} $(MAKE)
   BUILD_IN_SOURCE 1
-  INSTALL_COMMAND $(MAKE) PREFIX=${UNIX_INSTALL_PREFIX} install
+  INSTALL_COMMAND $(MAKE) PREFIX=${UNIX_INSTALL_PREFIX}${install_suffix} install
   ${CLEANUP_COMMAND}
 )

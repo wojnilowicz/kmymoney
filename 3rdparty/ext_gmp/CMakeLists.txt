@@ -9,7 +9,7 @@ if(MINGW)
 
     CONFIGURE_COMMAND ./configure
       ${AT_GLOBAL_PROFILE}
-      --enable-cxx
+      --enable-cxx # required by KMyMoney
     BUILD_IN_SOURCE 1
     ${CLEANUP_COMMAND}
   )
@@ -22,7 +22,7 @@ else()
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure
       ${AT_GLOBAL_PROFILE}
-      --enable-cxx
+      --enable-cxx # required by KMyMoney
     ${CLEANUP_COMMAND}
   )
 endif()

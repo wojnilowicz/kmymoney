@@ -1,11 +1,10 @@
-if(MSYS)
-  set (INSTALL_LIBDIR -DINSTALL_LIBDIR=lib)
-  set (INSTALL_PLUGINDIR -DINSTALL_PLUGINDIR=bin)
+if(MINGW)
+  set(INSTALL_LIBDIR -DINSTALL_LIBDIR=lib)
+  set(INSTALL_PLUGINDIR -DINSTALL_PLUGINDIR=bin/mariadb)
 else()
-  set (INSTALL_LIBDIR "")
-  set (INSTALL_PLUGINDIR "")
+  set(INSTALL_LIBDIR -DINSTALL_LIBDIR=lib)
+  set(INSTALL_PLUGINDIR -DINSTALL_PLUGINDIR=plugins/mariadb)
 endif()
-
 
 ExternalProject_Add(
   ext_mariadb
@@ -26,13 +25,13 @@ ExternalProject_Add(
              ${INSTALL_PLUGINDIR}
 
   ${CLEANUP_COMMAND}
-  #DEPENDS ext_openssl
+  DEPENDS ext_openssl
 )
 
-if(MSYS)
+if(MINGW)
   ExternalProject_Add_Step(
     ext_mariadb fixLibrariesOnMsys
-    COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll ${CMAKE_INSTALL_PREFIX}/bin
+    COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll ${CMAKE_INSTALL_PREFIX}/bin/mariadb.dll
     COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/liblibmariadb.dll.a ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll.a
     DEPENDEES install
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}

@@ -1,4 +1,5 @@
 # With "no-deprecated" nettle shows undefined reference to `ERR_load_crypto_strings'
+# With  "no-engine"  mariadb shows undefined EVP_MD_CTX_free
 if(MINGW)
   set(platform_specific_option <SOURCE_DIR>/Configure mingw64)
 else()
@@ -15,9 +16,15 @@ ExternalProject_Add(
     --prefix=${CMAKE_INSTALL_PREFIX}
     --openssldir=${CMAKE_INSTALL_PREFIX}/ssl
     no-tests
+    no-static-engine
+    no-gost
+    no-hw-padlock
+    no-ocsp
+    no-srp
+    no-srtp
+    no-ts
+    no-dtls
 
   INSTALL_COMMAND $(MAKE) install_sw
   ${CLEANUP_COMMAND}
 )
-
-#no-ui no-static-engine

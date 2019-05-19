@@ -47,7 +47,8 @@
 #   Html
 
 set(CMAKE_FRAMEWORKS_GLOBAL_PROFILE ${CMAKE_GLOBAL_PROFILE}
-                                    -DBUILD_TESTING=FALSE
+                                                                        -DBUILD_TESTING=FALSE
+                                                                        $<$<PLATFORM_ID:Darwin>:-DAPPLE_SUPPRESS_X11_WARNING=ON>
 )
 
 ExternalProject_Add(
@@ -355,6 +356,7 @@ ExternalProject_Add(
   URL http://download.kde.org/stable/frameworks/5.57/knotifications-5.57.0.tar.xz
   URL_MD5 a5381274fb940b1ce06850c2c8995b5e
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/knotifications.diff # otherwise no type named 'setBadgeLabelText' in namespace 'QtMac' QtMac::setBadgeLabelText
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kwindowsystem ext_kconfig ext_kcodecs ext_kcoreaddons ext_phonon
@@ -442,6 +444,7 @@ ExternalProject_Add(
   URL http://download.kde.org/stable/frameworks/5.57/kxmlgui-5.57.0.tar.xz
   URL_MD5 5716ffbd7ad51c55544e1cf924cb1dcc
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+                            -DFORCE_DISABLE_KGLOBALACCEL=ON
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS ext_kcoreaddons ext_kitemviews ext_kconfig ext_kconfigwidgets ext_ki18n ext_kiconthemes ext_ktextwidgets ext_kwidgetsaddons ext_kwindowsystem ext_kglobalaccel
@@ -477,7 +480,7 @@ ExternalProject_Add(
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
-  DEPENDS ext_extra_cmake_modules ext_karchive ext_kconfig ext_kcoreaddons ext_kdbusaddons ext_ki18n ext_kservice ext_solid ext_kwindowsystem ext_kwidgetsaddons ext_kcompletion ext_kconfigwidgets ext_kiconthemes ext_kitemviews ext_kjobwidgets ext_kbookmarks ext_kwallet
+  DEPENDS ext_karchive ext_kconfig ext_kcoreaddons ext_kdbusaddons ext_ki18n ext_kservice ext_solid ext_kwindowsystem ext_kwidgetsaddons ext_kcompletion ext_kconfigwidgets ext_kiconthemes ext_kitemviews ext_kjobwidgets ext_kbookmarks ext_kwallet
 )
 
 ExternalProject_Add(
@@ -535,17 +538,17 @@ ExternalProject_Add(
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
-  DEPENDS
-    ext_kconfig
-    ext_kcoreaddons
-    ext_ki18n
-    ext_kiconthemes
-    ext_kio
-    ext_kjobwidgets
-    ext_kservice
-    ext_ktextwidgets
-    ext_kwidgetsaddons
-    ext_kxmlgui
+ DEPENDS
+   ext_kconfig
+   ext_kcoreaddons
+   ext_ki18n
+   ext_kiconthemes
+   ext_kio
+   ext_kjobwidgets
+   ext_kservice
+   ext_ktextwidgets
+   ext_kwidgetsaddons
+   ext_kxmlgui
 )
 
 ExternalProject_Add(
@@ -637,6 +640,7 @@ ExternalProject_Add(
   URL https://download.kde.org/stable/frameworks/5.57/portingAids/khtml-5.57.0.tar.xz
   URL_MD5 425132b82608fe5b619bae07b20bf6be
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+                            -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/imagelibs
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}
   DEPENDS
@@ -655,7 +659,6 @@ ExternalProject_Add(
     ext_kwidgetsaddons
     ext_kwindowsystem
     ext_kxmlgui
+    ext_kdelibs4support
     ext_gif
-#     ext_kinit
-# ext_kdelibs4support
 )

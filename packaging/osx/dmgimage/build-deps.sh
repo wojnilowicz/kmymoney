@@ -7,6 +7,10 @@ set -eux
 # Switch directory in order to put all build files in the right place
 cd $CMAKE_BUILD_PREFIX
 
+# Those flags will be propageted to Autotools and CMake
+export CXXFLAGS="-O2 -DNDEBUG"
+export CFLAGS="-O2 -DNDEBUG"
+
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX
 NINJA_EXECUTABLE=$DEPS_INSTALL_PREFIX/bin/ninja
@@ -22,49 +26,54 @@ if [ ! -f $NINJA_EXECUTABLE ] ||
   rm -fr ninja
 fi
 
-
 # Configure the dependencies for building
-cmake -GNinja \
+cmake -G "Unix Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \
       -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
-      -DCMAKE_PREFIX_PATH=$CMAKE_PREFIX_PATH \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_BUILD_TYPE=None \
+      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR \
       -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
-      -DDARWIN_KERNEL_VERSION=16.0.0 \
-      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
+      -DDARWIN_KERNEL_VERSION=16.0.0
 
-bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & #MacOS accepts only seconds
 # Now start building everything we need, in the appropriate order
 pip3 install meson
-cmake --build . --target ext_xml -- -j${CPU_COUNT}
-cmake --build . --target ext_gettext -- -j${CPU_COUNT}
-cmake --build . --target ext_bison -- -j${CPU_COUNT} # required by solid
-cmake --build . --target ext_flex -- -j${CPU_COUNT}
-cmake --build . --target ext_xslt -- -j${CPU_COUNT}
-cmake --build . --target ext_png -- -j${CPU_COUNT}
-cmake --build . --target ext_jpeg -- -j${CPU_COUNT} #this causes build failures in Qt 5.10
-# cmake --build . --target ext_qt -- -j${CPU_COUNT}
-cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
+
+cmake --build . --target ext_glib -- -j${CPU_COUNT}
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Core.dydl ]; then
+  if [ -v TRAVIS ]; then bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
+fi
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Qml.dydl ]; then
+  if [ -v TRAVIS ]; then bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
+fi
+
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
-cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
+cmake --build . --target ext_qtspeech -- -j${CPU_COUNT}
 cmake --build . --target ext_qtmacextras -- -j${CPU_COUNT}
-cmake --build . --target ext_qtwebchannel -- -j${CPU_COUNT}
+
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
-cmake --build . --target ext_boost -- -j${CPU_COUNT}
-cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
+cmake --build . --target ext_bison -- -j${CPU_COUNT} # required by solid
+
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
-cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
+cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+
 cmake --build . --target ext_gmp -- -j${CPU_COUNT}
-# cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
-# cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
-# cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
+ cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
+ 
+ cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
+ cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
 # cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
-# cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
-# cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
-# cmake --build . --target ext_gpgme -- -j${CPU_COUNT}
-# cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
-# cmake --build . --target ext_ofx -- -j${CPU_COUNT}
-# cmake --build . --target ext_ical -- -j${CPU_COUNT}
+ cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
+ cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
+ cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
+ cmake --build . --target ext_ofx -- -j${CPU_COUNT}
+ cmake --build . --target ext_ical -- -j${CPU_COUNT}
+
+cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
