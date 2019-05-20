@@ -3,7 +3,7 @@
 
 if(MINGW)
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/help-setting-up-qt5.diff)
-  set(platform_specific_options 
+  set(platform_specific_options
     --with-plugin-searchdir=bin/gwenhywfar
     --with-data-searchdir=bin/data/gwenhywfar
     --with-sysdata-searchdir=bin/data
@@ -11,7 +11,7 @@ if(MINGW)
   )
 elseif(APPLE)
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/gwenhywfar-4.20.0-20180503.diff.txt)
-  set(platform_specific_options 
+  set(platform_specific_options
     --with-plugin-searchdir=PlugIns/gwenhywfar
     --with-data-searchdir=Resources/gwenhywfar
     --with-sysdata-searchdir=Resources
@@ -33,6 +33,7 @@ ExternalProject_Add(
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
+    $<$<PLATFORM_ID:Windows>:--disable-binreloc> # otherwise "undefined reference to `S_ISLNK'" on MS WIndows
     --enable-local-install
     --disable-debug
     --disable-warnings

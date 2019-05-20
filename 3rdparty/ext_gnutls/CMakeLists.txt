@@ -13,21 +13,21 @@ ExternalProject_Add(
     --disable-doc
     --disable-manpages
     --disable-tools
-    --enable-cxx
+    --disable-cxx
 #    --disable-tls13-interop
-#    --disable-ssl3-support
-#    --disable-ssl2-support
-#    --disable-dtls-srtp-support
-#    --disable-alpn-support
-#    --disable-heartbeat-support
-#    --disable-srp-authentication
-#    --enable-psk-authentication
-#    --enable-anon-authentication
-#    --enable-dhe
-#    --enable-ecdhe
-#    --disable-gost
-#    --disable-cryptodev
-#    --disable-ocsp
+    --disable-ssl3-support
+    --disable-ssl2-support
+    --disable-dtls-srtp-support
+    --disable-alpn-support
+    --disable-heartbeat-support
+    --disable-srp-authentication
+    --disable-psk-authentication # test if ok
+    --disable-anon-authentication # test if ok
+    --enable-dhe
+    --enable-ecdhe
+    --disable-gost
+    --disable-cryptodev
+    --disable-ocsp
     --enable-openssl-compatibility
     --disable-tests
     --disable-fuzzer-target
@@ -38,18 +38,18 @@ ExternalProject_Add(
     --disable-seccomp-tests
     --disable-valgrind-tests
     --disable-full-test-suite
-#    --disable-fips140-mode
-#    --disable-non-suiteb-curves
+    --disable-fips140-mode
+    --disable-non-suiteb-curves
     --disable-libdane
     --disable-guile
     --without-nettle-mini
     --without-included-libtasn1
     --without-included-unistring
-#    --without-idn
+    --without-idn
     --without-p11-kit
-#    --without-tpm
-  --disable-rpath
-  --enable-local-libopts
+    --without-tpm
+    --disable-rpath
+    --enable-local-libopts
     CPPFLAGS=${AT_CPPFLAGS}
     LDFLAGS=${AT_LDFLAGS}
 

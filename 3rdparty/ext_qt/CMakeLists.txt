@@ -13,6 +13,12 @@ elseif(UNIX)
   set(platform_specific_options -xcb)
 endif()
 
+if(APPLE)
+  set(install_suffix /colisionlibs)
+else()
+  set(install_suffix "")
+endif()
+
 ExternalProject_Add(
   ext_qtbase
   ${PROJECT_GLOBAL_PROFILE}
@@ -47,14 +53,31 @@ ExternalProject_Add(
     -system-sqlite
     -system-pcre
     -no-glib
+    -no-animation
+    -no-bearermanagement
+    -no-dnslookup
     -no-dtls
+    -no-ftp
+    -no-gestures
+    -no-localserver
+    -no-movie
+    -no-networkdiskcache
+    -no-networkinterface
+    -no-networkproxy
+    -no-socks5
+    -no-statemachine
+    -no-tabletevent
+    -no-textodfwriter
+    -no-topleveldomain
+    -no-udpsocket
+    -no-xmlstream
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
-    LIBPNG_PREFIX=${CMAKE_INSTALL_PREFIX}
-    LIBJPEG_PREFIX=${CMAKE_INSTALL_PREFIX}
+    LIBPNG_PREFIX=${CMAKE_INSTALL_PREFIX}${install_suffix}
+    LIBJPEG_PREFIX=${CMAKE_INSTALL_PREFIX}${install_suffix}
     DBUS_PREFIX=${CMAKE_INSTALL_PREFIX}
-    SQLITE_PREFIX=${CMAKE_INSTALL_PREFIX}
+    SQLITE_PREFIX=${CMAKE_INSTALL_PREFIX}${install_suffix}
     PCRE2_PREFIX=${CMAKE_INSTALL_PREFIX}
     PSQL_PREFIX=${CMAKE_INSTALL_PREFIX}
     MYSQL_INCDIR=${CMAKE_INSTALL_PREFIX}/include/mariadb

@@ -17,19 +17,22 @@ $DEPS_INSTALL_PREFIX/bin
 function find_needed_libs () {
   echo "Analizing libraries with ldd..." >&2
   local needed_libs=() # input lib_lists founded
+  local libFiles=(${@})
 
-  for libFile in $(find .. -type f \( -name "*.exe" -or -name "*.dll" \)); do
+  for libFile in ${libFiles[@]}; do
     echo ${libFile} >&2
-    local needed_libs+=($(ldd ${libFile} | awk '{print $3}'))
+    needed_libs+=($(ldd ${libFile} | awk '{print $3}'))
   done
 
-  echo ${needed_libs[@]} # return updated list
+  if [ ${#needed_libs[@]} -gt 0 ]; then
+    echo ${needed_libs[@]}
+  fi
 }
 
 function find_missing_libs (){
   echo "Searching for missing libs on deployment folders…" >&2
   local missing_libs=()
-
+  # filter out libraies that are already in the appdir or are system ones
   local needed_libs=($(printf '%s\n' "${@}" |
       sort -u |
       sed '/image-build/d' |
@@ -38,20 +41,22 @@ function find_missing_libs (){
       sed '/SYSTEM32/d' |
       sed '/WinSxS/d'
       ))
-    
+
   for lib in ${needed_libs[@]:0}; do
     for souceLibPath in ${sourceLibPaths[@]}; do
-      if test "${lib:0:${#souceLibPath}}" = "${souceLibPath}"; then
+      if [ "${lib:0:${#souceLibPath}}" == "${souceLibPath}" ]; then
         echo "Adding ${lib##*/} to missing libraries." >&2
-        local missing_libs+=("${lib}")
+        missing_libs+=("${lib}")
         break
       else
         echo "Library from unexpected source ${lib}." >&2
       fi
     done
   done
-  
-  echo ${missing_libs[@]}
+
+  if [ ${#missing_libs[@]} -gt 0 ]; then
+    echo ${missing_libs[@]}
+  fi
 }
 
 function copy_missing_libs () {
@@ -63,14 +68,31 @@ function copy_missing_libs () {
 
 function kmymoney_findmissinglibs() {
   echo "Starting search for missing libraries"
-  needed_libs=($(find_needed_libs))
-  missing_libs=($(find_missing_libs ${needed_libs[@]}))
+  local needed_libs=()
+  local missing_libs=()
+  local missing_libs_partial=()
+  # Must be invoked from bin, otherwise libraries appear as "??? -> ???"
+  cd $IMAGE_BUILD_PREFIX/bin
+  local libFiles=$(find .. -type f \( -name "*.exe" -or -name "*.dll" \))
+  while [ true ]; do
 
-  if test ${#missing_libs[@]} -gt 0; then
-      echo "Found missing libs!"
-      copy_missing_libs ${missing_libs[@]}
+    needed_libs=($(find_needed_libs ${libFiles[@]}))
+    missing_libs_partial=($(find_missing_libs ${needed_libs[@]}))
+    # break only if there is no missing libraries left
+    if [ ${#missing_libs_partial[@]} -eq 0 ]; then
+      break
+    else
+      missing_libs+=(${missing_libs_partial[@]})
+      libFiles=(${missing_libs_partial[@]}) # see if missing libraries also have some missing libraries
+    fi
+  done
+
+  if [ ${#missing_libs[@]} -gt 0 ]; then
+    echo "Found missing libs!"
+    missing_libs=($(printf '%s\n' "${missing_libs[@]}" | sort -u))
+    copy_missing_libs ${missing_libs[@]}
   else
-      echo "No missing libraries found."
+    echo "No missing libraries found."
   fi
 
   echo "Done!"
@@ -126,46 +148,10 @@ cp -r $KMYMONEY_INSTALL_PREFIX $IMAGE_BUILD_PREFIX
 cd $IMAGE_BUILD_PREFIX
 
 echo "Copying libs..."
-cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libpcre* bin
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libpq* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libpq* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libofx* bin
-  cp -v $DEPS_INSTALL_PREFIX/bin/libosp* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libgwen* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libgwen* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libgif* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libgif* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libjpeg* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libjpeg* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libical* ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libical* bin
-fi
-
-if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
-  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
-  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
-  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
-fi
 
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
- cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
+cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
 fi
 
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
@@ -173,16 +159,8 @@ cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicety
 
 mkdir -p bin/data/kf5
 if [ -d $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml ]; then
-  cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
+ cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
 fi
-
-mkdir -p share
-touch share/emptyfile
-for i in gwenhywfar aqbanking ktoblzcheck; do
- if [ -d $DEPS_INSTALL_PREFIX/share/${i} ]; then
-   cp -r $DEPS_INSTALL_PREFIX/share/${i} share
- fi
-done
 
 echo "Copying plugins..."
 cp -r $DEPS_INSTALL_PREFIX/plugins/sqldrivers bin
@@ -190,30 +168,34 @@ mkdir -p bin/kmymoney
 mv -v lib/plugins/kmymoney/* bin/kmymoney
 
 if [ -d lib/plugins/sqldrivers ]; then
- mv -v lib/plugins/sqldrivers/* bin/sqldrivers
+  echo "Copying SQLCipher..."
+  mv -v lib/plugins/sqldrivers/* bin/sqldrivers
 fi
 
 mkdir -p bin/kf5/kio
 cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file.dll bin/kf5/kio
 cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http.dll bin/kf5/kio
 
-mkdir -p lib
-touch lib/emptyfile
-for i in gwenhywfar aqbanking; do
- if [ -d $DEPS_INSTALL_PREFIX/lib/${i} ]; then
-   cp -r $DEPS_INSTALL_PREFIX/lib/${i} lib
- fi
-done
+if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
+  echo "Copying aqbanking and gwenhywfar..."
+  cp -rv $DEPS_INSTALL_PREFIX/share/aqbanking bin/data
+  cp -rv $DEPS_INSTALL_PREFIX/share/gwenhywfar bin/data
+  cp -rv $DEPS_INSTALL_PREFIX/share/ktoblzcheck bin/data
+  mkdir -p bin/aqbanking
+  mkdir -p bin/gwenhywfar
+  cp -rv $DEPS_INSTALL_PREFIX/lib/aqbanking/plugins/35/* bin/aqbanking
+  cp -rv $DEPS_INSTALL_PREFIX/lib/gwenhywfar/plugins/60/* bin/gwenhywfar
+fi
 
 # windeployqt fails without icudt64.dll, so workaround
 cp -fv $DEPS_INSTALL_PREFIX/lib/libicudt64.dll \
-      $DEPS_INSTALL_PREFIX/bin/icudt64.dll
+     $DEPS_INSTALL_PREFIX/bin/icudt64.dll
 windeployqt $IMAGE_BUILD_PREFIX/bin/kmymoney.exe \
-          --verbose=2 \
-          --release \
-          --qmldir=${DEPS_INSTALL_PREFIX}/qml \
-          --no-translations \
-          --compiler-runtime
+         --verbose=2 \
+         --release \
+         --qmldir=${DEPS_INSTALL_PREFIX}/qml \
+         --no-translations \
+         --compiler-runtime
 # Get rid of the workaround
 rm $DEPS_INSTALL_PREFIX/bin/icudt64.dll
 
@@ -221,8 +203,6 @@ rm $DEPS_INSTALL_PREFIX/bin/icudt64.dll
 cd $IMAGE_BUILD_PREFIX
 mv bin/icudt64.dll bin/libicudt64.dll
 
-# Must be invoked from bin, otherwise libraries appear as "??? -> ???"
-cd $IMAGE_BUILD_PREFIX/bin
 kmymoney_findmissinglibs
 
 # Remove redundant files and directories
@@ -240,10 +220,10 @@ KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
 # Also find out the revision of Git we built
 # Then use that to generate a combined name we'll distribute
 if [ -d .git ]; then
- GIT_REVISION=$(git rev-parse --short HEAD)
- export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
+GIT_REVISION=$(git rev-parse --short HEAD)
+export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
 else
- export VERSION=$KMYMONEY_VERSION
+export VERSION=$KMYMONEY_VERSION
 fi
 
 cd $IMAGE_BUILD_PREFIX

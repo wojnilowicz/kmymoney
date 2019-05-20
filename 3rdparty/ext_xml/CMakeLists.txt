@@ -4,12 +4,6 @@ else()
   set(platform_specific_patch "")
 endif()
 
-if(APPLE)
-  set(platform_specific_options --with-schemas --with-xinclude )
-else()
-  set(platform_specific_options --without-schemas --without-xinclude )
-endif()
-
 ExternalProject_Add(
   ext_xml
   ${PROJECT_GLOBAL_PROFILE}
@@ -34,7 +28,8 @@ ExternalProject_Add(
     --without-schematron
     --with-xptr # required by xmlsec1
     --without-modules
-    ${platform_specific_options}
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-schemas>
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-xinclude>
 
   ${CLEANUP_COMMAND}
 

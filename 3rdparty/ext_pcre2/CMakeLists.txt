@@ -25,6 +25,6 @@ ExternalProject_Add(
     --disable-pcre2test-libreadline
     --disable-valgrind
     --disable-coverage
-  
+
   ${CLEANUP_COMMAND}
-)N
+)
