@@ -104,8 +104,6 @@ Section "Core" coreComponentID
   File /a "@{iconFile}"
   SetOutPath "$INSTDIR"
   File /r "bin"
-  File /r "lib"
-  File /r "share"
 
 SectionEnd
 
@@ -113,8 +111,28 @@ SectionGroup "Plugins" pluginComponentID
   Section "QIF" qifComponentID
     SetOutPath "$INSTDIR\bin\kmymoney"
     File /r "qif\plugin\*"
+
     SetOutPath "$INSTDIR\bin\data\kservices5"
     File /r "qif\service\*"
+  SectionEnd
+
+  Section "OFX" ofxComponentID
+    SetOutPath "$INSTDIR\bin\kmymoney"
+    File /r "ofx\plugin\*"
+
+    SetOutPath "$INSTDIR\bin"
+    File /r "ofx\bin\*"
+  SectionEnd
+
+  Section "Online banking" onlineBankingComponentID
+    SetOutPath "$INSTDIR\bin\kmymoney"
+    File /r "onlinebanking\plugin\*"
+
+    SetOutPath "$INSTDIR\bin"
+    File /r "onlinebanking\bin\*"
+
+    SetOutPath "$INSTDIR\bin\data"
+    File /r "onlinebanking\data\*"
   SectionEnd
 SectionGroupEnd
 
@@ -125,12 +143,16 @@ SectionGroupEnd
   LangString coreComponentDescription ${LANG_ENGLISH} "Basic functionality of KMyMoneyNEXT."
   LangString pluginComponentDescription ${LANG_ENGLISH} "Extended functionality of KMyMoneyNEXT."
   LangString qifComponentDescription ${LANG_ENGLISH} "QIF importing and exporting support."
+  LangString ofxComponentDescription ${LANG_ENGLISH} "OFX importing support."
+  LangString onlineBankingComponentDescription ${LANG_ENGLISH} "Sending and receiving personal financial data from the internet."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${coreComponentID} $(coreComponentDescription)
     !insertmacro MUI_DESCRIPTION_TEXT ${pluginComponentID} $(pluginComponentDescription)
     !insertmacro MUI_DESCRIPTION_TEXT ${qifComponentID} $(qifComponentDescription)
+    !insertmacro MUI_DESCRIPTION_TEXT ${ofxComponentID} $(ofxComponentDescription)
+    !insertmacro MUI_DESCRIPTION_TEXT ${onlineBankingComponentID} $(onlineBankingComponentDescription)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------

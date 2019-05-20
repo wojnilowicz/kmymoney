@@ -6,8 +6,8 @@ set(CMAKE_APPLICATIONS_GLOBAL_PROFILE ${CMAKE_GLOBAL_PROFILE}
 #ExternalProject_Add(
 #  ext_akonadi
 #  ${PROJECT_GLOBAL_PROFILE}
-#  URL https://download.kde.org/stable/applications/19.04.0/src/akonadi-19.04.0.tar.xz
-#  URL_MD5 28d4caac890840df6e6197c6fa443dc2
+#  URL https://download.kde.org/stable/applications/19.04.1/src/akonadi-19.04.1.tar.xz
+#  URL_MD5 d41d8cd98f00b204e9800998ecf8427e
 
 #  CMAKE_ARGS ${CMAKE_APPLICATIONS_GLOBAL_PROFILE}
 #  ${CLEANUP_COMMAND}
@@ -18,8 +18,8 @@ set(CMAKE_APPLICATIONS_GLOBAL_PROFILE ${CMAKE_GLOBAL_PROFILE}
 ExternalProject_Add(
   ext_kpimtextedit
   ${PROJECT_GLOBAL_PROFILE}
-  URL https://download.kde.org/stable/applications/19.04.0/src/kpimtextedit-19.04.0.tar.xz
-  URL_MD5 13199f2e20b3686d35cde3e5139f6731
+  URL https://download.kde.org/stable/applications/19.04.1/src/kpimtextedit-19.04.1.tar.xz
+  URL_MD5 0f49b6caf016bbd2a7b3ccb0b70670f0
 
   CMAKE_ARGS ${CMAKE_APPLICATIONS_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
@@ -30,8 +30,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kidentitymanagement
   ${PROJECT_GLOBAL_PROFILE}
-  URL https://download.kde.org/stable/applications/19.04.0/src/kidentitymanagement-19.04.0.tar.xz
-  URL_MD5 e3ed4155f6c4e5a700e104dd7b0556f4
+  URL https://download.kde.org/stable/applications/19.04.1/src/kidentitymanagement-19.04.1.tar.xz
+  URL_MD5 d5459c53182ee744bbc55f531d1c2082
 
   CMAKE_ARGS ${CMAKE_APPLICATIONS_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
@@ -42,8 +42,8 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_kcontacts
   ${PROJECT_GLOBAL_PROFILE}
-  URL https://download.kde.org/stable/applications/19.04.0/src/kcontacts-19.04.0.tar.xz
-  URL_MD5 2b347429c3b49749bed2df411ebd0e65
+  URL https://download.kde.org/stable/applications/19.04.1/src/kcontacts-19.04.1.tar.xz
+  URL_MD5 e7c766c8a166e73152e5b71b18c74c34
 
   CMAKE_ARGS ${CMAKE_APPLICATIONS_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}

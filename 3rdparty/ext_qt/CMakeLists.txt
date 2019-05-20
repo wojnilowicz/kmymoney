@@ -36,6 +36,7 @@ ExternalProject_Add(
     -confirm-license
     -verbose
     -release
+    -strip
     -shared
     -no-static
     -nomake examples
@@ -53,24 +54,24 @@ ExternalProject_Add(
     -system-sqlite
     -system-pcre
     -no-glib
-    -no-animation
-    -no-bearermanagement
-    -no-dnslookup
     -no-dtls
-    -no-ftp
-    -no-gestures
-    -no-localserver
-    -no-movie
-    -no-networkdiskcache
-    -no-networkinterface
-    -no-networkproxy
-    -no-socks5
-    -no-statemachine
-    -no-tabletevent
-    -no-textodfwriter
-    -no-topleveldomain
-    -no-udpsocket
-    -no-xmlstream
+    -no-feature-animation
+    -no-feature-bearermanagement
+    -no-feature-dnslookup
+    -no-feature-ftp
+    -no-feature-gestures
+    -no-feature-localserver
+    -no-feature-movie
+    -no-feature-networkdiskcache
+    -no-feature-networkinterface
+    -no-feature-networkproxy
+    -no-feature-socks5
+    -no-feature-statemachine
+    -no-feature-tabletevent
+    -no-feature-textodfwriter
+    -no-feature-topleveldomain
+    -no-feature-udpsocket
+    -no-feature-xmlstream
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -81,7 +82,7 @@ ExternalProject_Add(
     PCRE2_PREFIX=${CMAKE_INSTALL_PREFIX}
     PSQL_PREFIX=${CMAKE_INSTALL_PREFIX}
     MYSQL_INCDIR=${CMAKE_INSTALL_PREFIX}/include/mariadb
-    MYSQL_LIBDIR=${CMAKE_INSTALL_PREFIX}
+    MYSQL_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
     MYSQL_LIBS="-lmariadb" # mingw used  MYSQL_LIBS="-llibmariadb" but MacOS fails on this
     ${platform_specific_options}
 

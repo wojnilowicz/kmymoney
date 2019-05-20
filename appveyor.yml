@@ -1,0 +1,20 @@
+version: '{build}'
+
+branches:
+  only:
+    - travis-builds
+  except:
+    - /continuous.*/
+
+os: Visual Studio 2015
+
+cache:
+  - c:\deps-build
+  - c:\deps-install
+
+build: off
+
+install:
+  - ps: Write-Host "Hello world"
+  #- ps: Remove-Item "C:/deps-build/ext_frameworks" -Force  -Recurse -ErrorAction SilentlyContinue
+  - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\build-from-ci.ps1 50 "/c" "%APPVEYOR_BUILD_FOLDER%"

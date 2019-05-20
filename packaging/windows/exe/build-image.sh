@@ -102,10 +102,50 @@ createNSIS () {
   cd ${IMAGE_BUILD_PREFIX}
 
   # Extract KMymoney's components
+  # QIF
   mkdir -p qif/plugin
-  mv bin/kmymoney/*qif* qif/plugin
   mkdir -p qif/service
-  mv bin/data/kservices5/*qif* qif/service
+
+  if [ -f bin/kmymoney/qifexporter.dll ]; then
+    mv bin/kmymoney/*qif* qif/plugin
+    mv bin/data/kservices5/*qif* qif/service
+  fi
+
+  # QFX
+  mkdir -p ofx/plugin
+  mkdir -p ofx/bin
+
+  if [ -f bin/kmymoney/ofximporter.dll ]; then
+    mv bin/kmymoney/ofx* ofx/plugin
+    mv bin/libofx* ofx/bin
+    mv bin/libosp* ofx/bin
+  fi
+
+  # Online banking
+  mkdir -p onlinebanking/plugin
+  mkdir -p onlinebanking/bin
+  mkdir -p onlinebanking/data
+
+  if [ -d bin/aqbanking ]; then
+    mv bin/kmymoney/kbanking* onlinebanking/plugin
+    mv bin/kmymoney/onlinejoboutboxview* onlinebanking/plugin
+
+    mv bin/aqbanking onlinebanking/bin
+    mv bin/gwenhywfar onlinebanking/bin
+    mv bin/libaq* onlinebanking/bin
+    mv bin/libgwen* onlinebanking/bin
+    mv bin/libgnutls* onlinebanking/bin
+    mv bin/libtasn* onlinebanking/bin
+    mv bin/libunistring* onlinebanking/bin
+    mv bin/libxmlsec* onlinebanking/bin
+    mv bin/libnettle* onlinebanking/bin
+    mv bin/libhogweed* onlinebanking/bin
+
+    mv bin/data/aqbanking onlinebanking/data
+    mv bin/data/gwenhywfar onlinebanking/data
+    mv bin/data/kbanking onlinebanking/data
+    mv bin/data/ktoblzcheck onlinebanking/data
+  fi
 
   cp -v $KMYMONEY_SOURCES/packaging/windows/exe/NullsoftInstaller.nsi .
   cp -v $KMYMONEY_SOURCES/COPYING .
@@ -151,7 +191,7 @@ echo "Copying libs..."
 
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
-cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
+  cp -v $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc bin/data/icontheme.rcc
 fi
 
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
@@ -159,7 +199,7 @@ cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicety
 
 mkdir -p bin/data/kf5
 if [ -d $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml ]; then
- cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
+  cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
 fi
 
 echo "Copying plugins..."
@@ -189,13 +229,13 @@ fi
 
 # windeployqt fails without icudt64.dll, so workaround
 cp -fv $DEPS_INSTALL_PREFIX/lib/libicudt64.dll \
-     $DEPS_INSTALL_PREFIX/bin/icudt64.dll
+    $DEPS_INSTALL_PREFIX/bin/icudt64.dll
 windeployqt $IMAGE_BUILD_PREFIX/bin/kmymoney.exe \
-         --verbose=2 \
-         --release \
-         --qmldir=${DEPS_INSTALL_PREFIX}/qml \
-         --no-translations \
-         --compiler-runtime
+  --verbose=2 \
+  --release \
+  --qmldir=${DEPS_INSTALL_PREFIX}/qml \
+  --no-translations \
+  --compiler-runtime
 # Get rid of the workaround
 rm $DEPS_INSTALL_PREFIX/bin/icudt64.dll
 

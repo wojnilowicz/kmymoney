@@ -31,7 +31,7 @@ ExternalProject_Add(
 if(MINGW)
   ExternalProject_Add_Step(
     ext_mariadb fixLibrariesOnMsys
-    COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll ${CMAKE_INSTALL_PREFIX}/bin/mariadb.dll
+    COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll ${CMAKE_INSTALL_PREFIX}/bin/libmariadb.dll
     COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/lib/liblibmariadb.dll.a ${CMAKE_INSTALL_PREFIX}/lib/libmariadb.dll.a
     DEPENDEES install
     WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}
