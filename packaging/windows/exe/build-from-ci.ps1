@@ -44,6 +44,7 @@ if ($Env:TRAVIS) {
   $Env:UPLOADTOOL_SUFFIX = "windows-appveyor"
 
   bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja"
+  bash -c "pip3 install meson"
 }
 
 foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
