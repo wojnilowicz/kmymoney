@@ -63,7 +63,7 @@ ExternalProject_Add(
     -no-feature-localserver
     -no-feature-movie
     -no-feature-networkdiskcache
-    -no-feature-networkinterface
+#     -no-feature-networkinterface # otherwise 'QNetworkInterface' does not name a type in qnativesocketengine_win.cpp
     -no-feature-networkproxy
     -no-feature-socks5
     -no-feature-statemachine
