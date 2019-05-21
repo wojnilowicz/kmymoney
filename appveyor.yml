@@ -17,5 +17,5 @@ build: off
 install:
   - ps: Write-Host "Hello world"
   #- ps: Remove-Item "C:/deps-build/ext_frameworks" -Force  -Recurse -ErrorAction SilentlyContinue
-  #- ps: Remove-Item "C:/deps-build/ext_qt" -Force  -Recurse -ErrorAction SilentlyContinue
+  - ps: Remove-Item "C:/deps-build/ext_qt" -Force  -Recurse -ErrorAction SilentlyContinue
   - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\build-from-ci.ps1 50 "/c" "%APPVEYOR_BUILD_FOLDER%"

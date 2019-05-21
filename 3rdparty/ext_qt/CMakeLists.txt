@@ -67,7 +67,7 @@ ExternalProject_Add(
     -no-feature-networkproxy
     -no-feature-socks5
     -no-feature-statemachine
-    -no-feature-tabletevent
+#     -no-feature-tabletevent # KItemViews reports "incomplete type 'class QTabletEvent'"
     -no-feature-textodfwriter
     -no-feature-topleveldomain
     -no-feature-udpsocket
