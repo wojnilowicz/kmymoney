@@ -61,7 +61,7 @@ ExternalProject_Add(
     -no-feature-ftp
     -no-feature-gestures
     -no-feature-localserver
-    -no-feature-movie
+#     -no-feature-movie # KF5WidgetsAddons requires that
     -no-feature-networkdiskcache
 #     -no-feature-networkinterface # otherwise 'QNetworkInterface' does not name a type in qnativesocketengine_win.cpp
     -no-feature-networkproxy
