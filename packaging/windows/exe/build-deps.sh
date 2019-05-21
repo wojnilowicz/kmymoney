@@ -58,23 +58,22 @@ cmake --build . --target ext_openssl -- -j${CPU_COUNT}
 cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
-  bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
+  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
-  bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
+  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
-  bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" &
+  if [ -v TRAVIS ]; then bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 fi
 
 cmake --build . --target ext_qtspeech
-
-# cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
+cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs and KHtml
@@ -83,14 +82,9 @@ cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSyste
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
-# cmake --build . --target ext_khtml -- -j${CPU_COUNT}
-cmake --build . --target ext_kinit -- -j${CPU_COUNT}
-cmake --build . --target ext_kdelibs4support -- -j${CPU_COUNT}
+cmake --build . --target ext_khtml -- -j${CPU_COUNT}
 
-
-cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
-
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 # cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}

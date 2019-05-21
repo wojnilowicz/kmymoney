@@ -71,7 +71,8 @@ ExternalProject_Add(
     -no-feature-textodfwriter
     -no-feature-topleveldomain
     -no-feature-udpsocket
-    -no-feature-xmlstream
+    -no-feature-xmlstream # qvkgen needs QXmlStreamReader
+    -no-feature-vulkan
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
