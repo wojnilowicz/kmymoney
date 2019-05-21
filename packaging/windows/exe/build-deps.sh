@@ -72,7 +72,7 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
   cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 fi
 
-cmake --build . --target ext_qtspeech
+cmake --build . --target ext_qtspeech  -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 

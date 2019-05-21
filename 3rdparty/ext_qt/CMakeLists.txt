@@ -22,14 +22,12 @@ endif()
 ExternalProject_Add(
   ext_qtbase
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short1" # workaround for long names on MS Windows and Travis CI cacher
 
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
   URL_MD5 fe47852113fc27581dbc0cf71644d6f1
   PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
-              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-qvkgen.diff
               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/search-for-release-dbus.diff
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
@@ -157,7 +155,6 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtdeclarative
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short2" # workaround for long names on MS Windows and Travis CI cacher
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtdeclarative-everywhere-src-5.12.3.tar.xz
   URL_MD5 2f8e8a30507adbec8f4c10fa56b06027
 
@@ -218,7 +215,6 @@ ExternalProject_Add(
 ExternalProject_Add(
   ext_qtwebengine
   ${PROJECT_GLOBAL_PROFILE}
-  DOWNLOAD_NAME "short3" # workaround for long names on MS Windows and Travis CI cacher
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtwebengine-everywhere-src-5.12.3.tar.xz
   URL_MD5 9841599435095b16f12870bd48ef5342
 

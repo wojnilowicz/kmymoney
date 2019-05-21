@@ -35,7 +35,7 @@ if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Qml.so ]; then
 fi
 
 cmake --build . --target ext_qttools -- -j${CPU_COUNT}
-cmake --build . --target ext_qtspeech
+cmake --build . --target ext_qtspeech -- -j${CPU_COUNT}
 cmake --build . --target ext_qtx11extras -- -j${CPU_COUNT}
 
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
