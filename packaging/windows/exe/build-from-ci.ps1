@@ -89,9 +89,12 @@ if ($BUILD_STAGE -eq "image" -and -not (Test-Path $TIMEDOUT_FILENAME -PathType L
   } elseif ($Env:APPVEYOR) {
     bash -c "bash ${KMYMONEY_SOURCES}/packaging/windows/exe/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   }
+} else {
+  Write-Host "Image will not be sent."
 }
 
-if ($Env:TRAVIS) {
+if ($Env:TRAVIS -or $Env:APPVEYOR) {
+  Write-Host "Stoping all build processes."
   Stop-Process -Name make -ErrorAction SilentlyContinue
   Stop-Process -Name ninja -ErrorAction SilentlyContinue
   $cmake = Get-Process cmake -ErrorAction SilentlyContinue
