@@ -1,0 +1,12 @@
+diff -ruN qtbase-everywhere-src-5.12.3.orig/configure.json qtbase-everywhere-src-5.12.3/configure.json
+--- qtbase-everywhere-src-5.12.3.orig/configure.json	2019-04-09 11:51:26.000000000 +0200
++++ qtbase-everywhere-src-5.12.3/configure.json	2019-05-21 16:04:44.526700444 +0200
+@@ -177,7 +177,7 @@
+                 {
+                     "libs": "",
+                     "builds": {
+-                        "debug": "-ldbus-1d",
++                        "debug": "-ldbus-1",
+                         "release": "-ldbus-1"
+                     },
+                     "condition": "config.win32"
