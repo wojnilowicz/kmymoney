@@ -55,7 +55,7 @@ ExternalProject_Add(
     -system-pcre
     -no-glib
     -no-dtls
-    -no-feature-animation
+#     -no-feature-animation # KF5Completion requires that
     -no-feature-bearermanagement
     -no-feature-dnslookup
     -no-feature-ftp
