@@ -99,9 +99,9 @@ if ($Env:TRAVIS -or $Env:APPVEYOR) {
   Stop-Process -Name ninja -ErrorAction SilentlyContinue
   $cmake = Get-Process cmake -ErrorAction SilentlyContinue
   if ($cmake) {
+    Write-Host "Waiting for cmake to stop."
     $cmake | Wait-Process -Timeout 60 # CMake might be unpacking, so wait for it to avoid caching issues
-    if (!$cmake.HasExited) {
-      $cmake | Stop-Process -Force
-    }
+    Write-Host "Stoping cmake."
+    Stop-Process -Name cmake -ErrorAction SilentlyContinue
   }
 }
