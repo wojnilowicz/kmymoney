@@ -55,10 +55,6 @@ ExternalProject_Add(
     -system-pcre
     -no-glib
     -no-dtls
-    -no-feature-bearermanagement
-    -no-feature-ftp
-    -no-feature-textodfwriter
-    -no-feature-vulkan
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
