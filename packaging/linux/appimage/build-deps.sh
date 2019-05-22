@@ -20,7 +20,6 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-bash -c "for i in {1..5};do sleep 9m; echo \"Still building\"; done;" &
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 
