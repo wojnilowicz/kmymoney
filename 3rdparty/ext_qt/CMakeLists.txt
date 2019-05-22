@@ -55,23 +55,9 @@ ExternalProject_Add(
     -system-pcre
     -no-glib
     -no-dtls
-#     -no-feature-animation # KF5Completion requires that
     -no-feature-bearermanagement
-    -no-feature-dnslookup
     -no-feature-ftp
-    -no-feature-gestures
-    -no-feature-localserver
-#     -no-feature-movie # KF5WidgetsAddons requires that
-    -no-feature-networkdiskcache
-#     -no-feature-networkinterface # otherwise 'QNetworkInterface' does not name a type in qnativesocketengine_win.cpp
-    -no-feature-networkproxy
-    -no-feature-socks5
-    -no-feature-statemachine
-#     -no-feature-tabletevent # KItemViews reports "incomplete type 'class QTabletEvent'"
     -no-feature-textodfwriter
-    -no-feature-topleveldomain
-    -no-feature-udpsocket
-#     -no-feature-xmlstream # qvkgen and qdbusxmlparser needs QXmlStreamReader
     -no-feature-vulkan
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
