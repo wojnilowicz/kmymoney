@@ -26,13 +26,12 @@ matrix:
         ccache: false
         timeout: 1000
         directories:
-          - /c/workaround
+          - $TRAVIS_BUILD_DIR/workaround
 
       before_install:
         - START_TIMESTAMP=$(date +%s)
         - MAX_TIME=50
-        - sudo mkdir -p /c
-        - cd /c
+        - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         #- rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
@@ -42,7 +41,7 @@ matrix:
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
-          if [ ! -f "/c/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
@@ -60,35 +59,35 @@ matrix:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       script:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       after_success:
         - |
           REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-            cd /c/downloads
+            cd $TRAVIS_BUILD_DIR/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="linux"
-            bash upload.sh /c/image-build/*.AppImage*
+            bash upload.sh $TRAVIS_BUILD_DIR/image-build/*.AppImage*
           fi
 
       before_cache:
-        - find /c/deps-install \( -type f \( -name "*.so" -o -executable \) \) -exec strip {} \+
-        - cd /c
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f \( -name "*.so" -o -executable \) \) -exec strip {} \+
+        - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install
             echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
@@ -103,13 +102,12 @@ matrix:
       cache:
         timeout: 1000
         directories:
-          - /c/workaround
+          - $TRAVIS_BUILD_DIR/workaround
 
       before_install:
         - START_TIMESTAMP=$(date +%s)
         - MAX_TIME=50
-        - sudo mkdir -p /c
-        - cd /c
+        - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         #- rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
@@ -119,7 +117,7 @@ matrix:
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
-          if [ ! -f "/c/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
@@ -129,34 +127,34 @@ matrix:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       script:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       after_success:
         - |
           REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-            cd /c/downloads
+            cd $TRAVIS_BUILD_DIR/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="osx"
-            bash upload.sh /c/image-build/*.dmg*
+            bash upload.sh $TRAVIS_BUILD_DIR/image-build/*.dmg*
           fi
 
       before_cache:
-        - find /c/deps-install \( -type f \( -name "*.dylib" -o -name "*.so" -o -executable \) \) -exec strip {} \+
-        - cd /c
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f \( -name "*.dylib" -o -name "*.so" -o -executable \) \) -exec strip {} \+
+        - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install
             echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
