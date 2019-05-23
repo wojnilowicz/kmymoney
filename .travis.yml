@@ -59,27 +59,27 @@ matrix:
         - CONTINUE_WITH_NEXT_STEP=true
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       script:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       after_success:
         - |
           REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
             cd /c/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="linux"
@@ -128,26 +128,26 @@ matrix:
         - CONTINUE_WITH_NEXT_STEP=true
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       script:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image /c $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       after_success:
         - |
           REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} -eq true ]; then
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
             cd /c/downloads
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="osx"
