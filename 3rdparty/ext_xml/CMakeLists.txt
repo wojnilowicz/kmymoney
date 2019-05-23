@@ -19,6 +19,7 @@ ExternalProject_Add(
     --without-catalog # required to be disabled by QWebEngine
     --without-debug
     --without-docbook
+    --without-iconv
     --with-icu
     --without-legacy
     --with-output # required by xmlsec1

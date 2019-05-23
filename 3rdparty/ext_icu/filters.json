@@ -2,17 +2,65 @@
   "localeFilter": {
     "filterType": "locale",
     "includeChildren": false,
+    "includeScripts": false,
     "whitelist": [
-      "en_US",
-      "en_GB"
+      "en"
     ]
   },
   "featureFilters": {
+    "brkitr_rules": {
+      "filterType": "exclude"
+    },
+    "brkitr_dictionaries": {
+      "filterType": "exclude"
+    },
+    "brkitr_tree": {
+      "filterType": "exclude"
+    },
+    "coll_ucadata": {
+      "filterType": "exclude"
+    },
+    "curr_tree": {
+      "filterType": "regex",
+      "whitelist": [
+        "^\\D\\D$"
+      ]
+    },
+    "confusables": {
+      "filterType": "exclude"
+    },
+    "lang_tree": {
+      "filterType": "exclude"
+    },
+    "normalization": {
+      "filterType": "exclude"
+    },
+    "region_tree": {
+      "filterType": "exclude"
+    },
+    "rbnf_tree": {
+      "filterType": "exclude"
+    },
+    "stringprep": {
+      "filterType": "exclude"
+    },
+    "translit": {
+      "filterType": "exclude"
+    },
+    "unames": {
+      "filterType": "exclude"
+    },
+    "ulayout": {
+      "filterType": "exclude"
+    },
     "unit_tree": {
       "filterType": "exclude"
     },
-    "coll_tree": {
-      "filterType": "exclude"
+    "locales_tree": {
+      "filterType": "regex",
+      "whitelist": [
+        "^\\D\\D$"
+      ]
     }
   }
 }

@@ -42,11 +42,6 @@ mkdir -p $DOWNLOADS_DIR
 export LC_ALL=en_US.UTF-8
 export LANG=en_us.UTF-8
 
-# Otherwise e.g. libQt5Core.so shows that it cannot find ICU libs
-export LD_LIBRARY_PATH=\
-$DEPS_INSTALL_PREFIX/lib:\
-${LD_LIBRARY_PATH:-}
-
 export PATH=\
 $DEPS_INSTALL_PREFIX/bin:\
 ${PATH:-}

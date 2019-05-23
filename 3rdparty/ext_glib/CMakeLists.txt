@@ -12,11 +12,14 @@ ExternalProject_Add(
                           --buildtype=release
                           -Dprefix=${CMAKE_INSTALL_PREFIX}
                           -Dselinux=disabled
+                          -Dxattr=false
+                          -Dlibmount=false
+                          -Dinternal_pcre=false
                           -Dman=false
                           -Dgtk_doc=false
                           -Dinstalled_tests=false
                           -Dnls=disabled
-                          -Dinternal_pcre=false
+                          $<$<PLATFORM_ID:Linux>:--libdir=lib>
 
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ninja -C _build

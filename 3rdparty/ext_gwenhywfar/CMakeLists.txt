@@ -32,7 +32,13 @@ ExternalProject_Add(
   ${platform_specific_patch}
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    ${AT_GLOBAL_PROFILE}
+    --prefix=${UNIX_INSTALL_PREFIX}
+    --build=${AT_SYSTEM_TYPE}
+    $<$<NOT:$<PLATFORM_ID:Linux>>:--host=${AT_SYSTEM_TYPE}>
+#     --host=${AT_SYSTEM_TYPE}
+    --disable-static
+    --enable-shared
+    --enable-silent-rules
     $<$<PLATFORM_ID:Windows>:--disable-binreloc> # otherwise "undefined reference to `S_ISLNK'" on MS WIndows
     --enable-local-install
     --disable-debug

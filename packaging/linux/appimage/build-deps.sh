@@ -21,10 +21,17 @@ cmake -G"Unix Makefiles" \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --target ext_iconv -- -j${CPU_COUNT}
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
+  if [ -v TRAVIS ]; then sudo apt-get install -qq -y python3-pip; pip3 install meson; fi;
+  cmake --build . --target ext_glib -- -j${CPU_COUNT}
+fi
+
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then
   if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+  if [ -v TRAVIS ]; then sudo apt-get install -qq -y libgl1-mesa-dev; fi;
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
@@ -45,8 +52,6 @@ cmake --build . --target ext_khtml -- -j${CPU_COUNT}
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
-# cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
-# cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
 cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
 cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}

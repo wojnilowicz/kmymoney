@@ -1,10 +1,12 @@
 # --disable-nls won't build libintl
 
 if(MINGW)
-  # msys2 and linux have gettext tools, so build library only
+  # msys2  has gettext tools, so build library only
   set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-tools.diff)
+  set(platform_specific_dependencies "")
 else()
   set(platform_specific_patch "")
+  set(platform_specific_dependencies ext_glib ext_xml)
 endif()
 
 ExternalProject_Add(
@@ -31,6 +33,5 @@ ExternalProject_Add(
     --with-included-gettext
 
   ${CLEANUP_COMMAND}
-
-  DEPENDS ext_glib
+    DEPENDS ${platform_specific_dependencies}
 )

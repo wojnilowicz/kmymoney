@@ -79,7 +79,7 @@ ExternalProject_Add(
   URL_MD5 8d386da9f2e3a64018b979a8a0512a18
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
   ${CLEANUP_COMMAND}
-  DEPENDS ext_extra_cmake_modules
+  DEPENDS ext_extra_cmake_modules ext_xz
 )
 
 ExternalProject_Add(

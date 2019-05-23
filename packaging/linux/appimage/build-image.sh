@@ -15,26 +15,42 @@ export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 # Now we can get the process started!
 #
 
-# Step 0: place the translations where ki18n and Qt look for them
-if [ -d $KMYMONEY_INSTALL_PREFIX/share/locale ] ; then
-    mv $KMYMONEY_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
+echo "Copying libs..."
+
+echo "Copying share..."
+rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/kcm* $KMYMONEY_INSTALL_PREFIX/share/kservicetypes5
+cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/share
+
+echo "Copying plugins..."
+mkdir -p $PLUGINS/kf5/kio
+cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file* $PLUGINS/kf5/kio
+cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http* $PLUGINS/kf5/kio
+rsync -prul $DEPS_INSTALL_PREFIX/plugins/sqldrivers $PLUGINS
+
+if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
+  echo "Copying aqbanking and gwenhywfar..."
+  rsync -prul $DEPS_INSTALL_PREFIX/share/aqbanking $KMYMONEY_INSTALL_PREFIX/share
+  rsync -prul $DEPS_INSTALL_PREFIX/share/gwenhywfar $KMYMONEY_INSTALL_PREFIX/share
+  rsync -prul $DEPS_INSTALL_PREFIX/share/ktoblzcheck $KMYMONEY_INSTALL_PREFIX/share
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/gwenhywfar/plugins/60/* $PLUGINS/gwenhywfar
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/aqbanking/plugins/35/* $PLUGINS/aqbanking
 fi
 
-# Step 1: Copy over all the resources provided by dependencies that we need
-cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
-cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/share
-cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/share
-if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
-  cp -r $DEPS_INSTALL_PREFIX/translations $KMYMONEY_INSTALL_PREFIX/
-else
-  echo "Warning: $DEPS_INSTALL_PREFIX/translations does not exist."
-fi
 
-if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
-  cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/lib
-else
-  echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
-fi
+# cp -r $DEPS_INSTALL_PREFIX/share/locale $KMYMONEY_INSTALL_PREFIX/share/kmymoney
+# cp -r $DEPS_INSTALL_PREFIX/share/kf5 $KMYMONEY_INSTALL_PREFIX/share
+# cp -r $DEPS_INSTALL_PREFIX/share/mime $KMYMONEY_INSTALL_PREFIX/share
+# if [ -d $DEPS_INSTALL_PREFIX/translations ] ; then
+#   cp -r $DEPS_INSTALL_PREFIX/translations $KMYMONEY_INSTALL_PREFIX/
+# else
+#   echo "Warning: $DEPS_INSTALL_PREFIX/translations does not exist."
+# fi
+
+# if [ -d $DEPS_INSTALL_PREFIX/openssl/lib ] ; then
+#   cp -r $DEPS_INSTALL_PREFIX/openssl/lib/*  $KMYMONEY_INSTALL_PREFIX/lib
+# else
+#   echo "Warning: $DEPS_INSTALL_PREFIX/openssl/lib does not exist."
+# fi
 
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages

@@ -7,10 +7,15 @@
 
 if (APPLE)
   set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
+                                               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
+        )
 elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
+  set(platform_specific_patch "")
 elseif(UNIX)
   set(platform_specific_options -xcb)
+  set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs-linux.diff)
 endif()
 
 if(APPLE)
@@ -25,10 +30,9 @@ ExternalProject_Add(
 
   URL https://download.qt.io/archive/qt/5.12/5.12.3/submodules/qtbase-everywhere-src-5.12.3.tar.xz
   URL_MD5 fe47852113fc27581dbc0cf71644d6f1
-  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
-              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/search-for-release-dbus.diff
               COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qdbus-manager-quit-5.7.patch
-              COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/search-for-release-dbus.diff
+              ${platform_specific_patch}
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     -prefix ${CMAKE_INSTALL_PREFIX}

@@ -39,14 +39,13 @@ mkdir -p $DOWNLOADS_DIR
 
 # qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
 # That's not always the case, so make sure it is
-export LC_ALL=en_US.UTF-8
-export LANG=en_us.UTF-8
+# export LC_ALL=en_US.UTF-8
+# export LANG=en_us.UTF-8
 
-# Setup variables needed to help everything find what we build
-# export LD_LIBRARY_PATH=\
-# $DEPS_INSTALL_PREFIX/lib:\
-# $DEPS_INSTALL_PREFIX/lib/x86_64-linux-gnu:
-# ${LD_LIBRARY_PATH:-}
+# Otherwise e.g. libQt5Core.so shows that it cannot find ICU libs
+export LD_LIBRARY_PATH=\
+$DEPS_INSTALL_PREFIX/lib:\
+${LD_LIBRARY_PATH:-}
 
 export PATH=\
 $DEPS_INSTALL_PREFIX/bin:\
@@ -60,9 +59,9 @@ ${PKG_CONFIG_PATH:-}
 export CPU_COUNT=`grep processor /proc/cpuinfo | wc -l`
 
 if [ $BUILD_TYPE == "deps" ];then
-  $KMYMONEY_SOURCES/packaging/linux/appimage/build-deps.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/appimage/build-deps.sh
 elif [ $BUILD_TYPE == "kmymoney" ];then
-  $KMYMONEY_SOURCES/packaging/linux/appimage/build-kmymoney.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/appimage/build-kmymoney.sh
 elif [ $BUILD_TYPE == "image" ];then
-  $KMYMONEY_SOURCES/packaging/linux/appimage/build-image.sh
+  sh $KMYMONEY_SOURCES/packaging/linux/appimage/build-image.sh
 fi
