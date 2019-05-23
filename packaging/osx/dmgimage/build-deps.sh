@@ -42,12 +42,12 @@ cmake --build . --target ext_glib -- -j${CPU_COUNT}
 cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Core.dydl ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Qml.dydl ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..5};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 
@@ -65,7 +65,7 @@ cmake --build . --target ext_khtml -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gmp -- -j${CPU_COUNT}
  cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
- 
+
  cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
  cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 # cmake --build . --target ext_akonadi -- -j${CPU_COUNT}

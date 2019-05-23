@@ -12,8 +12,8 @@ ExternalProject_Add(
                           --buildtype=release
                           -Dprefix=${CMAKE_INSTALL_PREFIX}
                           -Dselinux=disabled
-                          -Dxattr=false
-                          -Dlibmount=false
+                          $<$<PLATFORM_ID:Linux>:-Dxattr=false>
+                          $<$<PLATFORM_ID:Linux>:-Dlibmount=false>
                           -Dinternal_pcre=false
                           -Dman=false
                           -Dgtk_doc=false

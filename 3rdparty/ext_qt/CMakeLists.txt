@@ -14,7 +14,7 @@ elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -xcb)
+  set(platform_specific_options -xcb -linux-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs-linux.diff)
 endif()
 
