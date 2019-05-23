@@ -1,3 +1,9 @@
+if(APPLE OR MINGW)
+  set(platform_specific_options "")
+else()
+  set(platform_specific_options -Dxattr=false -Dlibmount=false --libdir=lib)
+endif()
+
 ExternalProject_Add(
   ext_glib
   ${PROJECT_GLOBAL_PROFILE}
@@ -12,14 +18,12 @@ ExternalProject_Add(
                           --buildtype=release
                           -Dprefix=${CMAKE_INSTALL_PREFIX}
                           -Dselinux=disabled
-                          $<$<PLATFORM_ID:Linux>:-Dxattr=false>
-                          $<$<PLATFORM_ID:Linux>:-Dlibmount=false>
                           -Dinternal_pcre=false
                           -Dman=false
                           -Dgtk_doc=false
                           -Dinstalled_tests=false
                           -Dnls=disabled
-                          $<$<PLATFORM_ID:Linux>:--libdir=lib>
+                          ${platform_specific_options}
 
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ninja -C _build
@@ -27,3 +31,7 @@ ExternalProject_Add(
   ${CLEANUP_COMMAND}
   DEPENDS ext_pcre
 )
+
+# $<$<PLATFORM_ID:Linux>:-Dxattr=false>
+# $<$<PLATFORM_ID:Linux>:-Dlibmount=false>
+# $<$<PLATFORM_ID:Linux>:--libdir=lib>

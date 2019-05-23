@@ -26,6 +26,7 @@ if [ ! -f $NINJA_EXECUTABLE ] ||
   rm -fr ninja
 fi
 
+cmake --version
 # Configure the dependencies for building
 cmake -G "Unix Makefiles" \
       $KMYMONEY_SOURCES/3rdparty \

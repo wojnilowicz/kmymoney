@@ -23,7 +23,7 @@ cmake -G"Unix Makefiles" \
 # Now start building everything we need, in the appropriate order
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
-  if [ -v TRAVIS ]; then sudo apt-get install  -y python3-pip; pip3 install meson; fi;
+  if [ -v TRAVIS ]; then sudo apt-get install  -y python3-pip; pip install --upgrade pip; pip3 install meson; fi;
   pip3 install meson
   cmake --build . --target ext_glib -- -j${CPU_COUNT}
 fi
