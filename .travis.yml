@@ -31,6 +31,7 @@ matrix:
       before_install:
         - START_TIMESTAMP=$(date +%s)
         - MAX_TIME=50
+        - mkdir -p /c
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
@@ -107,6 +108,7 @@ matrix:
       before_install:
         - START_TIMESTAMP=$(date +%s)
         - MAX_TIME=50
+        - mkdir -p /c
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
