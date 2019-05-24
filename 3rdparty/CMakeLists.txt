@@ -63,9 +63,9 @@ set(AT_LDFLAGS "-L${UNIX_INSTALL_PREFIX}/lib")
 set(CMAKE_GLOBAL_PROFILE
     -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
     -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
-    $<$<PLATFORM_ID:Linux>:-DCMAKE_INSTALL_LIBDIR=lib>
-    $<$<PLATFORM_ID:Darwin>:-DCMAKE_MACOSX_RPATH=ON>
-    $<$<PLATFORM_ID:Darwin>:-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}>
+    $<$<PLATFORM_ID:Linux>:"-DCMAKE_INSTALL_LIBDIR=lib">
+    $<$<PLATFORM_ID:Darwin>:"-DCMAKE_MACOSX_RPATH=ON">
+    $<$<PLATFORM_ID:Darwin>:"-DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}">
 )
 
 set(AT_GLOBAL_PROFILE
@@ -75,7 +75,7 @@ set(AT_GLOBAL_PROFILE
     --disable-static
     --enable-shared
     --enable-silent-rules
-    $<$<BOOL:$ENV{CI}>:--disable-dependency-tracking>
+    $<$<BOOL:$ENV{CI}>:"--disable-dependency-tracking">
 )
 
 set(PROJECT_GLOBAL_PROFILE
@@ -103,8 +103,6 @@ add_subdirectory(ext_expat)
 add_subdirectory(ext_dbus)
 add_subdirectory(ext_xz)
 add_subdirectory(ext_icu)
-# add_subdirectory(ext_ncurses)
-# add_subdirectory(ext_readline)
 add_subdirectory(ext_xml)
 add_subdirectory(ext_gettext)
 add_subdirectory(ext_png)

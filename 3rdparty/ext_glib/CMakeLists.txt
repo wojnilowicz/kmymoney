@@ -1,7 +1,7 @@
 if(APPLE OR MINGW)
-  set(platform_specific_options "")
+  set(platform_specific_dependencies ext_gettext-runtime)
 else()
-  set(platform_specific_options -Dxattr=false -Dlibmount=false --libdir=lib)
+  set(platform_specific_dependencies "")
 endif()
 
 ExternalProject_Add(
@@ -23,15 +23,14 @@ ExternalProject_Add(
                           -Dgtk_doc=false
                           -Dinstalled_tests=false
                           -Dnls=disabled
-                          ${platform_specific_options}
+                          $<$<PLATFORM_ID:Linux>:"-Dxattr=false">
+                          $<$<PLATFORM_ID:Linux>:"-Dlibmount=false">
+                          $<$<PLATFORM_ID:Linux>:"--libdir=lib">
 
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ninja -C _build
   INSTALL_COMMAND ninja -C _build install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_pcre
+  DEPENDS ext_pcre ${platform_specific_dependencies}
 )
 
-# $<$<PLATFORM_ID:Linux>:-Dxattr=false>
-# $<$<PLATFORM_ID:Linux>:-Dlibmount=false>
-# $<$<PLATFORM_ID:Linux>:--libdir=lib>
