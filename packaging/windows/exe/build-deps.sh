@@ -43,6 +43,7 @@ du -h -d1  /c/deps-build
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
+cmake --build . --target ext_gettext-runtime -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
   if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;

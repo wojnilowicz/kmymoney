@@ -1,9 +1,3 @@
-if(APPLE OR MINGW)
-  set(platform_specific_dependencies ext_gettext-runtime)
-else()
-  set(platform_specific_dependencies "")
-endif()
-
 ExternalProject_Add(
   ext_glib
   ${PROJECT_GLOBAL_PROFILE}
@@ -31,6 +25,6 @@ ExternalProject_Add(
   BUILD_COMMAND ninja -C _build
   INSTALL_COMMAND ninja -C _build install
   ${CLEANUP_COMMAND}
-  DEPENDS ext_pcre ${platform_specific_dependencies}
+  DEPENDS ext_pcre
 )
 
