@@ -17,9 +17,9 @@ ExternalProject_Add(
                           -Dgtk_doc=false
                           -Dinstalled_tests=false
                           -Dnls=disabled
-                          $<$<PLATFORM_ID:Linux>:"-Dxattr=false">
-                          $<$<PLATFORM_ID:Linux>:"-Dlibmount=false">
-                          $<$<PLATFORM_ID:Linux>:"--libdir=lib">
+                          $<$<PLATFORM_ID:Linux>:-Dxattr=false>
+                          $<$<PLATFORM_ID:Linux>:-Dlibmount=false>
+                          $<$<PLATFORM_ID:Linux>:--libdir=lib>
 
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ninja -C _build

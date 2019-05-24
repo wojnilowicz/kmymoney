@@ -41,19 +41,19 @@ cmake -G "Unix Makefiles" \
 cmake --build . --target ext_gettext-runtime -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
-  if [ -v TRAVIS ]; then pip3 install meson; fi;
+  if [ ! -z ${TRAVIS+x} ]; then pip3 install meson; fi;
   cmake --build . --target ext_glib -- -j${CPU_COUNT}
 fi
 
 cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Core.dydl ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Qml.dydl ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 

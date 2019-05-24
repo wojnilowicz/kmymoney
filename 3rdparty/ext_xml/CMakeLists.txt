@@ -30,8 +30,8 @@ ExternalProject_Add(
     --without-schematron
     --with-xptr # required by xmlsec1
     --without-modules
-    $<$<NOT:$<PLATFORM_ID:Darwin>>:"--without-schemas">
-    $<$<NOT:$<PLATFORM_ID:Darwin>>:"--without-xinclude">
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-schemas>
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-xinclude>
 
   ${CLEANUP_COMMAND}
 

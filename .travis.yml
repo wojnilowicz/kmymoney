@@ -154,7 +154,7 @@ matrix:
           fi
 
       before_cache:
-        - find $TRAVIS_BUILD_DIR/deps-install \( -type f \( -name "*.dylib" -o -name "*.so" -o -executable \) \) -exec strip {} \+
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f \( -name "*.dylib" -o -name "*.so" \) \) -exec strip {} \+
         - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install
