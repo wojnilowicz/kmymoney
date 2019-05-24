@@ -9,12 +9,12 @@ if(MINGW)
                                                             COMMAND $(MAKE) -C src/port MAKELEVEL=0
                                                             COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
                                                             COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install)
 else()
   set(platform_specific_patch "")
   set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
                                                             COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install)
 endif()
 
 ExternalProject_Add(
