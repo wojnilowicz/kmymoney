@@ -3,13 +3,27 @@
 # without MAKELEVEL=0 set, some headers cannot be found
 # building src/common and src/port is workaround for mingw
 
+if(MINGW)
+  set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff)
+  set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/common MAKELEVEL=0
+                                                            COMMAND $(MAKE) -C src/port MAKELEVEL=0
+                                                            COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
+else()
+  set(platform_specific_patch "")
+  set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
+                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
+endif()
+
 ExternalProject_Add(
   ext_postgresql
   ${PROJECT_GLOBAL_PROFILE}
   URL https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2
   URL_MD5 19d43be679cb0d55363feb8926af3a0f
 
-  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff
+  ${platform_specific_patch}
   CONFIGURE_COMMAND ./configure
                     ${AT_GLOBAL_PROFILE}
                     --disable-nls
@@ -33,12 +47,7 @@ ExternalProject_Add(
                     --with-zlib
                     PKG_CONFIG_PATH=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
 
-  BUILD_COMMAND $(MAKE) -C src/common MAKELEVEL=0
-        COMMAND $(MAKE) -C src/port MAKELEVEL=0
-        COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
-        COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
-        COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
-
+  ${platform_specific_build}
   INSTALL_COMMAND ""
 
   BUILD_IN_SOURCE 1
