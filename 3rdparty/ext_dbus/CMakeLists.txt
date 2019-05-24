@@ -18,6 +18,7 @@ ExternalProject_Add(
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DDBUS_BUILD_TESTS=OFF
+             $<$<PLATFORM_ID:Darwin>:-DBUS_BUILD_X11=OFF>
              -DDBUS_ENABLE_XML_DOCS=OFF
              -DDBUS_DISABLE_ASSERT=ON
              -DDBUS_ENABLE_VERBOSE_MODE=OFF
