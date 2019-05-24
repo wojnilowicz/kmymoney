@@ -36,6 +36,8 @@ ExternalProject_Add(
   DEPENDS ext_glib ${platform_specific_dependencies}
 )
 
+# -DDBUS_WITH_GLIB=OFF
+
 # Without this Qt cannot find dbus easilly
 if(MINGW)
   ExternalProject_Add_Step(
