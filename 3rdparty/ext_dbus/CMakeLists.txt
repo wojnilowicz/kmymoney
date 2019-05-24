@@ -1,6 +1,6 @@
 if(APPLE)
   set(platform_specific_dependencies "")
-  set(platform_specific_options -DBUS_BUILD_X11=OFF)
+  set(platform_specific_options -DDBUS_BUILD_X11=OFF)
 elseif(MINGW)
   set(platform_specific_dependencies ext_expat)
   set(platform_specific_options -DCMAKE_INSTALL_DATADIR:STRING=bin/data)
