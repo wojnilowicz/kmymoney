@@ -1,5 +1,7 @@
 if(APPLE)
   set(platform_specific_options "")
+elseif(MINGW)
+  set(platform_specific_options "")
 else()
   set(platform_specific_options $<$<PLATFORM_ID:Linux>:-Dxattr=false>
                                                   $<$<PLATFORM_ID:Linux>:-Dlibmount=false>

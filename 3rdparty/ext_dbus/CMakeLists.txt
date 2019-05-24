@@ -1,7 +1,12 @@
 if(APPLE)
   set(platform_specific_dependencies "")
+  set(platform_specific_options -DBUS_BUILD_X11=OFF)
+elseif(MINGW)
+  set(platform_specific_dependencies ext_expat)
+  set(platform_specific_options -DCMAKE_INSTALL_DATADIR:STRING=bin/data)
 else()
   set(platform_specific_dependencies ext_expat)
+  set(platform_specific_options "")
 endif()
 
 ExternalProject_Add(
@@ -18,14 +23,13 @@ ExternalProject_Add(
 
   CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
              -DDBUS_BUILD_TESTS=OFF
-             $<$<PLATFORM_ID:Darwin>:"-DBUS_BUILD_X11=OFF">
              -DDBUS_ENABLE_XML_DOCS=OFF
              -DDBUS_DISABLE_ASSERT=ON
              -DDBUS_ENABLE_VERBOSE_MODE=OFF
-             -DCMAKE_INSTALL_DATADIR:STRING=bin/data
              -DDBUS_SESSION_BUS_LISTEN_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SESSION_BUS_CONNECT_ADDRESS:STRING=autolaunch:scope=*install-path
              -DDBUS_SYSTEM_BUS_DEFAULT_ADDRESS:STRING=autolaunch:scope=*install-path
+             ${platform_specific_options}
 
   ${BUILD_IN_SOURCE}
   ${CLEANUP_COMMAND}

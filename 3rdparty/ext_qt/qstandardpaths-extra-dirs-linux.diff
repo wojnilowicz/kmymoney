@@ -15,7 +15,7 @@ diff -ruN qtbase-everywhere-src-5.12.3.orig/configure.pri qtbase-everywhere-src-
 @@ -1209,6 +1209,15 @@
      !isEmpty(config.input.qt_libinfix): \
          output += "$${LITERAL_HASH}define QT_LIBINFIX \"$$eval(config.input.qt_libinfix)\""
- 
+
 +    # Add support for additional QStandardPaths::GenericDataLocation on Linux
 +    unix {
 +        !isEmpty(config.input.linux_additional_datadirs) {
@@ -27,7 +27,7 @@ diff -ruN qtbase-everywhere-src-5.12.3.orig/configure.pri qtbase-everywhere-src-
 +
      return($$output)
  }
- 
+
 diff -ruN qtbase-everywhere-src-5.12.3.orig/src/corelib/io/qstandardpaths_unix.cpp qtbase-everywhere-src-5.12.3/src/corelib/io/qstandardpaths_unix.cpp
 --- qtbase-everywhere-src-5.12.3.orig/src/corelib/io/qstandardpaths_unix.cpp	2019-04-09 11:51:26.000000000 +0200
 +++ qtbase-everywhere-src-5.12.3/src/corelib/io/qstandardpaths_unix.cpp	2019-05-23 18:30:50.058470907 +0200
@@ -53,7 +53,7 @@ diff -ruN qtbase-everywhere-src-5.12.3.orig/src/corelib/io/qstandardpaths_unix.c
 +                appendOrganizationAndApp(dir);
 +            }
 +        }
-+        dirs.prepend(extraDataDirs);
++        dirs.prepend(extraDataDirs.join(QLatin1Char(':')));
 +    }
 +#endif
 +
