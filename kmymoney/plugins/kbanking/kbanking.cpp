@@ -316,7 +316,7 @@ MyMoneyKeyValueContainer KBanking::onlineBankingSettings(const MyMoneyKeyValueCo
 void KBanking::createActions()
 {
   QAction *settings_aqbanking = actionCollection()->addAction("settings_aqbanking");
-  settings_aqbanking->setText(i18n("Configure Aq&Banking..."));
+  settings_aqbanking->setText(i18n("Setup Aq&Banking..."));
   connect(settings_aqbanking, &QAction::triggered, this, &KBanking::slotSettings);
 
   QAction *file_import_aqbanking = actionCollection()->addAction("file_import_aqbanking");
