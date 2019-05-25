@@ -124,4 +124,4 @@ APPDIR=$(pwd)
 
 mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
 cd $CMAKE_BUILD_PREFIX
-$DOWNLOADS_DIR/appimagetool-x86_64.appimage --comp xz ${APPDIR} KMyMoneyNEXT-${KMYMONEY_VERSION}-x86_64.appimage
+$DOWNLOADS_DIR/appimagetool-x86_64.AppImage --comp xz ${APPDIR} KMyMoneyNEXT-${KMYMONEY_VERSION}-x86_64.AppImage
