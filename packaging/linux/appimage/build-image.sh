@@ -65,7 +65,7 @@ fi
 
 if [ -f $PLUGINS/sqldrivers/qsqlcipher.so ]; then
   echo "Patching qsqlcipher plugin..."
-  patchelf --set-rpath '$ORIGIN/../../../lib' qsqlcipher.so;
+  patchelf --set-rpath '$ORIGIN/../../../lib' $PLUGINS/sqldrivers/qsqlcipher.so;
 fi
 
 # Step 4: Move plugins to loadable location in AppImage
