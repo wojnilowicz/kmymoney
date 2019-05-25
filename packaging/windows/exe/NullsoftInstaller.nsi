@@ -121,7 +121,7 @@ SectionGroup "Plugins" pluginComponentID
     File /r "ofx\plugin\*"
 
     SetOutPath "$INSTDIR\bin"
-    File /r "ofx\bin\*"
+    File /r "ofx\libs\*"
   SectionEnd
 
   Section "Online banking" onlineBankingComponentID
@@ -129,7 +129,7 @@ SectionGroup "Plugins" pluginComponentID
     File /r "onlinebanking\plugin\*"
 
     SetOutPath "$INSTDIR\bin"
-    File /r "onlinebanking\bin\*"
+    File /r "onlinebanking\libs\*"
 
     SetOutPath "$INSTDIR\bin\data"
     File /r "onlinebanking\data\*"

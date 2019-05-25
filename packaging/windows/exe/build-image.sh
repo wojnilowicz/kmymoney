@@ -113,33 +113,33 @@ createNSIS () {
 
   # QFX
   mkdir -p ofx/plugin
-  mkdir -p ofx/bin
+  mkdir -p ofx/libs
 
   if [ -f bin/kmymoney/ofximporter.dll ]; then
     mv bin/kmymoney/ofx* ofx/plugin
-    mv bin/libofx* ofx/bin
-    mv bin/libosp* ofx/bin
+    mv bin/libofx* ofx/libs
+    mv bin/libosp* ofx/libs
   fi
 
   # Online banking
   mkdir -p onlinebanking/plugin
-  mkdir -p onlinebanking/bin
+  mkdir -p onlinebanking/libs
   mkdir -p onlinebanking/data
 
   if [ -d bin/aqbanking ]; then
     mv bin/kmymoney/kbanking* onlinebanking/plugin
     mv bin/kmymoney/onlinejoboutboxview* onlinebanking/plugin
 
-    mv bin/aqbanking onlinebanking/bin
-    mv bin/gwenhywfar onlinebanking/bin
-    mv bin/libaq* onlinebanking/bin
-    mv bin/libgwen* onlinebanking/bin
-    mv bin/libgnutls* onlinebanking/bin
-    mv bin/libtasn* onlinebanking/bin
-    mv bin/libunistring* onlinebanking/bin
-    mv bin/libxmlsec* onlinebanking/bin
-    mv bin/libnettle* onlinebanking/bin
-    mv bin/libhogweed* onlinebanking/bin
+    mv bin/aqbanking onlinebanking/libs
+    mv bin/gwenhywfar onlinebanking/libs
+    mv bin/libaq* onlinebanking/libs
+    mv bin/libgwen* onlinebanking/libs
+    mv bin/libgnutls* onlinebanking/libs
+    mv bin/libtasn* onlinebanking/libs
+    mv bin/libunistring* onlinebanking/libs
+    mv bin/libxmlsec* onlinebanking/libs
+    mv bin/libnettle* onlinebanking/libs
+    mv bin/libhogweed* onlinebanking/libs
 
     mv bin/data/aqbanking onlinebanking/data
     mv bin/data/gwenhywfar onlinebanking/data

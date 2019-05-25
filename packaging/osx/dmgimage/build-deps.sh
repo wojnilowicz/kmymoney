@@ -63,6 +63,7 @@ cmake --build . --target ext_qtmacextras -- -j${CPU_COUNT}
 
 # cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 cmake --build . --target ext_bison -- -j${CPU_COUNT} # required by solid
+cmake --build . --target ext_xslt -- -j${CPU_COUNT} # otherwise xslt from system is used for KI18n which requires _xmlModuleClose
 
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
@@ -74,8 +75,6 @@ cmake --build . --target ext_gmp -- -j${CPU_COUNT}
 
  cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
  cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
-# cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
-# cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
  cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
  cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
  cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}

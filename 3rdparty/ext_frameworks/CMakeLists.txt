@@ -587,13 +587,19 @@ ExternalProject_Add_Step(
   WORKING_DIRECTORY <SOURCE_DIR>/src/kio/imageformats
 )
 
+if(APPLE)
+  set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/imagelibs;${CMAKE_INSTALL_PREFIX})
+else()
+  set(platform_specific_options "")
+endif()
+
 ExternalProject_Add(
   ext_khtml
   ${PROJECT_GLOBAL_PROFILE}
   URL https://download.kde.org/stable/frameworks/5.58/portingAids/khtml-5.58.0.tar.xz
   URL_MD5 d62ea2b2a7eecd46f3b95460b8a94956
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
-                            -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/imagelibs
+                        ${platform_specific_options}
   ${CLEANUP_COMMAND}
   DEPENDS
     ext_karchive

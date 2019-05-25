@@ -37,3 +37,4 @@ ExternalProject_Add(
 
   DEPENDS ext_xz ext_icu
 )
+# $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-modules>
