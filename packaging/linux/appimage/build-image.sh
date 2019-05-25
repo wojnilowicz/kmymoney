@@ -67,7 +67,7 @@ done
 # Make sure our plugin directory already exists
 mkdir -p $APPIMAGEPLUGINS
 
-mv $PLUGINS/* $APPIMAGEPLUGINS
+rsync -prul $PLUGINS/* $APPIMAGEPLUGINS
 
 # Step 5: Determine the version of KMyMoney we have just built
 # This is needed for linuxdeployqt/appimagetool to do the right thing
