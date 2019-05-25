@@ -21,6 +21,7 @@ cmake -G"Unix Makefiles" \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
+ls -la $DEPS_INSTALL_PREFIX/lib
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
   if [ ! -z ${TRAVIS+x} ]; then sudo apt-get install -qq -y python3-pip python3-setuptools; pip3 install meson; fi;

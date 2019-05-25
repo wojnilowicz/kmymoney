@@ -588,9 +588,9 @@ ExternalProject_Add_Step(
 )
 
 if(APPLE)
-  set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/imagelibs;${CMAKE_INSTALL_PREFIX})
+  set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/colisionlibs;${CMAKE_INSTALL_PREFIX})
 else()
-  set(platform_specific_options "")
+  set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX})
 endif()
 
 ExternalProject_Add(
