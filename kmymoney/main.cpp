@@ -73,7 +73,18 @@ int main(int argc, char *argv[])
    * Create application first
    */
   QApplication app(argc, argv);
-  qDebug() << "nazwa aplikacji na starcie: " << qAppName();
+
+  auto xdgDataDirs = qgetenv("XDG_DATA_DIRS");
+  auto appImageXdgDataDir = QCoreApplication::applicationDirPath();
+  appImageXdgDataDir.chop(3);
+  appImageXdgDataDir.append(QLatin1String("share"));
+  appImageXdgDataDir.prepend(QLatin1String(":"));
+  xdgDataDirs.append(appImageXdgDataDir.toLocal8Bit());
+  qDebug() << "AppImage share path is equal to: " << appImageXdgDataDir;
+  qDebug() << "old XDG_DATA_DIRS is equal to: " << qgetenv("XDG_DATA_DIRS");
+  qputenv("XDG_DATA_DIRS", xdgDataDirs);
+  xdgDataDirs = qgetenv("XDG_DATA_DIRS");
+  qDebug() << "new XDG_DATA_DIRS is equal to: " << qgetenv("XDG_DATA_DIRS");
   KLocalizedString::setApplicationDomain("kmymoney");
 
   migrateConfigFiles();
