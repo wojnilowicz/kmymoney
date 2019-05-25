@@ -47,7 +47,7 @@ ${PATH:-}
 
 export PKG_CONFIG_PATH=\
 $DEPS_INSTALL_PREFIX/lib/pkgconfig:\
-$DEPS_INSTALL_PREFIX/imagelibs/lib/pkgconfig:\
+$DEPS_INSTALL_PREFIX/colisionlibs/lib/pkgconfig:\
 ${PKG_CONFIG_PATH:-}
 
 # Get available processors count

@@ -9,7 +9,7 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Configure KMyMoney for building
-cmake -GNinja \
+cmake -G"Unix Makefiles" \
       $KMYMONEY_SOURCES \
       -DCMAKE_INSTALL_PREFIX=$KMYMONEY_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX \
