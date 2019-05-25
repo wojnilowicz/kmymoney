@@ -318,9 +318,9 @@ kmymoney_findmissinglibs
 
 # Remove redundant files and directories
 cd $CONTENTSDIR
-find . -type f \( -name *.a -or -name *.la \) -exec rm {} \;
+find . \( -type f \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
 # Strip libraries
-find . -type f \( -name *.dylib -or -name *.so -or -name Qt* -or -name kmymoney \) -exec strip -Sx {} \;
+find . \( -type f \( -name *.dylib -or -name *.so -or -name Qt* -or -name kmymoney \) \) -exec strip -Sx {} \;
 
 createDMG

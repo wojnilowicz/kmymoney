@@ -19,7 +19,12 @@ elseif(APPLE)
   )
 else()
   set(platform_specific_patch "")
-  set(platform_specific_options "")
+  set(platform_specific_options
+    --with-plugin-searchdir=plugins/gwenhywfar
+    --with-data-searchdir=share/gwenhywfar
+    --with-sysdata-searchdir=share
+    --with-locale-searchdir=share/locale
+  )
 endif()
 
 if (APPLE OR MINGW)

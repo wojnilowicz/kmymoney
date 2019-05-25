@@ -17,7 +17,12 @@ elseif(APPLE)
     --with-locale-searchdir=Resources/locale
   )
 else()
-  set(platform_specific_options "")
+  set(platform_specific_options
+    --with-plugin-searchdir=plugins/aqbanking
+    --with-data-searchdir=share # watch out, it differs from gwenhywfar
+    --with-sysdata-searchdir=share
+    --with-locale-searchdir=share/locale
+  )
 endif()
 
 if(APPLE OR MINGW)
