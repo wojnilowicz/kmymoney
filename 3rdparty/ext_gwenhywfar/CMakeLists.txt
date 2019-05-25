@@ -22,6 +22,7 @@ else()
   set(platform_specific_options "")
 endif()
 
+if (APPLE OR MINGW)
 ExternalProject_Add(
   ext_gwenhywfar
   ${PROJECT_GLOBAL_PROFILE}
@@ -54,6 +55,39 @@ ExternalProject_Add(
   DEPENDS ext_gnutls ext_gcrypt
 )
 
+else()
+ExternalProject_Add(
+  ext_gwenhywfar
+  ${PROJECT_GLOBAL_PROFILE}
+  URL https://www.aquamaniac.de/rdm/attachments/download/10/gwenhywfar-4.20.0.tar.gz
+  URL_MD5 0744255cae68adca6dff81d3a9f3932d
+
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-qt5-as-dll.diff
+  ${platform_specific_patch}
+
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    --prefix=${UNIX_INSTALL_PREFIX}
+#     --build=${AT_SYSTEM_TYPE}
+#     $<$<NOT:$<PLATFORM_ID:Linux>>:--host=${AT_SYSTEM_TYPE}>
+#     --host=${AT_SYSTEM_TYPE}
+    --disable-static
+    --enable-shared
+    --enable-silent-rules
+    $<$<PLATFORM_ID:Windows>:--disable-binreloc> # otherwise "undefined reference to `S_ISLNK'" on MS WIndows
+    --enable-local-install
+    --disable-debug
+    --disable-warnings
+    --with-guis=qt5
+    --disable-ssl
+    ${platform_specific_options}
+    CPPFLAGS=${AT_CPPFLAGS}
+    LDFLAGS=${AT_LDFLAGS}
+
+  ${CLEANUP_COMMAND}
+
+  DEPENDS ext_gnutls ext_gcrypt
+)
+endif()
 
 if(MINGW)
   ExternalProject_Add_Step(

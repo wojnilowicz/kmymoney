@@ -34,8 +34,10 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_gwenhywfar/*
         - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_aqbanking/*
         - rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/libaq*
+        - rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/*gwen*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
