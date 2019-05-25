@@ -2,14 +2,14 @@
 # "make -j1" prevents "cannot find the library libaqhbci.la or unhandled argument libaqhbci.la"
 
 if(MINGW)
-  set(platform_specific_options 
+  set(platform_specific_options
     --with-plugin-searchdir=bin/aqbanking
     --with-data-searchdir=bin/data # watch out, it differs from gwenhywfar
     --with-sysdata-searchdir=bin/data
     --with-locale-searchdir=bin/data/locale
   )
 elseif(APPLE)
-  set(platform_specific_options 
+  set(platform_specific_options
     --with-plugin-searchdir=PlugIns/aqbanking
     --with-data-searchdir=Resources # watch out, it differs from gwenhywfar
     --with-sysdata-searchdir=Resources
@@ -28,7 +28,7 @@ ExternalProject_Add(
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
     --disable-gwenhywfar-test
-    --enable-local-install
+    $<$<NOT:$<PLATFORM_ID:Linux>>:--enable-local-install>
     --enable-release
     --disable-debug
     --disable-warnings

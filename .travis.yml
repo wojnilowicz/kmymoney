@@ -34,7 +34,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_khtml-prefix/*
+        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_aqbanking/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -112,7 +112,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_ki18n-prefix/*
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_ki18n-prefix/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -155,7 +155,7 @@ matrix:
           fi
 
       before_cache:
-        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and  \( -name "*.dylib" -o -name "*.so" -o -perm +111 \) \) -exec strip -S -x {} \+
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and  \( -name "*.dylib" -o -name "*.so" -o \( -perm +111 -and  ! -name "*.*" \) \) \) -exec strip -S -x {} \+
         - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install

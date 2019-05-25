@@ -53,3 +53,5 @@ ExternalProject_Add(
   BUILD_IN_SOURCE 1
   DEPENDS ext_icu ext_openssl
 )
+
+# ${CLEANUP_COMMAND}

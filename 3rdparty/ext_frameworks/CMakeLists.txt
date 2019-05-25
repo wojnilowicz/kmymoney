@@ -589,7 +589,10 @@ ExternalProject_Add_Step(
 
 if(APPLE)
   set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX}/colisionlibs;${CMAKE_INSTALL_PREFIX})
+elseif(MINGW)
+  set(platform_specific_options "")
 else()
+  # otherwise gets libpng and lipjpeg from system
   set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX})
 endif()
 
