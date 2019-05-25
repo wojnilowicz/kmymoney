@@ -39,7 +39,7 @@ matrix:
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
-          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
+          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
           if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
@@ -117,7 +117,7 @@ matrix:
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
-          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
+          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
           if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
@@ -156,7 +156,7 @@ matrix:
           fi
 
       before_cache:
-        - find $TRAVIS_BUILD_DIR/deps-install \( -type f \( -name "*.dylib" -o -name "*.so" \) \) -exec strip -S -x {} \+
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and  \( -name "*.dylib" -o -name "*.so" -o -perm +111 \) \) -exec strip -S -x {} \+
         - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install

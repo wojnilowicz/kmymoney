@@ -188,6 +188,7 @@ cp -r $KMYMONEY_INSTALL_PREFIX $IMAGE_BUILD_PREFIX
 cd $IMAGE_BUILD_PREFIX
 
 echo "Copying libs..."
+cp -v $DEPS_INSTALL_PREFIX/bin/kioslave.exe bin
 
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
