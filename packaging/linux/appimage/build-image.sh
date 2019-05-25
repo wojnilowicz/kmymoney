@@ -98,16 +98,16 @@ chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 
 cd $KMYMONEY_INSTALL_PREFIX
 # Remove redundant files and directories
-find . \( -type f \( -name kmymoney -or -name *.so \) \) -exec rm {} \;
+find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
 # Strip libraries
-find . \( -type f \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
+find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
 
 rm -fr $KMYMONEY_INSTALL_PREFIX/include
 
 cd $CMAKE_BUILD_PREFIX
 # Step 7: Build the image!!!
-$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/bin/kmymoney \
+$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
