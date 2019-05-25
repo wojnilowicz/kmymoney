@@ -94,7 +94,9 @@ fi
 cd $DOWNLOADS_DIR
 #Step 6: Download tool to create AppImage
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
+wget -c -nv "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+chmod a+x appimagetool-x86_64.AppImage
 
 cd $KMYMONEY_INSTALL_PREFIX
 # Remove redundant files and directories
@@ -107,9 +109,19 @@ rm -fr $KMYMONEY_INSTALL_PREFIX/include
 
 cd $CMAKE_BUILD_PREFIX
 # Step 7: Build the image!!!
-$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
+$DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
+  $KMYMONEY_INSTALL_PREFIX/share/applications/org.kde.kmymoney.desktop \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -appimage \
   -exclude-libs=libnss3.so,libnssutil3.so
+
+#   -appimage \
+
+cd $KMYMONEY_INSTALL_PREFIX
+cd ..
+APPDIR=$(pwd)
+
+mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
+cd $CMAKE_BUILD_PREFIX
+$DOWNLOADS_DIR/appimagetool-x86_64.appimage --comp xz ${APPDIR} KMyMoneyNEXT-${KMYMONEY_VERSION}-x86_64.appimage
