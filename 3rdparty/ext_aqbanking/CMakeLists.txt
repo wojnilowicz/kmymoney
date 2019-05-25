@@ -1,5 +1,6 @@
 # Without CPPFLAGS and LDFLAGS "error: GMP is required"
 # "make -j1" prevents "cannot find the library libaqhbci.la or unhandled argument libaqhbci.la"
+# "make -j1 install" is needed on Linux, otherwise it fails to find libaqhbci.so
 
 if(MINGW)
   set(platform_specific_options
@@ -53,13 +54,7 @@ ExternalProject_Add(
   URL_MD5 6aceeaad3a1000f22f08986e68946db3
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    --prefix=${UNIX_INSTALL_PREFIX}
-#     --build=${AT_SYSTEM_TYPE}
-#     $<$<NOT:$<PLATFORM_ID:Linux>>:--host=${AT_SYSTEM_TYPE}>
-#     --host=${AT_SYSTEM_TYPE}
-    --disable-static
-    --enable-shared
-    --enable-silent-rules
+    ${AT_GLOBAL_PROFILE}
     --disable-gwenhywfar-test
     --enable-local-install
     --enable-release
