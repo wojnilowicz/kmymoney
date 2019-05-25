@@ -58,4 +58,5 @@ cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
 cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 cmake --build . --target ext_ical -- -j${CPU_COUNT}
+cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_patchelf -- -j${CPU_COUNT}
