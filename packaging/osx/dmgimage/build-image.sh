@@ -286,7 +286,6 @@ if [ -f $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   echo "Copying MariaDB..."
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $CONTENTSDIR/PlugIns
 fi
- rsync -prul $DEPS_INSTALL_PREFIX/lib/mariadb/plugin $CONTENTSDIR/PlugIns/mariadb
 
 if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
   echo "Copying KF5KHtml..."

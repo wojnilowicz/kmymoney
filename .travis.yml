@@ -35,6 +35,7 @@ matrix:
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_aqbanking/*
+        - rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/libaq*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -128,7 +129,7 @@ matrix:
         - CONTINUE_WITH_NEXT_STEP=true
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+            if [ ${REMAINING_TIME} -gt 60 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
@@ -177,7 +178,7 @@ matrix:
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        #- rm -fr /c/deps-build/ext_bison/ext_bison-prefix/src/ext_bison/*
+        - rm -fr /c/deps-build/ext_postgresql/ext_postgresql-prefix/src/ext_postgresql/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
