@@ -55,7 +55,8 @@ matrix:
           # libharfbuzz-dev isn't detected by Qt, so don't install it
           # libc contains intl.h and iconv
           # gperf is required by KCodecs
-          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libgl1-mesa-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf flex bison python3-pip python3-setuptools > /dev/null
+          # expat is required by DBus
+          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libgl1-mesa-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf expat flex bison python3-pip python3-setuptools > /dev/null
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
@@ -63,7 +64,7 @@ matrix:
         - CONTINUE_WITH_NEXT_STEP=true
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+            if [ ${REMAINING_TIME} -gt 60 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
               timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
