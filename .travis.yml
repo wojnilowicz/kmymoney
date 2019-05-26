@@ -34,10 +34,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_gwenhywfar/*
-        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_aqbanking/*
-        #- rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/libaq*
-        #- rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/*gwen*
+        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_postgresql/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -57,7 +54,8 @@ matrix:
           # gperf is required by KCodecs
           # expat is required by DBus
           # libgtk-3-dev is for icon
-          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf expat flex bison fuse libcups2-dev appstream libgtk-3-dev > /dev/null
+          # don't use apt-get in scripts bacause that hangs them
+          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf expat flex bison fuse libcups2-dev appstream libgtk-3-dev python3-pip python3-setuptools libgl1-mesa-dev  > /dev/null
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 
@@ -120,7 +118,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_ki18n-prefix/*
+        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_postgresql/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -185,7 +183,7 @@ matrix:
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        #- rm -fr /c/deps-build/ext_tcl
+        - rm -fr /c/deps-build/ext_postgresql/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
