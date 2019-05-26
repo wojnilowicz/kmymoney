@@ -14,8 +14,7 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_INSTALL_PREFIX=$KMYMONEY_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-      -DBUILD_TESTING=FALSE \
-      -DENABLE_WEBENGINE=FALSE \
+      -DBUILD_TESTING=TRUE \
       -DIS_APPIMAGE=FALSE
 
 # Build and Install KMyMoney (ready for the next phase)

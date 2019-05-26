@@ -13,7 +13,11 @@ export PLUGINS=$KMYMONEY_INSTALL_PREFIX/lib/plugins/
 export APPIMAGEPLUGINS=$KMYMONEY_INSTALL_PREFIX/plugins/
 
 # Now we can get the process started!
-#
+
+if [ -f $PLUGINS/sqldrivers/qsqlcipher.so ]; then
+  echo "Copying qsqlcipher for tests..."
+  cp -fv $PLUGINS/sqldrivers/qsqlcipher.so $DEPS_INSTALL_PREFIX/plugins/sqldrivers
+fi
 
 echo "Copying libs..."
 
@@ -38,7 +42,7 @@ fi
 
 if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   echo "Copying MariaDB plugins..."
-  rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $KMYMONEY_INSTALL_PREFIX/plugins
+  rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $PLUGINS
 fi
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
@@ -47,8 +51,8 @@ rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 pluginFiles=$(find $PLUGINS/kmymoney -type f -and -name "*.so")
+echo "Patching kmymoney plugins..."
 for pluginFile in ${pluginFiles}; do
-  echo "Patching kmymoney plugins..."
   patchelf --set-rpath '$ORIGIN/../../lib' $pluginFile;
 done
 
