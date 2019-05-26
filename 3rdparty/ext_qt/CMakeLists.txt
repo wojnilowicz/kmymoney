@@ -11,6 +11,7 @@
 #  -no-feature-tabletevent # KItemViews reports "incomplete type 'class QTabletEvent'"
 #  -no-feature-xmlstream # qvkgen and qdbusxmlparser needs QXmlStreamReader
 #  -no-feature-localserver # required by something
+#  -no-feature-bearermanagement # required in KIO for QNetworkConfigurationManager
 
 # Untested disables:
 #     -no-feature-dnslookup
@@ -77,8 +78,6 @@ ExternalProject_Add(
     -system-pcre
     -no-dtls
     -no-feature-textodfwriter
-    -no-feature-bearermanagement
-    -no-feature-ftp
     GLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}

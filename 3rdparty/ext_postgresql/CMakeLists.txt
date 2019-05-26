@@ -12,7 +12,6 @@ else()
   set(platform_specific_build   BUILD_COMMAND "")
 endif()
 
-set(compiler_flags "-O2 -DNDEBUG") # if "-w" is given then "compiler does not report undeclared identifiers" during configuration
 ExternalProject_Add(
   ext_postgresql
   ${PROJECT_GLOBAL_PROFILE}
@@ -42,8 +41,6 @@ ExternalProject_Add(
                     --without-libxslt
                     --with-zlib
                     PKG_CONFIG_PATH=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
-                    CXXFLAGS=${compiler_flags}
-                    CFLAGS=${compiler_flags}
 
   ${platform_specific_build}
   COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install

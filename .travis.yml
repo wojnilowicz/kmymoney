@@ -41,7 +41,7 @@ matrix:
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
-          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=46; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
@@ -118,14 +118,14 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
-        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_gcrypt/*
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_gcrypt/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
-          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=46; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
@@ -190,7 +190,7 @@ matrix:
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
           SAFETY_TIME=5
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
-          if [ ! -f "/c/deps-install/bin/libiconv-2.dll" ]; then CUTOFF_TIME=43; fi;
+          if [ ! -f "/c/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
           echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
           echo "CUTOFF_TIME ${CUTOFF_TIME}"
