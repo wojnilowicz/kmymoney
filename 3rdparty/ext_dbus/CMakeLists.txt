@@ -1,5 +1,5 @@
 # cmake on Ubuntu 16.04 cannot use SOURCE_SUBDIR, so autotools is the only way
-if(MINGW)
+if(MINGW OR APPLE)
   set(platform_specific_dependencies ext_expat)
 else()
   set(platform_specific_dependencies "")
