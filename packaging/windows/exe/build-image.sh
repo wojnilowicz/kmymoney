@@ -213,6 +213,13 @@ if [ -d lib/plugins/sqldrivers ]; then
   mv -v lib/plugins/sqldrivers/* bin/sqldrivers
 fi
 
+# needed only on Travis
+if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
+  echo "Copying OFX..."
+  cp -v $DEPS_INSTALL_PREFIX/bin/libofx* bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libosp* bin
+fi
+
 mkdir -p bin/kf5/kio
 cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file.dll bin/kf5/kio
 cp -v $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http.dll bin/kf5/kio
