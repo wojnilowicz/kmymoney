@@ -8,8 +8,8 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Those flags will be propageted to Autotools and CMake
-export CXXFLAGS="-O2 -DNDEBUG -w"
-export CFLAGS="-O2 -DNDEBUG -w"
+export CXXFLAGS="-O2 -DNDEBUG"
+export CFLAGS="-O2 -DNDEBUG"
 
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX
