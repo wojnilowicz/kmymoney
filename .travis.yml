@@ -56,7 +56,7 @@ matrix:
           # libc contains intl.h and iconv
           # gperf is required by KCodecs
           # expat is required by DBus
-          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libgl1-mesa-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf expat flex bison fuse python3-pip python3-setuptools > /dev/null
+          sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libxext-dev libx11-dev libx11-xcb-dev libxcb1-dev libxcb-glx0-dev libxkbcommon-x11-dev libxkbcommon-dev libgl1-mesa-dev libfreetype6-dev libxml-parser-perl libfam-dev libxcb-keysyms1-dev libudev-dev libxrender-dev gperf expat flex bison fuse appstream python3-pip python3-setuptools > /dev/null
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
 

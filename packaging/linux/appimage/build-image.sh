@@ -114,7 +114,8 @@ $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
-  -exclude-libs=libnss3.so,libnssutil3.so
+  -exclude-libs=libnss3.so,libnssutil3.so \
+  -extra-plugins=iconengines,platformthemes/libqgtk3.so
 
 #   -appimage \
 
