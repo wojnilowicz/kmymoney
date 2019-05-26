@@ -189,6 +189,14 @@ cd $IMAGE_BUILD_PREFIX
 
 echo "Copying libs..."
 cp -v $DEPS_INSTALL_PREFIX/bin/kioslave.exe bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libjpeg* ]; then
+  cp -v $DEPS_INSTALL_PREFIX/bin/libjpeg* bin
+fi
 
 echo "Copying shares..."
 if [ -f $DEPS_INSTALL_PREFIX/bin/data/icons/breeze/breeze-icons.rcc ]; then
@@ -218,6 +226,18 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
   echo "Copying OFX..."
   cp -v $DEPS_INSTALL_PREFIX/bin/libofx* bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libosp* bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
+  echo "Copying KF5KHtml..."
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libical* ]; then
+  echo "Copying ical..."
+  cp -v $DEPS_INSTALL_PREFIX/bin/libical* bin
 fi
 
 mkdir -p bin/kf5/kio
