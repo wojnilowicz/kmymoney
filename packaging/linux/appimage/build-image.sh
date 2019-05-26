@@ -36,6 +36,11 @@ if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/aqbanking/plugins/35/* $PLUGINS/aqbanking
 fi
 
+if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
+  echo "Copying MariaDB plugins..."
+  rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $KMYMONEY_INSTALL_PREFIX/plugins
+fi
+
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
 rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu
@@ -58,6 +63,14 @@ fi
 if [ -d $PLUGINS/gwenhywfar ]; then
   echo "Patching gwenhywfar plugins..."
   pluginFiles=$(find $PLUGINS/gwenhywfar -type f -and -name "*.so")
+  for pluginFile in ${pluginFiles}; do
+    patchelf --set-rpath '$ORIGIN/../../../lib' $pluginFile;
+  done
+fi
+
+if [ -d $PLUGINS/mariadb ]; then
+  echo "Patching mariadb plugins..."
+  pluginFiles=$(find $PLUGINS/mariadb -type f -and -name "*.so")
   for pluginFile in ${pluginFiles}; do
     patchelf --set-rpath '$ORIGIN/../../../lib' $pluginFile;
   done
