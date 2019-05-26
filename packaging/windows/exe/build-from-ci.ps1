@@ -88,9 +88,9 @@ if ($BUILD_STAGE -eq "image" -and -not (Test-Path $TIMEDOUT_FILENAME -PathType L
   if ($Env:TRAVIS) {
 #     bash -c "wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh"
 #     bash -c "bash upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
-    bash -c "bash ${KMYMONEY_SOURCES}/packaging/windows/exe/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
+    bash -c "bash ${KMYMONEY_SOURCES}/packaging/common/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   } elseif ($Env:APPVEYOR) {
-    bash -c "bash ${KMYMONEY_SOURCES}/packaging/windows/exe/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
+    bash -c "bash ${KMYMONEY_SOURCES}/packaging/common/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   }
 } else {
   Write-Host "Image will not be sent."

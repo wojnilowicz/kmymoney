@@ -2,20 +2,38 @@
 # "WebRTC" is required by "Pepper Plugins" is required by "Printing and PDF"
 # don't use -I and -L switches as they will cause explicit link to
 # OpenSSL instead of BoringSSL in QWebEngine
-
 # kxmlgui uses QSslSocket and fails to build without that, so openssl must be present
 
+# Tested disables:
+#  -no-feature-animation # KF5Completion requires that
+#  -no-feature-movie # KF5WidgetsAddons requires that
+#  -no-feature-networkinterface # otherwise 'QNetworkInterface' does not name a type in qnativesocketengine_win.cpp
+#  -no-feature-tabletevent # KItemViews reports "incomplete type 'class QTabletEvent'"
+#  -no-feature-xmlstream # qvkgen and qdbusxmlparser needs QXmlStreamReader
+#  -no-feature-localserver # required by something
+
+# Untested disables:
+#     -no-feature-dnslookup
+#     -no-feature-ftp
+#     -no-feature-gestures
+#     -no-feature-networkdiskcache
+#     -no-feature-networkproxy
+#     -no-feature-socks5
+#     -no-feature-statemachine
+#     -no-feature-topleveldomain
+#     -no-feature-udpsocket
+
 if (APPLE)
-  set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(platform_specific_options -no-glib -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
                                                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
         )
 elseif(MINGW)
-  set(platform_specific_options -platform win32-g++ -opengl desktop)
+  set(platform_specific_options -no-glib -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -xcb -linux-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
-  set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs-linux.diff)
+  set(platform_specific_options -glib -xcb -gtk -cups)
+  set(platform_specific_patch "")
 endif()
 
 if(APPLE)
@@ -57,8 +75,11 @@ ExternalProject_Add(
     -sql-mysql
     -system-sqlite
     -system-pcre
-    -no-glib
     -no-dtls
+    -no-feature-textodfwriter
+    -no-feature-bearermanagement
+    -no-feature-ftp
+    GLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
     ICU_PREFIX=${CMAKE_INSTALL_PREFIX}
     OPENSSL_PREFIX=${CMAKE_INSTALL_PREFIX}
     ZLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -74,7 +95,7 @@ ExternalProject_Add(
     ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
+  DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
 )
 
 ExternalProject_Add(

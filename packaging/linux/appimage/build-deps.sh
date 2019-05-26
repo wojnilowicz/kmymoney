@@ -21,18 +21,14 @@ cmake -G"Unix Makefiles" \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-ls -la $DEPS_INSTALL_PREFIX/lib
-
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
   if [ ! -z ${TRAVIS+x} ]; then sudo apt-get install -qq -y python3-pip python3-setuptools; pip3 install meson; fi;
   cmake --build . --target ext_glib -- -j${CPU_COUNT}
 fi
 
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
-
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then
   if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
-  if [ ! -z ${TRAVIS+x} ]; then sudo apt-get install -y libgl1-mesa-dev; fi;
+  if [ ! -z ${TRAVIS+x} ]; then sudo apt-get install -qq -y libgl1-mesa-dev; fi;
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 

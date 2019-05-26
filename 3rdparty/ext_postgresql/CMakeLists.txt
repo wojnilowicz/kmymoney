@@ -6,15 +6,10 @@
 if(MINGW)
   set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff)
   set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/common MAKELEVEL=0
-                                                            COMMAND $(MAKE) -C src/port MAKELEVEL=0
-                                                            COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install)
+                                                            COMMAND $(MAKE) -C src/port MAKELEVEL=0)
 else()
   set(platform_specific_patch "")
-  set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
-                                                            COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install)
+  set(platform_specific_build   BUILD_COMMAND "")
 endif()
 
 ExternalProject_Add(
@@ -48,10 +43,14 @@ ExternalProject_Add(
                     PKG_CONFIG_PATH=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
 
   ${platform_specific_build}
+  COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
+  COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
+  COMMAND $(MAKE) -C src/interfaces MAKELEVEL=0 install
   INSTALL_COMMAND ""
 
   BUILD_IN_SOURCE 1
+  ${CLEANUP_COMMAND}
   DEPENDS ext_icu ext_openssl
 )
 
-# ${CLEANUP_COMMAND}
+

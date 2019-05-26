@@ -1,42 +1,55 @@
-if(APPLE)
-  set(platform_specific_dependencies "")
-  set(platform_specific_options -DDBUS_BUILD_X11=OFF)
-elseif(MINGW)
+# cmake on Ubuntu 16.04 cannot use SOURCE_SUBDIR, so autotools is the only way
+if(MINGW)
   set(platform_specific_dependencies ext_expat)
-  set(platform_specific_options -DCMAKE_INSTALL_DATADIR:STRING=bin/data)
 else()
-  set(platform_specific_dependencies ext_expat)
-  set(platform_specific_options "")
+  set(platform_specific_dependencies "")
 endif()
 
 ExternalProject_Add(
   ext_dbus
   ${PROJECT_GLOBAL_PROFILE}
-  SOURCE_SUBDIR cmake
-  URL https://dbus.freedesktop.org/releases/dbus/dbus-1.12.12.tar.gz
-  URL_MD5 ea11069521beeee4e47f0086596a43c8
+  URL https://dbus.freedesktop.org/releases/dbus/dbus-1.12.14.tar.gz
+  URL_MD5 9e748b8c50dae17ae639f1c55ae6417d
 
   PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.11.4-20160903.diff
         COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-1.12.12-launchd.diff
         COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus-fix_data_dir.diff
         COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/dbus.diff
 
-  CMAKE_ARGS ${CMAKE_GLOBAL_PROFILE}
-             -DDBUS_BUILD_TESTS=OFF
-             -DDBUS_ENABLE_XML_DOCS=OFF
-             -DDBUS_DISABLE_ASSERT=ON
-             -DDBUS_ENABLE_VERBOSE_MODE=OFF
-             -DDBUS_SESSION_BUS_LISTEN_ADDRESS:STRING=autolaunch:scope=*install-path
-             -DDBUS_SESSION_BUS_CONNECT_ADDRESS:STRING=autolaunch:scope=*install-path
-             -DDBUS_SYSTEM_BUS_DEFAULT_ADDRESS:STRING=autolaunch:scope=*install-path
-             ${platform_specific_options}
+  CONFIGURE_COMMAND <SOURCE_DIR>/configure
+    ${AT_GLOBAL_PROFILE}
+    --disable-developer
+    --enable-debug=no
+    --disable-verbose-mode
+    --disable-asserts
+    --disable-xml-docs
+    --disable-doxygen-docs
+    --disable-ducktype-docs
+    --disable-selinux
+    --disable-apparmor
+    --disable-libaudit
+    --disable-inotify
+    --disable-kqueue
+    --disable-systemd
+    --disable-launchd
+    --disable-embedded-tests
+    --disable-modular-tests
+    --disable-tests
+    --disable-installed-tests
+    --disable-code-coverage
+    --disable-epoll
+    --disable-x11-autolaunch
+    --disable-compile-warnings
+    --enable-relocation=auto
+    --disable-stats
+    --disable-user-session
+    --with-dbus-session-bus-listen-address=autolaunch:scope=*install-path
+    --with-dbus-session-bus-connect-address=autolaunch:scope=*install-path
 
-  ${BUILD_IN_SOURCE}
+  BUILD_IN_SOURCE 1 # otherwise no Win32.Manifest could be found on MS Windows
   ${CLEANUP_COMMAND}
-  DEPENDS ext_glib ${platform_specific_dependencies}
+  DEPENDS ${platform_specific_dependencies}
 )
-
-# -DDBUS_WITH_GLIB=OFF
 
 # Without this Qt cannot find dbus easilly
 if(MINGW)

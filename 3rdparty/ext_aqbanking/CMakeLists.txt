@@ -25,33 +25,6 @@ else()
   )
 endif()
 
-if(APPLE OR MINGW)
-ExternalProject_Add(
-  ext_aqbanking
-  ${PROJECT_GLOBAL_PROFILE}
-  URL https://www.aquamaniac.de/rdm/attachments/download/27/aqbanking-5.7.8.tar.gz
-  URL_MD5 6aceeaad3a1000f22f08986e68946db3
-
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure
-    ${AT_GLOBAL_PROFILE}
-    --disable-gwenhywfar-test
-    $<$<NOT:$<PLATFORM_ID:Linux>>:--enable-local-install>
-    --enable-release
-    --disable-debug
-    --disable-warnings
-    --disable-cli
-    --disable-tutorials
-    ${platform_specific_options}
-    CPPFLAGS=${AT_CPPFLAGS}
-    LDFLAGS=${AT_LDFLAGS}
-
-  BUILD_COMMAND $(MAKE) -j1
-  INSTALL_COMMAND $(MAKE) install
-  ${CLEANUP_COMMAND}
-
-  DEPENDS ext_gwenhywfar ext_ktoblzcheck ext_xmlsec1 ext_gmp ext_xslt
-)
-else()
 ExternalProject_Add(
   ext_aqbanking
   ${PROJECT_GLOBAL_PROFILE}
@@ -77,7 +50,6 @@ ExternalProject_Add(
 
   DEPENDS ext_gwenhywfar ext_ktoblzcheck ext_xmlsec1 ext_gmp ext_xslt
 )
-endif()
 
 if(MINGW)
   ExternalProject_Add_Step(

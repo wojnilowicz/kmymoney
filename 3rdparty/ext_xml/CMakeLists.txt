@@ -32,9 +32,10 @@ ExternalProject_Add(
     --without-modules
     $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-schemas>
     $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-xinclude>
+    $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-modules>
 
   ${CLEANUP_COMMAND}
 
   DEPENDS ext_xz ext_icu
 )
-# $<$<NOT:$<PLATFORM_ID:Darwin>>:--without-modules>
+

@@ -29,8 +29,8 @@ cd $DOWNLOADS_DIR
 cd $CMAKE_BUILD_PREFIX
 
 # Those flags will be propageted to Autotools and CMake
-export CXXFLAGS="-O2 -DNDEBUG"
-export CFLAGS="-O2 -DNDEBUG"
+export CXXFLAGS="-O2 -DNDEBUG -w"
+export CFLAGS="-O2 -DNDEBUG -w"
 
 # Configure the dependencies for building
 cmake -G "MSYS Makefiles" \
@@ -42,20 +42,16 @@ cmake -G "MSYS Makefiles" \
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
-cmake --build . --target ext_gettext-runtime -- -j${CPU_COUNT}
 
-if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
-  if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
-  cmake --build . --target ext_glib -- -j${CPU_COUNT}
-fi
+# if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
+#   if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
+#   cmake --build . --target ext_glib -- -j${CPU_COUNT}
+# fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
   if [ -v TRAVIS ]; then cinst -y --no-progress python; fi;
   cmake --build . --target ext_icu -- -j${CPU_COUNT}
 fi
-
-cmake --build . --target ext_openssl -- -j${CPU_COUNT}
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
   if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
@@ -67,14 +63,9 @@ if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 
-if [ ! -f $DEPS_INSTALL_PREFIX/bin/windeployqt.exe ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" & fi;
-  cmake --build . --target ext_qttools -- -j${CPU_COUNT}
-fi
-
+cmake --build . --target ext_qttools -- -j${CPU_COUNT}
 cmake --build . --target ext_qtspeech  -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
-# cmake --build . --target ext_qtwebengine -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs and KHtml
 cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
@@ -86,16 +77,11 @@ cmake --build . --target ext_khtml -- -j${CPU_COUNT}
 
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
-# cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
-# cmake --build . --target ext_akonadi -- -j${CPU_COUNT}
-# cmake --build . --target ext_alkimia -- -j${CPU_COUNT}
+cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
 cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
 cmake --build . --target ext_ofx -- -j${CPU_COUNT}
 cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
 cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
 cmake --build . --target ext_ical -- -j${CPU_COUNT}
-
 cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
 cmake --build . --target ext_png2ico -- -j${CPU_COUNT}
-
-touch $CMAKE_BUILD_PREFIX/cache_is_built

@@ -26,9 +26,11 @@ if(MINGW)
     COMMAND cp -f tclsh86.exe ${UNIX_INSTALL_PREFIX}/bin/tclsh.exe
     COMMAND mkdir -p ${UNIX_INSTALL_PREFIX}/lib/tcl8.6
     COMMAND cp -f <SOURCE_DIR>/library/init.tcl ${UNIX_INSTALL_PREFIX}/lib/tcl8.6
+    COMMAND sleep 5 # tzdata fails to build on MingGW, so try to make a little pause
 
     DEPENDEES build
     DEPENDERS install
     WORKING_DIRECTORY <BINARY_DIR>
   )
 endif()
+

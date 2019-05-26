@@ -190,6 +190,8 @@ cd $IMAGE_BUILD_PREFIX
 echo "Copying libs..."
 cp -v $DEPS_INSTALL_PREFIX/bin/kioslave.exe bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libassuan* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKChart.dll bin
@@ -240,9 +242,9 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/bin/libical* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/bin/libical.dll ]; then
   echo "Copying ical..."
-  cp -v $DEPS_INSTALL_PREFIX/bin/libical* bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libical.dll bin
 fi
 
 mkdir -p bin/kf5/kio
