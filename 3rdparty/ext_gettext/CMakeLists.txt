@@ -48,5 +48,5 @@ ExternalProject_Add(
     --enable-relocatable
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_glib ext_xml
+  DEPENDS ext_xml #ext_glib
 )
