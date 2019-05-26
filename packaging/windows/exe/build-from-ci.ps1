@@ -52,6 +52,9 @@ foreach ($BUILD_STAGE in @("deps", "kmymoney", "image")) {
 
   $TIMEDOUT_FILENAME="TIMEDOUT"
   Remove-Item $TIMEDOUT_FILENAME -ErrorAction SilentlyContinue
+  if ($BUILD_STAGE -eq "deps") {
+    continue
+  }
 
   if (($BUILD_STAGE -eq "deps" -and $REMAINING_TIME -le 0) -or
       ($BUILD_STAGE -eq "kmymoney" -and $REMAINING_TIME -lt 2) -or
