@@ -8,8 +8,10 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Those flags will be propageted to Autotools and CMake
-export CXXFLAGS="-O2 -DNDEBUG -Wno-nonportable-include-path"
-export CFLAGS="-O2 -DNDEBUG -Wno-nonportable-include-path"
+# KChart produces many -Wzero-as-null-pointer-constant
+# Solid and KIO produces many -Wnonportable-include-path
+export CXXFLAGS="-O2 -DNDEBUG -Wno-nonportable-include-path -Wno-zero-as-null-pointer-constant"
+export CFLAGS="-O2 -DNDEBUG -Wno-nonportable-include-path -Wno-zero-as-null-pointer-constant"
 
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX

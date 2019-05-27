@@ -132,9 +132,6 @@ $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
   -verbose=2 \
   -bundle-non-qt-libs \
   -exclude-libs=libnss3.so,libnssutil3.so \
-  -extra-plugins=iconengines,platformthemes/libqgtk3.so
-
-#   -appimage \
 
 cd $KMYMONEY_INSTALL_PREFIX
 cd ..
@@ -142,4 +139,4 @@ APPDIR=$(pwd)
 
 mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
 cd $CMAKE_BUILD_PREFIX
-$DOWNLOADS_DIR/appimagetool-x86_64.AppImage --comp xz ${APPDIR} KMyMoneyNEXT-${KMYMONEY_VERSION}-x86_64.AppImage
+$DOWNLOADS_DIR/appimagetool-x86_64.AppImage --comp xz ${APPDIR} KMyMoneyNEXT-${VERSION}-x86_64.AppImage

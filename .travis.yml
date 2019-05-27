@@ -189,6 +189,8 @@ matrix:
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
           SAFETY_TIME=5
+          # it helps in cases whre qtbase is build, cache is small, and qtdeclarative is going to be built
+          if [ ! -f "/c/deps-install/bin/Qt5Qml.dll" ] && [ $CACHE_UNCOMPRESS_TIME -lt 3 ]; then CACHE_COMPRESS_TIME=5; fi;
           CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
           if [ ! -f "/c/workaround/deps-install.tar" ]; then CUTOFF_TIME=41; fi;
           echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
