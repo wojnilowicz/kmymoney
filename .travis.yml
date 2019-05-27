@@ -186,7 +186,7 @@ matrix:
         #- rm -fr /c/deps-build/ext_postgresql/*
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
-          CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
+          CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 10 ) / 10 ))
           if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
           SAFETY_TIME=5
           # it helps in cases whre qtbase is build, cache is small, and qtdeclarative is going to be built
