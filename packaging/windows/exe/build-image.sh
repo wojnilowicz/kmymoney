@@ -285,6 +285,8 @@ kmymoney_findmissinglibs
 cd $IMAGE_BUILD_PREFIX
 rm -fr include
 rm -fr lib/plugins
+rm -fr bin/data/kmymoney/icons/oxygen
+rm -fr bin/data/kmymoney/icons/Tango
 find . -type f \( -name *.dll.a -or -name *.la \) -exec rm {} \;
 
 # Strip libraries

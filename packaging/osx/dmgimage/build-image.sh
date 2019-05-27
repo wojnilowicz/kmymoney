@@ -318,6 +318,8 @@ kmymoney_findmissinglibs
 
 # Remove redundant files and directories
 cd $CONTENTSDIR
+rm -fr $CONTENTSDIR/Resources/icons/oxygen
+rm -fr $CONTENTSDIR/Resources/icons/Tango
 find . \( -type f \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
 # Strip libraries

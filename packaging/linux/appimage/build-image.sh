@@ -115,15 +115,6 @@ wget -c -nv "https://github.com/AppImage/AppImageKit/releases/download/continuou
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 chmod a+x appimagetool-x86_64.AppImage
 
-cd $KMYMONEY_INSTALL_PREFIX
-# Remove redundant files and directories
-find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
-
-# Strip libraries
-find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
-
-rm -fr $KMYMONEY_INSTALL_PREFIX/include
-
 cd $CMAKE_BUILD_PREFIX
 # Step 7: Build the image!!!
 $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
@@ -136,6 +127,17 @@ $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
 cd $KMYMONEY_INSTALL_PREFIX
 cd ..
 APPDIR=$(pwd)
+
+cd $KMYMONEY_INSTALL_PREFIX
+# Remove redundant files and directories
+rm -fr $KMYMONEY_INSTALL_PREFIX/include
+rm -fr $KMYMONEY_INSTALL_PREFIX/share/doc
+rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/oxygen
+rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/Tango
+find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
+
+# Strip libraries
+find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
 
 mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
 cd $CMAKE_BUILD_PREFIX

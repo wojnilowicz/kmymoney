@@ -65,9 +65,16 @@ ExternalProject_Add(
   ${PROJECT_GLOBAL_PROFILE}
   URL http://download.kde.org/stable/frameworks/5.58/breeze-icons-5.58.0.tar.xz
   URL_MD5 551a7d46848ec758464a1cc96c68672f
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/breeze/breeze.diff
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
              -DBINARY_ICONS_RESOURCE=ON
              -DSKIP_INSTALL_ICONS=ON
+  BUILD_COMMAND ""
+              COMMAND $(MAKE) breeze-icons-preprocess
+              COMMAND $(MAKE) breeze-icons-dark-preprocess
+              COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/breeze/adjust-rcc.sh $ENV{KMYMONEY_SOURCES}/kmymoney/icons/icons.cpp <BINARY_DIR>/icons/res/breeze-icons.qrc"
+              COMMAND bash -c "${CMAKE_CURRENT_SOURCE_DIR}/breeze/adjust-rcc.sh $ENV{KMYMONEY_SOURCES}/kmymoney/icons/icons.cpp <BINARY_DIR>/icons-dark/res/breeze-icons-dark.qrc"
+              COMMAND $(MAKE)
   ${CLEANUP_COMMAND}
   DEPENDS ext_extra_cmake_modules
 )
