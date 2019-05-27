@@ -228,6 +228,12 @@ if [ -d lib/plugins/sqldrivers ]; then
   mv -v lib/plugins/sqldrivers/* bin/sqldrivers
 fi
 
+if [ -f $DEPS_INSTALL_PREFIX/bin/libmariadb.dll ]; then
+  echo "Copying MariaDB..."
+  cp -v $DEPS_INSTALL_PREFIX/bin/libmariadb.dll bin
+  cp -r $DEPS_INSTALL_PREFIX/bin/mariadb bin
+fi
+
 # needed only on Travis
 if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
   echo "Copying OFX..."
@@ -299,7 +305,7 @@ KMYMONEY_VERSION=$(grep "KMyMoney VERSION" CMakeLists.txt | cut -d '"' -f 2)
 # Then use that to generate a combined name we'll distribute
 if [ -d .git ]; then
 GIT_REVISION=$(git rev-parse --short HEAD)
-export VERSION=$KMYMONEY_VERSION-$GIT_REVISION
+export VERSION=$KMYMONEY_VERSION-${GIT_REVISION:0:7}
 else
 export VERSION=$KMYMONEY_VERSION
 fi
