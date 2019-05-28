@@ -103,5 +103,8 @@ if ($Env:TRAVIS -or $Env:APPVEYOR) {
     $cmake | Wait-Process -Timeout 60 # CMake might be unpacking, so wait for it to avoid caching issues
     Write-Host "Stoping cmake."
     Stop-Process -Name cmake -ErrorAction SilentlyContinue
+    # cmake could unpack and start building so kill building executables again
+    Stop-Process -Name make -ErrorAction SilentlyContinue
+    Stop-Process -Name ninja -ErrorAction SilentlyContinue
   }
 }
