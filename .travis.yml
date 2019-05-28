@@ -158,6 +158,9 @@ matrix:
             wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
             export UPLOADTOOL_SUFFIX="osx"
             bash upload.sh $TRAVIS_BUILD_DIR/image-build/*.dmg*
+            cd $TRAVIS_BUILD_DIR/kmymoney-build
+            export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/deps-install/lib:${LD_LIBRARY_PATH}
+            ctest -V
           fi
 
       before_cache:

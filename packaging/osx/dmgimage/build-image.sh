@@ -280,6 +280,9 @@ rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney $CONTENTSDIR/PlugIns
 if [ -d $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers ]; then
   echo "Copying SQLCipher..."
   rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers $CONTENTSDIR/PlugIns
+
+  echo "Copying qsqlcipher for tests..."
+  cp -fv $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers/qsqlcipher* $DEPS_INSTALL_PREFIX/plugins/sqldrivers
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
