@@ -192,6 +192,7 @@ cp -v $DEPS_INSTALL_PREFIX/bin/kioslave.exe bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libassuan* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/*dbus* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKChart.dll bin

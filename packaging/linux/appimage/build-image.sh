@@ -23,7 +23,7 @@ echo "Copying libs..."
 
 echo "Copying share..."
 rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/kcm* $KMYMONEY_INSTALL_PREFIX/share/kservicetypes5
-cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/share
+cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/share/icontheme.rcc
 
 echo "Copying plugins..."
 mkdir -p $PLUGINS/kf5/kio
@@ -134,6 +134,7 @@ rm -fr $KMYMONEY_INSTALL_PREFIX/include
 rm -fr $KMYMONEY_INSTALL_PREFIX/share/doc
 rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/oxygen
 rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/Tango
+rm -f $KMYMONEY_INSTALL_PREFIX/lib/libQt5*Test*
 find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
 # Strip libraries

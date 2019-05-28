@@ -258,6 +258,7 @@ createDMG () {
 }
 
 echo "Copying libs..."
+rsync -prul $DEPS_INSTALL_PREFIX/lib/*dbus*.dylib $CONTENTSDIR/Frameworks
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/*.dylib $CONTENTSDIR/Frameworks
 
 echo "Copying share..."
@@ -323,6 +324,7 @@ kmymoney_findmissinglibs
 cd $CONTENTSDIR
 rm -fr $CONTENTSDIR/Resources/icons/oxygen
 rm -fr $CONTENTSDIR/Resources/icons/Tango
+rm -fr $CONTENTSDIR/Frameworks/*Test*
 find . \( -type f \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
 # Strip libraries
