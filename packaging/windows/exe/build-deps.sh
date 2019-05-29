@@ -68,11 +68,11 @@ cmake --build . --target ext_qtspeech  -- -j${CPU_COUNT}
 cmake --build . --target ext_qtwinextras -- -j${CPU_COUNT}
 
 cmake --build . --target ext_gperf -- -j${CPU_COUNT} # required by KCodecs and KHtml
-cmake --build . --target ext_kitemviews -- -j${CPU_COUNT}
 cmake --build . --target ext_kdewin -- -j${CPU_COUNT} # required by KWindowSystem
 cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
+cmake --build . --target ext_kinit -- -j${CPU_COUNT}
 cmake --build . --target ext_khtml -- -j${CPU_COUNT}
 
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}

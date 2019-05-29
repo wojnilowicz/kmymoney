@@ -286,9 +286,19 @@ if [ -d $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers ]; then
   cp -fv $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers/qsqlcipher* $DEPS_INSTALL_PREFIX/plugins/sqldrivers
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
+if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   echo "Copying MariaDB..."
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $CONTENTSDIR/PlugIns
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus* ]; then
+  echo "Copying DBus..."
+  rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $CONTENTSDIR/MacOS
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1* $CONTENTSDIR/Frameworks
+  rsync -prul $DEPS_INSTALL_PREFIX/share/dbus-1 $CONTENTSDIR/Resources
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $CONTENTSDIR/MacOS
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $CONTENTSDIR/MacOS
+  rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $CONTENTSDIR/MacOS
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
@@ -310,7 +320,11 @@ fi
 cd $CMAKE_BUILD_PREFIX
 
 # withouth rpath no dependent library will be loaded
-install_name_tool -add_rpath @loader_path/../Frameworks $CONTENTSDIR/MacOS/kmymoney
+macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
+for macOSFile in $macOSFiles; do
+  install_name_tool -add_rpath @loader_path/../Frameworks $macOSFile
+done
+
 cd $DEPS_INSTALL_PREFIX/bin
 macdeployqt $APPDIR/kmymoney.app \
            -verbose=1 \

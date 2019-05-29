@@ -63,7 +63,7 @@ fi
 qrcFileContent=$(cat $qrcPath)
 qrcFileContent=$(echo "$qrcFileContent" | sed '/@2x/d')
 for nameOfNotRequiredIcon in ${namesOfNotRequiredIcons[@]}; do
-    qrcFileContent=$(echo "$qrcFileContent" | sed '/'$nameOfNotRequiredIcon'.svg/d')
+    qrcFileContent=$(echo "$qrcFileContent" | sed '/\/'$nameOfNotRequiredIcon'.svg</d')
 done
 echo "$qrcFileContent" > $qrcPath
 

@@ -40,6 +40,22 @@ if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/aqbanking/plugins/35/* $PLUGINS/aqbanking
 fi
 
+if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* ]; then
+  echo "Copying KF5KHtml..."
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* $KMYMONEY_INSTALL_PREFIX/lib
+  rsync -prul $DEPS_INSTALL_PREFIX/share/kf5/khtml $KMYMONEY_INSTALL_PREFIX/share/kf5/khtml
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus* ]; then
+  echo "Copying DBus..."
+  rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $KMYMONEY_INSTALL_PREFIX/bin
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1.so* $KMYMONEY_INSTALL_PREFIX/lib
+  rsync -prul $DEPS_INSTALL_PREFIX/share/dbus-1 $KMYMONEY_INSTALL_PREFIX/share
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5/
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5/
+  rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $KMYMONEY_INSTALL_PREFIX/bin
+fi
+
 if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   echo "Copying MariaDB plugins..."
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $PLUGINS

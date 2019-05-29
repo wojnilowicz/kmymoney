@@ -188,11 +188,10 @@ cp -r $KMYMONEY_INSTALL_PREFIX $IMAGE_BUILD_PREFIX
 cd $IMAGE_BUILD_PREFIX
 
 echo "Copying libs..."
-cp -v $DEPS_INSTALL_PREFIX/bin/kioslave.exe bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libphonon4qt5* bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libassuan* bin
-cp -v $DEPS_INSTALL_PREFIX/bin/libgpg* bin
-cp -v $DEPS_INSTALL_PREFIX/bin/*dbus* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libassuan*.dll bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libgpgme* bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libgpg-* bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Crash.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKChart.dll bin
@@ -247,6 +246,16 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
+fi
+
+if [ -f $DEPS_INSTALL_PREFIX/bin/libdbus* ]; then
+  echo "Copying DBus..."
+  cp -fv $DEPS_INSTALL_PREFIX/bin/*dbus* bin
+  cp -fvr $DEPS_INSTALL_PREFIX/bin/data/dbus-1 bin/data
+  cp -fv $DEPS_INSTALL_PREFIX/bin/libexpat* bin
+  cp -fv  $DEPS_INSTALL_PREFIX/bin/kioslave* bin
+  cp -fv  $DEPS_INSTALL_PREFIX/bin/klauncher* bin
+  cp -fv  $DEPS_INSTALL_PREFIX/bin/kdeinit* bin
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/bin/libical.dll ]; then
