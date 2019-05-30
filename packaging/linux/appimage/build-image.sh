@@ -40,13 +40,13 @@ if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/aqbanking/plugins/35/* $PLUGINS/aqbanking
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.so.5 ]; then
   echo "Copying KF5KHtml..."
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* $KMYMONEY_INSTALL_PREFIX/lib
   rsync -prul $DEPS_INSTALL_PREFIX/share/kf5/khtml $KMYMONEY_INSTALL_PREFIX/share/kf5/khtml
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.so ]; then
   echo "Copying DBus..."
   rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $KMYMONEY_INSTALL_PREFIX/bin
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1.so* $KMYMONEY_INSTALL_PREFIX/lib

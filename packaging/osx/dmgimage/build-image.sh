@@ -291,7 +291,7 @@ if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $CONTENTSDIR/PlugIns
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.dylib ]; then
   echo "Copying DBus..."
   rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $CONTENTSDIR/MacOS
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1* $CONTENTSDIR/Frameworks

@@ -197,11 +197,11 @@ cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKChart.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Solid.dll bin
 
-if [ -f $DEPS_INSTALL_PREFIX/bin/libjpeg* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/bin/libjpeg-62.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libjpeg* bin
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/bin/libgif* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/bin/libgif-7.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libgif* bin
 fi
 
@@ -212,11 +212,6 @@ fi
 
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/kcmodule* bin/data/kservicetypes5
 cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicetypes5
-
-mkdir -p bin/data/kf5
-if [ -d $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml ]; then
-  cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
-fi
 
 echo "Copying plugins..."
 cp -r $DEPS_INSTALL_PREFIX/plugins/sqldrivers bin
@@ -235,7 +230,7 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libmariadb.dll ]; then
 fi
 
 # needed only on Travis
-if [ -f $DEPS_INSTALL_PREFIX/bin/libofx* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/bin/libosp-5.dll ]; then
   echo "Copying OFX..."
   cp -v $DEPS_INSTALL_PREFIX/bin/libofx* bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libosp* bin
@@ -246,9 +241,12 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
+  mkdir -p bin/data/kf5
+  cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
+
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/bin/libdbus* ]; then
+if [ -f $DEPS_INSTALL_PREFIX/bin/libdbus-1-3.dll ]; then
   echo "Copying DBus..."
   cp -fv $DEPS_INSTALL_PREFIX/bin/*dbus* bin
   cp -fvr $DEPS_INSTALL_PREFIX/bin/data/dbus-1 bin/data
