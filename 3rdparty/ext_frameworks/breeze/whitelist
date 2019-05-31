@@ -1,6 +1,3 @@
-format-number-percent
-get-hot-new-stuff
-gtk-convert
 document-print
 server-database
 network-server-database
@@ -14,4 +11,7 @@ x-office-calendar
 x-office-spreadsheet
 network-connect
 preferences-desktop
-applications-internet
+preferences-desktop-locale
+application-vnd.oasis.opendocument.spreadsheet-template
+kde
+tools-report-bug

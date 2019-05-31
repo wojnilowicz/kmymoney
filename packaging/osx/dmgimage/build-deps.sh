@@ -41,6 +41,8 @@ cmake -G "Unix Makefiles" \
 
 # Now start building everything we need, in the appropriate order
 
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
+
 # if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
 #   if [ ! -z ${TRAVIS+x} ]; then pip3 install meson; fi;
 #   cmake --build . --target ext_glib -- -j${CPU_COUNT}

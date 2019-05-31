@@ -201,10 +201,10 @@ namespace Icons {
       {Icon::TaskAccepted, QStringLiteral("task-accepted")},
       {Icon::HelpContents, QStringLiteral("help-contents")},
       {Icon::Kgpg, QStringLiteral("kgpg")},
-      {Icon::PreferencesNetwork, QStringLiteral("preferences-system-network")},
+      {Icon::PreferencesNetwork, QStringLiteral("applications-internet")},
       {Icon::PreferencesColor, QStringLiteral("preferences-desktop-color")},
       {Icon::PreferencesFont, QStringLiteral("preferences-desktop-font")},
-      {Icon::PreferencesIcon, QStringLiteral("preferences-desktop-icon")},
+      {Icon::PreferencesIcon, QStringLiteral("preferences-desktop-icons")},
       {Icon::NetworkDisconect, QStringLiteral("network-disconnect")},
       {Icon::Folder, QStringLiteral("folder")}
     };
@@ -279,6 +279,7 @@ namespace Icons {
       {Icon::ViewExpense, QStringLiteral("view-categories-expenditures")},
       {Icon::ViewIncome, QStringLiteral("view-categories-incomes")},
       {Icon::ViewCreditCard, QStringLiteral("skrooge_credit_card")},
+      {Icon::ViewSchedules, QStringLiteral("view-calendar")},
       {Icon::Download, QStringLiteral("edit-download")},
       {Icon::Refresh, QStringLiteral("view-refresh")}
     };

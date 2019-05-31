@@ -266,10 +266,12 @@ rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/*.dylib $CONTENTSDIR/Frameworks
 
 echo "Copying share..."
 rsync -prul $KMYMONEY_INSTALL_PREFIX/share/* $CONTENTSDIR/Resources
-if [ -d $CONTENTSDIR/Resources/kmymoney/icons ]; then
-  rsync -prul $CONTENTSDIR/Resources/kmymoney/icons $CONTENTSDIR/Resources
-  rm -fr $CONTENTSDIR/Resources/kmymoney/icons
+if [ -d $CONTENTSDIR/Resources/kmymoney ]; then
+  # It's because QStandardPaths::DataLocation return <APPDIR>/../Resources and not <APPDIR>/../Resources/<APPNAME> like in case of other OSes
+  rsync -prul $CONTENTSDIR/Resources/kmymoney/* $CONTENTSDIR/Resources
+  rm -fr $CONTENTSDIR/Resources/kmymoney
 fi
+
 rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/kcm* $CONTENTSDIR/Resources/kservicetypes5
 cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $CONTENTSDIR/Resources/icontheme.rcc
 
@@ -279,7 +281,6 @@ cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file* $CONTENTSDIR/PlugIns/kf5/kio
 cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http* $CONTENTSDIR/PlugIns/kf5/kio
 rsync -prul $DEPS_INSTALL_PREFIX/plugins/sqldrivers $CONTENTSDIR/PlugIns
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/plugins/kmymoney $CONTENTSDIR/PlugIns
-
 
 if [ -d $KMYMONEY_INSTALL_PREFIX/lib/plugins/sqldrivers ]; then
   echo "Copying SQLCipher..."

@@ -34,7 +34,7 @@
         "Description[uk]": "Підтримка сховищ XML у KMyMoney",
         "Description[x-test]": "xxAdds XML storage support to KMyMoneyxx",
         "EnabledByDefault": true,
-        "Icon": "server-database",
+        "Icon": "network-server-database",
         "Id": "xmlstorage",
         "License": "GPL",
         "Name": "XML Storage",
