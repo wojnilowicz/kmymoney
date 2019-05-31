@@ -151,7 +151,7 @@ kmymoney_findmissinglibs() {
   # start searching for missing libraries based on libraries already in the appdir
   local libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" \))
   local macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
-  libFiles+=(${macOSFiles[@]})
+  libFiles+=" ${macOSFiles[*]}"
   while [ true ]; do
 
     needed_libs=($(find_needed_libs ${libFiles[@]}))
@@ -174,7 +174,7 @@ kmymoney_findmissinglibs() {
   fi
   libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" \))
   macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
-  libFiles+=(${macOSFiles[@]})
+  libFiles+=" ${macOSFiles[*]}"
   substitute_with_rpaths ${libFiles}
   echo "Done!"
 }

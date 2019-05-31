@@ -7,7 +7,7 @@ if(MINGW)
                                                   --datarootdir=${UNIX_INSTALL_PREFIX}/bin/data)
 elseif(APPLE)
   set(platform_specific_dependencies ext_expat)
-  set(platform_specific_options "")
+  set(platform_specific_options --without-x)
 else()
   set(platform_specific_dependencies "")
   set(platform_specific_options "")
@@ -51,6 +51,8 @@ ExternalProject_Add(
     --enable-relocation=auto
     --disable-stats
     --disable-user-session
+    --without-gcov
+    --without-valgrind
     ${platform_specific_options}
 
   BUILD_IN_SOURCE 1 # otherwise no Win32.Manifest could be found on MS Windows

@@ -34,7 +34,7 @@
         "Description[uk]": "Підтримка сховища даних SQL у KMyMoney",
         "Description[x-test]": "xxAdds SQL storage support to KMyMoneyxx",
         "EnabledByDefault": true,
-        "Icon": "server-database",
+        "Icon": "network-server-database",
         "Id": "sqlstorage",
         "License": "GPL",
         "Name": "SQL Storage",
