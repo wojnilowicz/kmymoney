@@ -1,8 +1,15 @@
 # cmake on Ubuntu 16.04 cannot use SOURCE_SUBDIR, so autotools is the only way
-if(MINGW OR APPLE)
+if(MINGW)
   set(platform_specific_dependencies ext_expat)
+  set(platform_specific_options --with-dbus-session-bus-listen-address=autolaunch:scope=*install-path
+                                                  --with-dbus-session-bus-connect-address=autolaunch:scope=*install-path
+                                                  --with-system-socket=autolaunch:scope=*install-path)
+elseif(APPLE)
+  set(platform_specific_dependencies ext_expat)
+  set(platform_specific_options "")
 else()
   set(platform_specific_dependencies "")
+  set(platform_specific_options "")
 endif()
 
 ExternalProject_Add(
@@ -43,8 +50,7 @@ ExternalProject_Add(
     --enable-relocation=auto
     --disable-stats
     --disable-user-session
-    --with-dbus-session-bus-listen-address=autolaunch:scope=*install-path
-    --with-dbus-session-bus-connect-address=autolaunch:scope=*install-path
+    ${platform_specific_options}
 
   BUILD_IN_SOURCE 1 # otherwise no Win32.Manifest could be found on MS Windows
   ${CLEANUP_COMMAND}

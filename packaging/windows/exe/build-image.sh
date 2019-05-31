@@ -197,7 +197,7 @@ cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Wallet.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKChart.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Solid.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5GlobalAccel.dll bin
-cp -v $DEPS_INSTALL_PREFIX/bin/lib/libKF5Bookmarks.dll bin
+cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Bookmarks.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KIOFileWidgets.dll bin
 cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KIONTLM.dll bin
 

@@ -48,7 +48,7 @@ substitute_with_rpaths () {
     done
     if [ $isSubstituted == true ]; then
       local needed_libs_for_lib=($(otool -L ${libFile} | awk '{print $1}'))
-      echo " rpaths substitued for ${libFile##*/} and now look like that:" >&2
+      echo " rpaths substituted for ${libFile##*/} and now look like that:" >&2
       printf '   %s\n' "${needed_libs_for_lib[@]:0}" >&2
       printf '   \n' >&2
     fi
@@ -172,8 +172,10 @@ kmymoney_findmissinglibs() {
   else
       echo "No missing libraries found."
   fi
-  libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" -or -name "kmymoney"  \))
+  libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" \))
+  macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
   substitute_with_rpaths ${libFiles}
+  libFiles+=(${macOSFiles[@]})
   echo "Done!"
 }
 

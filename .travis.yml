@@ -34,6 +34,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        - if [ -f workaround/kmymoney-build.tar ]; then travis_wait tar xf workaround/kmymoney-build.tar; fi;
         - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_breezeicons-prefix
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
@@ -94,7 +95,7 @@ matrix:
           fi
 
       before_cache:
-        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and -executable -and \( -name "*.so" -o ! -name "*.*" \) \) -exec strip {} \+
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and -executable -and \( -name "*.so" -o ! -name "*.*" \) -and \( ! -name "*-config" \) \) -exec strip {} \+
         - cd $TRAVIS_BUILD_DIR
         - |
             travis_wait tar cf workaround/deps-install.tar deps-install
@@ -102,6 +103,9 @@ matrix:
         - |
             travis_wait tar cf workaround/deps-build.tar deps-build
             echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/kmymoney-build.tar kmymoney-build
+            echo "Cache size (uncompressed) $(du -h workaround/kmymoney-build.tar | cut -f1)"
 
     - os: osx
       osx_image: xcode9.4
@@ -118,6 +122,7 @@ matrix:
         - cd $TRAVIS_BUILD_DIR
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        - if [ -f workaround/kmymoney-build.tar ]; then travis_wait tar xf workaround/kmymoney-build.tar; fi;
         - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_breezeicons-prefix
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
@@ -172,6 +177,9 @@ matrix:
         - |
             travis_wait tar cf workaround/deps-build.tar deps-build
             echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/kmymoney-build.tar kmymoney-build
+            echo "Cache size (uncompressed) $(du -h workaround/kmymoney-build.tar | cut -f1)"
 
     - os: windows
       filter_secrets: false
@@ -186,6 +194,7 @@ matrix:
         - cd /c
         - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        - if [ -f workaround/kmymoney-build.tar ]; then travis_wait tar xf workaround/kmymoney-build.tar; fi;
         - rm -fr /c/deps-build/ext_frameworks/ext_breezeicons-prefix
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
@@ -218,3 +227,6 @@ matrix:
         - |
             travis_wait tar cf workaround/deps-build.tar deps-build
             echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/kmymoney-build.tar kmymoney-build
+            echo "Cache size (uncompressed) $(du -h workaround/kmymoney-build.tar | cut -f1)"
