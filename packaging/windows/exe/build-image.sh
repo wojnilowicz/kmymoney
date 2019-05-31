@@ -249,9 +249,9 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicetypes5
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/bin/libdbus-1-3.dll ]; then
+if [ -d $DEPS_INSTALL_PREFIX/bin/data/dbus-1 ]; then
   echo "Copying DBus..."
-  cp -fv $DEPS_INSTALL_PREFIX/bin/*dbus* bin
+  cp -fv $DEPS_INSTALL_PREFIX/bin/dbus* bin
   cp -fvr $DEPS_INSTALL_PREFIX/bin/data/dbus-1 bin/data
   cp -fv $DEPS_INSTALL_PREFIX/bin/libexpat* bin
   cp -fv  $DEPS_INSTALL_PREFIX/bin/kioslave* bin

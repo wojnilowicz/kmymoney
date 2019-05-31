@@ -3,7 +3,8 @@ if(MINGW)
   set(platform_specific_dependencies ext_expat)
   set(platform_specific_options --with-dbus-session-bus-listen-address=autolaunch:scope=*install-path
                                                   --with-dbus-session-bus-connect-address=autolaunch:scope=*install-path
-                                                  --with-system-socket=autolaunch:scope=*install-path)
+                                                  --with-system-socket=autolaunch:scope=*install-path
+                                                  --datarootdir=${UNIX_INSTALL_PREFIX}/bin/data)
 elseif(APPLE)
   set(platform_specific_dependencies ext_expat)
   set(platform_specific_options "")

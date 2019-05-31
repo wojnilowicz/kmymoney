@@ -174,8 +174,8 @@ kmymoney_findmissinglibs() {
   fi
   libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" \))
   macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
-  substitute_with_rpaths ${libFiles}
   libFiles+=(${macOSFiles[@]})
+  substitute_with_rpaths ${libFiles}
   echo "Done!"
 }
 
@@ -262,7 +262,6 @@ createDMG () {
 }
 
 echo "Copying libs..."
-rsync -prul $DEPS_INSTALL_PREFIX/lib/*dbus*.dylib $CONTENTSDIR/Frameworks
 rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/*.dylib $CONTENTSDIR/Frameworks
 
 echo "Copying share..."
@@ -295,7 +294,7 @@ if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $CONTENTSDIR/PlugIns
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.dylib ]; then
+if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   echo "Copying DBus..."
   rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $CONTENTSDIR/MacOS
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1* $CONTENTSDIR/Frameworks

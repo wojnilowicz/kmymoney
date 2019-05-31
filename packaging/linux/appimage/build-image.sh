@@ -29,6 +29,12 @@ echo "Copying plugins..."
 mkdir -p $PLUGINS/kf5/kio
 cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/file* $PLUGINS/kf5/kio
 cp -fpv $DEPS_INSTALL_PREFIX/plugins/kf5/kio/http* $PLUGINS/kf5/kio
+echo "Patching kio..."
+pluginFiles=$(find $PLUGINS/kf5/kio -type f)
+for pluginFile in ${pluginFiles}; do
+  patchelf --set-rpath '$ORIGIN/../../../lib' $pluginFile;
+done
+
 rsync -prul $DEPS_INSTALL_PREFIX/plugins/sqldrivers $PLUGINS
 
 if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
@@ -48,7 +54,7 @@ if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.so.5 ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/qimageio* $KMYMONEY_INSTALL_PREFIX/share/kservicetypes5
 fi
 
-if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.so ]; then
+if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   echo "Copying DBus..."
   rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $KMYMONEY_INSTALL_PREFIX/bin
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1.so* $KMYMONEY_INSTALL_PREFIX/lib
@@ -57,6 +63,18 @@ if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.so ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $KMYMONEY_INSTALL_PREFIX/bin
+  echo "Patching dbus..."
+  dbusFiles=$(find $KMYMONEY_INSTALL_PREFIX/bin -type f -and -name "dbus*" -o -name "kdeinit5")
+  for dbusFile in ${dbusFiles}; do
+    patchelf --set-rpath '$ORIGIN/../lib' $dbusFile;
+  done
+
+  echo "Patching libexec..."
+  libexecFiles=$(find $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5 -type f)
+  for libexecFile in ${libexecFiles}; do
+    patchelf --set-rpath '$ORIGIN/../../' $libexecFiles;
+  done
+
 fi
 
 if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
