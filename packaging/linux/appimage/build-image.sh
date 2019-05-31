@@ -43,7 +43,9 @@ fi
 if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.so.5 ]; then
   echo "Copying KF5KHtml..."
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* $KMYMONEY_INSTALL_PREFIX/lib
-  rsync -prul $DEPS_INSTALL_PREFIX/share/kf5/khtml $KMYMONEY_INSTALL_PREFIX/share/kf5/khtml
+  mkdir -p $KMYMONEY_INSTALL_PREFIX/share/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/share/kf5/khtml $KMYMONEY_INSTALL_PREFIX/share/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/qimageio* $KMYMONEY_INSTALL_PREFIX/share/kservicetypes5
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.so ]; then
@@ -51,8 +53,9 @@ if [ -f $DEPS_INSTALL_PREFIX/lib/libdbus-1.so ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/bin/dbus* $KMYMONEY_INSTALL_PREFIX/bin
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1.so* $KMYMONEY_INSTALL_PREFIX/lib
   rsync -prul $DEPS_INSTALL_PREFIX/share/dbus-1 $KMYMONEY_INSTALL_PREFIX/share
-  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5/
-  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5/
+  mkdir -p $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $KMYMONEY_INSTALL_PREFIX/bin
 fi
 
@@ -62,8 +65,10 @@ if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
 fi
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
-rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
-rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu
+if [ -d $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu ]; then
+  rsync -prul $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu/*  $KMYMONEY_INSTALL_PREFIX/lib
+  rm -rf $KMYMONEY_INSTALL_PREFIX/lib/x86_64-linux-gnu
+fi
 
 # Step 3: Update the rpath in the various plugins we have to make sure they'll be loadable in an Appimage context
 pluginFiles=$(find $PLUGINS/kmymoney -type f -and -name "*.so")

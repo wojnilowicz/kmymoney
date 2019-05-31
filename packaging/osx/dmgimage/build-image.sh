@@ -149,7 +149,9 @@ kmymoney_findmissinglibs() {
   local missing_libs=()
   local missing_libs_partial=()
   # start searching for missing libraries based on libraries already in the appdir
-  local libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" -or -name "kmymoney"  \))
+  local libFiles=$(find ${CONTENTSDIR} -type f \( -name "*.so" -or -name "*.dylib" \))
+  local macOSFiles=$(find $CONTENTSDIR/MacOS -type f -and \( -perm +111 -and  ! -name "*.*"  \))
+  libFiles+=(${macOSFiles[@]})
   while [ true ]; do
 
     needed_libs=($(find_needed_libs ${libFiles[@]}))
@@ -306,6 +308,7 @@ if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libKF5KHtml* $CONTENTSDIR/Frameworks
   install_name_tool -change libgif.7.dylib "@rpath/libgif.7.dylib" "$CONTENTSDIR/Frameworks/libKF5KHtml.dylib"
   rsync -prul $DEPS_INSTALL_PREFIX/share/kf5/khtml $CONTENTSDIR/Resources/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/qimageio* $CONTENTSDIR/Resources/kservicetypes5
 fi
 
 if [ -d $DEPS_INSTALL_PREFIX/share/aqbanking ]; then
