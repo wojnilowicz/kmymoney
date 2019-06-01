@@ -62,6 +62,7 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   mkdir -p $KMYMONEY_INSTALL_PREFIX/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/libexec/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libkdeinit5_klauncher* $KMYMONEY_INSTALL_PREFIX/lib
   rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $KMYMONEY_INSTALL_PREFIX/bin
   echo "Patching dbus..."
   dbusFiles=$(find $KMYMONEY_INSTALL_PREFIX/bin -type f -and -name "dbus*" -o -name "kdeinit5")
@@ -161,6 +162,10 @@ $DOWNLOADS_DIR/linuxdeployqt-continuous-x86_64.AppImage \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \
+  -executable=$KMYMONEY_INSTALL_PREFIX/libexec/kf5/kioslave \
+  -executable=$KMYMONEY_INSTALL_PREFIX/libexec/kf5/klauncher \
+  -executable=$KMYMONEY_INSTALL_PREFIX/bin/dbus-daemon \
+  -executable=$KMYMONEY_INSTALL_PREFIX/bin/dbus-launch \
   -exclude-libs=libnss3.so,libnssutil3.so \
 
 cd $KMYMONEY_INSTALL_PREFIX
