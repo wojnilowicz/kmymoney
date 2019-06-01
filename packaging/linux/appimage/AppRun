@@ -1,4 +1,10 @@
 #!/bin/bash
 HERE="$(dirname "$(readlink -f "${0}")")"
 export XDG_DATA_DIRS=${HERE}/usr/share:$XDG_DATA_DIRS
+## test for an existing bus daemon, just to be safe
+if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
+    ## if not found, launch a new one
+    ${HERE}/usr/bin/dbus-daemon --fork --config-file=${HERE}/usr/share/dbus-1/session.conf
+    echo "D-BUS per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+fi
 exec "${HERE}/usr/bin/kmymoney" "$@"

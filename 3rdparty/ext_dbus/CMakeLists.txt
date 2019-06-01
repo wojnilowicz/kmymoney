@@ -12,7 +12,7 @@ elseif(APPLE)
                                                   --with-launchd-agent-dir=${UNIX_INSTALL_PREFIX}/Library/LaunchAgents)
 else()
   set(platform_specific_dependencies "")
-  set(platform_specific_options "")
+  set(platform_specific_options --enable-x11-autolaunch)
 endif()
 
 ExternalProject_Add(
@@ -47,7 +47,6 @@ ExternalProject_Add(
     --disable-installed-tests
     --disable-code-coverage
     --disable-epoll
-    --disable-x11-autolaunch
     --disable-compile-warnings
     --enable-relocation=yes
     --disable-stats

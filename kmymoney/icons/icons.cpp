@@ -311,7 +311,7 @@ namespace Icons {
     sStandardIcons = getCommonNames();
     auto hasIconsResource = false;
 
-#if defined(Q_OS_WIN) || defined(Q_OS_MACOS) || defined(Q_OS_LINUX)
+#if defined(Q_OS_WIN) || defined(Q_OS_MACOS)
     hasIconsResource = true;
 #endif
 
@@ -327,7 +327,7 @@ namespace Icons {
     // get icon replacements for specific theme
     if (_themeName == kdeThemes.at(0))
       iconNames = getOxygenNames();
-    else if (_themeName == kdeThemes.at(1) || _themeName == kdeThemes.at(2) || hasIconsResource)
+    else if (_themeName == kdeThemes.at(1) || _themeName == kdeThemes.at(2) || hasIconsResource || _themeName.isEmpty())
       iconNames = getBreezeNames();
     else if (_themeName == QLatin1String("Tango"))
       iconNames = getTangoNames();

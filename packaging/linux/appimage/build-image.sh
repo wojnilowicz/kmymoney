@@ -23,7 +23,7 @@ echo "Copying libs..."
 
 echo "Copying share..."
 rsync -prul $DEPS_INSTALL_PREFIX/share/kservicetypes5/kcm* $KMYMONEY_INSTALL_PREFIX/share/kservicetypes5
-cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/share/icontheme.rcc
+cp -pv $DEPS_INSTALL_PREFIX/share/icons/breeze/breeze-icons.rcc $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icontheme.rcc
 
 echo "Copying plugins..."
 mkdir -p $PLUGINS/kf5/kio

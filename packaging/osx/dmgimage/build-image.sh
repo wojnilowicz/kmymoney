@@ -200,8 +200,9 @@ createDMG () {
       mkdir "/Volumes/${DMG_title}/.background"
   fi
 
-  cp -v ${KMYMONEY_SOURCES}/packaging/osx/dmgimage/.VolumeIcon.icns "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus service" "/Volumes/${DMG_title}/"
+  cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/.VolumeIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+  cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/.VolumeIcon.icns" "/Volumes/${DMG_title}/VolumeIcon.icns"
+  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/"
 
   cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
@@ -213,14 +214,13 @@ createDMG () {
               set current view of container window to icon view
               set toolbar visible of container window to false
               set statusbar visible of container window to false
-              set the bounds of container window to {200, 200, (200 + 200), (200 + 320)}
+              set the bounds of container window to {200, 200, (200 + 350), (200 + 200)}
               set theViewOptions to the icon view options of container window
               set arrangement of theViewOptions to not arranged
               set icon size of theViewOptions to 80
-              set background picture of theViewOptions to file ".background:'${DMG_background}'"
               set position of item "kmymoney.app" of container window to {0, 0}
-              set position of item "Applications" of container window to {120, 0}
-              set position of item "DBus service" of container window to {0, 120}
+              set position of item "Applications" of container window to {100, 0}
+              set position of item "DBus HOWTO.txt" of container window to {200, 0}
               update without registering applications
               delay 1
               close
