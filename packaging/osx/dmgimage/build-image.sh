@@ -317,7 +317,7 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   sed -i '' \
         -e s+$buildDMGPath/bin+$installDMGPath/MacOS+g \
         -e s+--session+--config-file=$installDMGPath/Resources/dbus-1/session.conf+g \
-        $CONTENTSDIR/Library/org.freedesktop.dbus-session.plist
+        $CONTENTSDIR/Library/LaunchAgents/org.freedesktop.dbus-session.plist
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
