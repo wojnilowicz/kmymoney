@@ -15,7 +15,7 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX \
       -DCMAKE_BUILD_TYPE=RelWithDebInfo \
       -DBUILD_TESTING=TRUE \
-      -DIS_APPIMAGE=FALSE
+      -DIS_APPIMAGE=TRUE
 
 # Build and Install KMyMoney (ready for the next phase)
 cmake --build . --target install -- -j${CPU_COUNT}
