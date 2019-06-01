@@ -20,8 +20,8 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-cmake --build . --target ext_cups -- -j${CPU_COUNT}
-exit
+cmake --build . --target ext_dbus -- -j${CPU_COUNT}
+
 # Now start building everything we need, in the appropriate order
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
   if [ ! -z ${TRAVIS+x} ]; then pip3 install meson; fi;

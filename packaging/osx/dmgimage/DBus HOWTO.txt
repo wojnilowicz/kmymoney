@@ -1,0 +1,27 @@
+===================
+DBus HOWTO
+===================
+This HOWTO is about getting DBus working on MacOS. Starting KMyMoneyNEXT should be possible without it, so this HOWTO could be omitted.
+Steps presented here are supposed to be followed only once, so you can make subsequent updates to KMyMoneyNEXT and DBus set here should still be working.
+First step is to copy service file by invoking command below in bash:
+
+cp -fv /Volumes/KMyMoneyNEXT/kmymoney.app/Contents/Library/LaunchAgents/org.freedesktop.dbus-session.plist ~/Library/LaunchAgents
+
+Second step is to launch the service by command below:
+
+launchctl load -w ~/Library/LaunchAgents/org.freedesktop.dbus-session.plist
+
+The service will start automatically at each boot. In order to disable it invoke command below:
+
+launchctl unload -w ~/Library/LaunchAgents/org.freedesktop.dbus-session.plist
+
+===================
+Troubleshooting
+===================
+If KMyMoneyNEXT hangs forever on splash screen, then run through checklist below.
+1) Check if your kmymoney.app is in "/Applications" directory. It won't work if it's in e.g. "/Applications/KDE" directory
+2) Check if "org.freedesktop.dbus-session.plist" file is present in "~/Library/LaunchAgents" directory
+3) Check if "org.freedesktop.dbus-session.plist" contains
+  a) /Applications/kmymoney.app/Contents/MacOS/dbus-daemon
+  b) --config-file=/Applications/kmymoney.app/Contents/Resources/dbus-1/session.conf
+  If it contains other paths or "--session" then it won't work
