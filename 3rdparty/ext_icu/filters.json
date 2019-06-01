@@ -21,10 +21,7 @@
       "filterType": "exclude"
     },
     "curr_tree": {
-      "filterType": "regex",
-      "whitelist": [
-        "^\\D\\D$"
-      ]
+      "filterType": "exclude"
     },
     "confusables": {
       "filterType": "exclude"
@@ -57,10 +54,7 @@
       "filterType": "exclude"
     },
     "locales_tree": {
-      "filterType": "regex",
-      "whitelist": [
-        "^\\D\\D$"
-      ]
+      "filterType": "exclude"
     }
   }
 }

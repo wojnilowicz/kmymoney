@@ -39,29 +39,22 @@ cmake -G "MSYS Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
-
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 
-# if [ ! -f $DEPS_INSTALL_PREFIX/bin/libglib-2.0-0.dll ]; then
-#   if [ -v TRAVIS ]; then cinst -y --no-progress python; pip3.exe install meson; fi;
-#   cmake --build . --target ext_glib -- -j${CPU_COUNT}
-# fi
-
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
-  if [ -v TRAVIS ]; then cinst -y --no-progress python; fi;
+  if [ ! -z ${TRAVIS+x} ]; then cinst -y --no-progress python; fi;
   cmake --build . --target ext_icu -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Core.dll ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
 fi
 
 if [ ! -f $DEPS_INSTALL_PREFIX/bin/Qt5Qml.dll ]; then
-  if [ -v TRAVIS ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
 fi
 
@@ -75,7 +68,10 @@ cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 cmake --build . --target ext_kinit -- -j${CPU_COUNT}
-cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+if [ ! -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" & fi;
+    cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+fi
 
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}

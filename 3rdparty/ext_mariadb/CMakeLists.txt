@@ -19,7 +19,7 @@ ExternalProject_Add(
              -DWITH_MSI=OFF
              -DWITH_RTC=OFF
              -DWITH_SSL=OPENSSL
-             -DWITH_MYSQLCOMPAT=ON
+             -DWITH_MYSQLCOMPAT=OFF
              -DWITH_UNIT_TESTS=OFF
              ${INSTALL_LIBDIR}
              ${INSTALL_PLUGINDIR}

@@ -10,9 +10,9 @@ cd $CMAKE_BUILD_PREFIX
 # Those flags will be propageted to Autotools and CMake
 # KChart produces many -Wzero-as-null-pointer-constant
 # Solid and KIO produces many -Wnonportable-include-path
-export CXXFLAGS="-O2 -DNDEBUG -w"
+export CXXFLAGS="-O2 -DNDEBUG"
 
-export CFLAGS="-O2 -DNDEBUG -w"
+export CFLAGS="-O2 -DNDEBUG"
 
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX
@@ -40,14 +40,6 @@ cmake -G "Unix Makefiles" \
       -DDARWIN_KERNEL_VERSION=16.0.0
 
 # Now start building everything we need, in the appropriate order
-
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
-
-# if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
-#   if [ ! -z ${TRAVIS+x} ]; then pip3 install meson; fi;
-#   cmake --build . --target ext_glib -- -j${CPU_COUNT}
-# fi
-
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/Qt5Core.dydl ]; then
   if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
@@ -69,7 +61,10 @@ cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 cmake --build . --target ext_kinit -- -j${CPU_COUNT}
-cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..2};do sleep 540; echo \"Still building\"; done;" & fi; #MacOS accepts only seconds
+    cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+fi
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}

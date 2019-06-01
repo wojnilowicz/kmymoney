@@ -25,15 +25,15 @@
 #     -no-feature-udpsocket
 
 if (APPLE)
-  set(platform_specific_options -no-glib -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+  set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
                                                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
         )
 elseif(MINGW)
-  set(platform_specific_options -no-glib -platform win32-g++ -opengl desktop)
+  set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -glib -xcb -gtk -cups)
+  set(platform_specific_options -xcb -cups)
   set(platform_specific_patch "")
 endif()
 
@@ -59,6 +59,7 @@ ExternalProject_Add(
     -confirm-license
     -verbose
     -release
+    -optimize-size
     -strip
     -shared
     -no-static
@@ -66,6 +67,7 @@ ExternalProject_Add(
     -nomake tests
     -nomake tools
     -pkg-config
+    -no-glib
     -icu
     -ssl
     -openssl-runtime
@@ -94,8 +96,7 @@ ExternalProject_Add(
     ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
-#   DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
-  DEPENDS ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
+  DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
 )
 
 ExternalProject_Add(

@@ -20,14 +20,8 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-cmake --build . --target ext_dbus -- -j${CPU_COUNT}
-
 # Now start building everything we need, in the appropriate order
-if [ ! -f $DEPS_INSTALL_PREFIX/lib/libglib* ]; then
-  if [ ! -z ${TRAVIS+x} ]; then pip3 install meson; fi;
-  cmake --build . --target ext_glib -- -j${CPU_COUNT}
-fi
-
+cmake --build . --target ext_cups -- -j${CPU_COUNT}
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then
   if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
   cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
@@ -46,7 +40,10 @@ cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
 cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
 cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
 cmake --build . --target ext_kinit -- -j${CPU_COUNT}
-cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.so.5 ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" & fi;
+    cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+fi
 cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
 cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
 cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
