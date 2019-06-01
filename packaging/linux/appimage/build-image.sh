@@ -72,7 +72,7 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   echo "Patching libexec..."
   libexecFiles=$(find $KMYMONEY_INSTALL_PREFIX/libexec/kf5 -type f)
   for libexecFile in ${libexecFiles}; do
-    patchelf --set-rpath '$ORIGIN/../lib' $libexecFiles;
+    patchelf --set-rpath '$ORIGIN/../../lib' $libexecFiles;
   done
 
 fi
