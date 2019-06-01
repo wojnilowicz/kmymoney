@@ -60,8 +60,8 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libdbus-1.so* $KMYMONEY_INSTALL_PREFIX/lib
   rsync -prul $DEPS_INSTALL_PREFIX/share/dbus-1 $KMYMONEY_INSTALL_PREFIX/share
   mkdir -p $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
-  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
-  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $KMYMONEY_INSTALL_PREFIX/libexec/kf5
+  rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $KMYMONEY_INSTALL_PREFIX/libexec/kf5
   rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $KMYMONEY_INSTALL_PREFIX/bin
   echo "Patching dbus..."
   dbusFiles=$(find $KMYMONEY_INSTALL_PREFIX/bin -type f -and -name "dbus*" -o -name "kdeinit5")
@@ -70,9 +70,9 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   done
 
   echo "Patching libexec..."
-  libexecFiles=$(find $KMYMONEY_INSTALL_PREFIX/lib/libexec/kf5 -type f)
+  libexecFiles=$(find $KMYMONEY_INSTALL_PREFIX/libexec/kf5 -type f)
   for libexecFile in ${libexecFiles}; do
-    patchelf --set-rpath '$ORIGIN/../../' $libexecFiles;
+    patchelf --set-rpath '$ORIGIN/../lib' $libexecFiles;
   done
 
 fi
