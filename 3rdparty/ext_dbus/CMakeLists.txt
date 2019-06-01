@@ -7,7 +7,9 @@ if(MINGW)
                                                   --datarootdir=${UNIX_INSTALL_PREFIX}/bin/data)
 elseif(APPLE)
   set(platform_specific_dependencies ext_expat)
-  set(platform_specific_options --without-x)
+  set(platform_specific_options --without-x
+                                                  --enable-launchd
+                                                  --with-launchd-agent-dir=${UNIX_INSTALL_PREFIX}/Library/LaunchAgents)
 else()
   set(platform_specific_dependencies "")
   set(platform_specific_options "")
@@ -39,7 +41,6 @@ ExternalProject_Add(
     --disable-inotify
     --disable-kqueue
     --disable-systemd
-    --disable-launchd
     --disable-embedded-tests
     --disable-modular-tests
     --disable-tests
@@ -48,7 +49,7 @@ ExternalProject_Add(
     --disable-epoll
     --disable-x11-autolaunch
     --disable-compile-warnings
-    --enable-relocation=auto
+    --enable-relocation=yes
     --disable-stats
     --disable-user-session
     --without-gcov

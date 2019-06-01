@@ -3,7 +3,8 @@ iconsPath=${1}
 qrcPath=${2}
 namesOfRequiredIcons=($(grep --only-matching '\"[a-z-]*\"' $iconsPath | sort -u | tr -d \"))
 
-HERE="$(dirname "$(readlink -f "${0}")")"
+# HERE="$(dirname "$(readlink -f "${0}")")"
+HERE=$(dirname ${0})
 
 # names of icons that should be included in the rcc file but weren't added automatically
 namesOfRequiredIconsWhiteList=($(cat $HERE/whitelist))

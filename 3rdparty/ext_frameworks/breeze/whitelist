@@ -3,10 +3,6 @@ server-database
 network-server-database
 document-import
 document-export
-document-print
-document-print-direct
-folder-print
-printer
 x-office-calendar
 x-office-spreadsheet
 network-connect

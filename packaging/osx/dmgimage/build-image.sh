@@ -200,6 +200,8 @@ createDMG () {
       mkdir "/Volumes/${DMG_title}/.background"
   fi
 
+  cp ${KMYMONEY_SOURCES}/packaging/osx/dmgimage/.VolumeIcon.icns "/Volumes/${DMG_title}"
+
   cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
@@ -215,7 +217,7 @@ createDMG () {
               set arrangement of theViewOptions to not arranged
               set icon size of theViewOptions to 80
               set background picture of theViewOptions to file ".background:'${DMG_background}'"
-              set position of item "'kmymoney.app'" of container window to {0, 0}
+              set position of item "kmymoney.app" of container window to {0, 0}
               set position of item "Applications" of container window to {120, 0}
               update without registering applications
               delay 1
@@ -303,6 +305,8 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/kioslave $CONTENTSDIR/MacOS
   rsync -prul $DEPS_INSTALL_PREFIX/lib/libexec/kf5/klauncher $CONTENTSDIR/MacOS
   rsync -prul $DEPS_INSTALL_PREFIX/bin/kdeinit5 $CONTENTSDIR/MacOS
+  mkdir -p $CONTENTSDIR/Library/LaunchAgents
+  rsync -prul $DEPS_INSTALL_PREFIX/Library/LaunchAgents $CONTENTSDIR/Library
 fi
 
 if [ -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.dylib ]; then
