@@ -1220,8 +1220,9 @@ KMyMoneyApp::KMyMoneyApp(QWidget* parent) :
     QString themeName = KMyMoneySettings::iconsTheme();                 // get theme user wants
     #endif
     if (!themeName.isEmpty() && themeName != QLatin1Literal("system")) {  // if it isn't default theme then set it
-      QIcon::setThemeName(themeName);
       qDebug() << "Setting icon theme name:" << themeName;
+//       QIcon::setThemeName(themeName);
+      QString themeName = QLatin1Literal("system");
     }
     Icons::setIconThemeNames(QIcon::themeName());                       // get whatever theme user ends up with and hope our icon names will fit that theme
   }
