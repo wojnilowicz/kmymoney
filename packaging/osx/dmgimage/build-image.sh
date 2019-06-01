@@ -311,7 +311,7 @@ if [ -d $DEPS_INSTALL_PREFIX/share/dbus-1 ]; then
   rsync -prul $DEPS_INSTALL_PREFIX/Library/LaunchAgents $CONTENTSDIR/Library
   echo "Patching org.freedesktop.dbus-session.plist.org ..."
   installDMGPath=/Applications/kmymoney.app/Contents
-  buildDMGPath=$(grep bin/dbus-daemon $CONTENTSDIR/Library/org.freedesktop.dbus-session.plist)
+  buildDMGPath=$(grep bin/dbus-daemon $CONTENTSDIR/Library/LaunchAgents/org.freedesktop.dbus-session.plist)
   buildDMGPath=${buildDMGPath#*>}
   buildDMGPath=${buildDMGPath%/bin/dbus-daemon*}
   sed -i '' \
