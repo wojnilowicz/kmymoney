@@ -1,5 +1,3 @@
-# Ubuntu 16.04 uses libgpg-error 1.21 and newer version won't be packaged into AppImage because this library is blacklisted, so to avoid missing symbols stay with old version
-
 if(APPLE OR MINGW)
   ExternalProject_Add(
     ext_gpgerror
@@ -18,6 +16,7 @@ if(APPLE OR MINGW)
     ${CLEANUP_COMMAND}
   )
 else()
+  # Ubuntu 16.04 uses libgpg-error 1.21 and newer version won't be packaged into AppImage because this library is blacklisted, so to avoid missing symbols stay with old version
   ExternalProject_Add(
     ext_gpgerror
     ${PROJECT_GLOBAL_PROFILE}

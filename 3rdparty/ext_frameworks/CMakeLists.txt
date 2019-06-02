@@ -603,9 +603,17 @@ else()
   set(platform_specific_options -DCMAKE_PREFIX_PATH=${CMAKE_INSTALL_PREFIX})
 endif()
 
+# silence a lot of warnings on MacOS
+if(APPLE)
+  set(platform_specific_option LOG_BUILD 1)
+else()
+  set(platform_specific_option "")
+endif()
+
 ExternalProject_Add(
   ext_khtml
   ${PROJECT_GLOBAL_PROFILE}
+  ${platform_specific_option}
   URL https://download.kde.org/stable/frameworks/5.58/portingAids/khtml-5.58.0.tar.xz
   URL_MD5 d62ea2b2a7eecd46f3b95460b8a94956
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}

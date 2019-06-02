@@ -10,17 +10,9 @@ cd $CMAKE_BUILD_PREFIX
 # Those flags will be propageted to Autotools and CMake
 # KChart produces many -Wzero-as-null-pointer-constant
 # Solid and KIO produces many -Wnonportable-include-path
-export CXXFLAGS="-Os -DNDEBUG \
--Wno-nonportable-include-path \
--Wno-zero-as-null-pointer-constant \
--Wno-nested-anon-types \
--Wno-zero-as-null-pointer-constant"
-
-export CFLAGS="-Os -DNDEBUG \
--Wno-nonportable-include-path \
--Wno-zero-as-null-pointer-constant \
--Wno-nested-anon-types \
--Wno-zero-as-null-pointer-constant"
+# KHtml produces many -Winconsistent-missing-override
+export CXXFLAGS="-Os -DNDEBUG -Wno-all -Wno-extra"
+export CFLAGS="-Os -DNDEBUG -Wno-all -Wno-extra"
 
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX

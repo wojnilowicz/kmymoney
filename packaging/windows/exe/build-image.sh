@@ -244,6 +244,8 @@ if [ -f $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll ]; then
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5KHtml.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5JS.dll bin
   cp -v $DEPS_INSTALL_PREFIX/bin/libKF5Parts.dll bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libpcre-1.dll bin
+  cp -v $DEPS_INSTALL_PREFIX/bin/libpcreposix-0.dll bin
   mkdir -p bin/data/kf5
   cp -r $DEPS_INSTALL_PREFIX/bin/data/kf5/khtml bin/data/kf5
   cp -v $DEPS_INSTALL_PREFIX/bin/data/kservicetypes5/qimageio* bin/data/kservicetypes5
