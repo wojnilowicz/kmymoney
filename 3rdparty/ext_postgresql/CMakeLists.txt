@@ -2,6 +2,7 @@
 # without PKG_CONFIG_PATH set, backward slashes are used and that causes build errors
 # without MAKELEVEL=0 set, some headers cannot be found
 # building src/common and src/port is workaround for mingw
+# fails on MacOS, Linux and MS Windows if LOG_BUILD is set to 1
 
 if(MINGW)
   set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff)

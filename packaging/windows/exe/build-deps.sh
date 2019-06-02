@@ -43,6 +43,8 @@ cmake -G "MSYS Makefiles" \
 cmake --build . --target ext_zlib -- -j${CPU_COUNT}
 cmake --build . --target ext_iconv -- -j${CPU_COUNT}
 
+if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libicudt.dll.a ]; then
   if [ ! -z ${TRAVIS+x} ]; then cinst -y --no-progress python; fi;
   cmake --build . --target ext_icu -- -j${CPU_COUNT}

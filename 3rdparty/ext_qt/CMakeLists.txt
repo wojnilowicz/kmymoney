@@ -33,7 +33,7 @@ elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -xcb -cups)
+  set(platform_specific_options -recheck all -system-xcb -cups CUPS_PREFIX=${CMAKE_INSTALL_PREFIX})
   set(platform_specific_patch "")
 endif()
 

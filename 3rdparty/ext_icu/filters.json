@@ -20,6 +20,9 @@
     "coll_ucadata": {
       "filterType": "exclude"
     },
+    "coll_tree": {
+      "filterType": "exclude"
+    },
     "curr_tree": {
       "filterType": "exclude"
     },
