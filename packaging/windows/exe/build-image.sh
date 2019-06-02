@@ -325,3 +325,6 @@ fi
 
 cd $IMAGE_BUILD_PREFIX
 createNSIS
+
+cd "/c/kmymoney-build"
+ctest -V

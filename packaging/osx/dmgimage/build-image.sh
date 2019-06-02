@@ -216,7 +216,7 @@ createDMG () {
               set current view of container window to icon view
               set toolbar visible of container window to false
               set statusbar visible of container window to false
-              set the bounds of container window to {200, 200, 600, 400)}
+              set the bounds of container window to {200, 200, 600, 400}
               update without registering applications
               delay 1
               close
