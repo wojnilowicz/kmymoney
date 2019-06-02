@@ -88,7 +88,7 @@ if ($BUILD_STAGE -eq "image" -and -not (Test-Path $TIMEDOUT_FILENAME -PathType L
     bash -c "bash ${KMYMONEY_SOURCES}/packaging/common/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
   } elseif ($Env:APPVEYOR) {
     bash -c "bash ${KMYMONEY_SOURCES}/packaging/common/upload.sh ${WORKSPACE_PATH}/image-build/*.exe"
-    bash -c "export LD_LIBRARY_PATH=${WORKSPACE_PATH}/deps-install/lib:${LD_LIBRARY_PATH} && cd ${WORKSPACE_PATH}/kmymoney-build && ctest -V"
+    bash -c "export LD_LIBRARY_PATH=${WORKSPACE_PATH}/deps-install/bin:${LD_LIBRARY_PATH} && cd ${WORKSPACE_PATH}/kmymoney-build && ctest -V"
   }
 } else {
   Write-Host "Image will not be sent."

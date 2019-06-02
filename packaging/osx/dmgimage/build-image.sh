@@ -201,15 +201,29 @@ createDMG () {
   fi
 
   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
-#   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
+  SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
   SetFile -a C "/Volumes/${DMG_title}"
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
 
-  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/"
+  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/${DMG_background}"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
   echo "Applying style"
-#   echo '
+  echo '
+      tell application "Finder"
+          tell disk "'${DMG_title}'"
+              open
+              set current view of container window to icon view
+              set toolbar visible of container window to false
+              set statusbar visible of container window to false
+              set the bounds of container window to {200, 200, 600, 400)}
+              update without registering applications
+              close
+          end tell
+      end tell
+      ' | osascript
+
+#         echo '
 #       tell application "Finder"
 #           tell disk "'${DMG_title}'"
 #               open
@@ -223,14 +237,12 @@ createDMG () {
 #               set background picture of theViewOptions to file ".background:'${DMG_background}'"
 #               set position of item "kmymoney.app" of container window to {0, 0}
 #               set position of item "Applications" of container window to {100, 0}
-#               set position of item "DBus HOWTO.txt" of container window to {200, 0}
 #               update without registering applications
 #               delay 1
 #               close
 #           end tell
 #       end tell
 #       ' | osascript
-
 
   echo "Changing image permissions"
   chmod -Rf go-w "/Volumes/${DMG_title}"

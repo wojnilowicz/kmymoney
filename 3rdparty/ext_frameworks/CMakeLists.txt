@@ -535,9 +535,17 @@ ExternalProject_Add(
   DEPENDS ext_kitemviews ext_kconfigwidgets ext_kcoreaddons ext_ki18n ext_kiconthemes ext_kservice ext_kxmlgui ext_kdeclarative
 )
 
+# silence a lot of warnings on MacOS
+if(NOT MINGW AND NOT APPLE)
+  set(platform_specific_option LOG_BUILD 1)
+else()
+  set(platform_specific_option "")
+endif()
+
 ExternalProject_Add(
   ext_kjs
   ${PROJECT_GLOBAL_PROFILE}
+  ${platform_specific_option}
   URL https://download.kde.org/stable/frameworks/5.58/portingAids/kjs-5.58.0.tar.xz
   URL_MD5 7c88ae56084c5b43538344af72b4b6d2
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
@@ -604,7 +612,7 @@ else()
 endif()
 
 # silence a lot of warnings on MacOS
-if(APPLE)
+if(NOT MINGW)
   set(platform_specific_option LOG_BUILD 1)
 else()
   set(platform_specific_option "")

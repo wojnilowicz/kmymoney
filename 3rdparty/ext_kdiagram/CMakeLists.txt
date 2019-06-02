@@ -1,5 +1,5 @@
 # silence a lot of warnings on MacOS
-if(APPLE)
+if(NOT MINGW)
   set(platform_specific_option LOG_BUILD 1)
 else()
   set(platform_specific_option "")
