@@ -209,19 +209,19 @@ createDMG () {
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
   echo "Applying style"
-  echo '
-      tell application "Finder"
-          tell disk "'${DMG_title}'"
-              open
-              set current view of container window to icon view
-              set toolbar visible of container window to false
-              set statusbar visible of container window to false
-              set the bounds of container window to {200, 200, 600, 400)}
-              update without registering applications
-              close
-          end tell
-      end tell
-      ' | osascript
+#   echo '
+#       tell application "Finder"
+#           tell disk "'${DMG_title}'"
+#               open
+#               set current view of container window to icon view
+#               set toolbar visible of container window to false
+#               set statusbar visible of container window to false
+#               set the bounds of container window to {200, 200, 600, 400)}
+#               update without registering applications
+#               close
+#           end tell
+#       end tell
+#       ' | osascript
 
 #         echo '
 #       tell application "Finder"
