@@ -36,7 +36,8 @@ matrix:
         - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
         #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_breezeicons-prefix
         #- rm -f $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build/config.cache
-        - rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_gcrypt
+        - rm -fr $TRAVIS_BUILD_DIR/deps-build
+        - rm -fr $TRAVIS_BUILD_DIR/deps-install
         - |
           CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
           CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
@@ -66,8 +67,7 @@ matrix:
         - |
             REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
             if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
-              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $TRAVIS_BUILD_DIR/t2 $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
-              CONTINUE_WITH_NEXT_STEP=false
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
             fi
 
       script:

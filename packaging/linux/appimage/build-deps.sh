@@ -20,8 +20,6 @@ cmake -G"Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=None \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
-cmake --build . --target ext_gcrypt -- -j${CPU_COUNT}
-exit
 # Now start building everything we need, in the appropriate order
 cmake --build . --target ext_cups -- -j${CPU_COUNT}
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then

@@ -202,7 +202,7 @@ createDMG () {
 
   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
 #   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  SetFile -a C "/Volumes/${DMG_title}"
+#   SetFile -a C "/Volumes/${DMG_title}"
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/"
 
   cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"
