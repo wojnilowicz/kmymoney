@@ -182,7 +182,7 @@ kmymoney_findmissinglibs() {
 createDMG () {
   echo "Starting creation of dmg..."
   cd $CMAKE_BUILD_PREFIX
-  DMG_size=200
+  DMG_size=500
   DMG_title=KMyMoneyNEXT
   DMG_background=background.png
 
@@ -208,35 +208,39 @@ createDMG () {
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
-  echo '
-      tell application "Finder"
-          tell disk "'${DMG_title}'"
-              open
-              set current view of container window to icon view
-              set toolbar visible of container window to false
-              set statusbar visible of container window to false
-              set the bounds of container window to {200, 200, (200 + 350), (200 + 200)}
-              set theViewOptions to the icon view options of container window
-              set arrangement of theViewOptions to not arranged
-              set icon size of theViewOptions to 80
-              set background picture of theViewOptions to file ".background:'${DMG_background}'"
-              set position of item "kmymoney.app" of container window to {0, 0}
-              set position of item "Applications" of container window to {100, 0}
-              set position of item "DBus HOWTO.txt" of container window to {200, 0}
-              update without registering applications
-              delay 1
-              close
-          end tell
-      end tell
-      ' | osascript
+  echo "Applying style"
+#   echo '
+#       tell application "Finder"
+#           tell disk "'${DMG_title}'"
+#               open
+#               set current view of container window to icon view
+#               set toolbar visible of container window to false
+#               set statusbar visible of container window to false
+#               set the bounds of container window to {200, 200, (200 + 350), (200 + 200)}
+#               set theViewOptions to the icon view options of container window
+#               set arrangement of theViewOptions to not arranged
+#               set icon size of theViewOptions to 80
+#               set background picture of theViewOptions to file ".background:'${DMG_background}'"
+#               set position of item "kmymoney.app" of container window to {0, 0}
+#               set position of item "Applications" of container window to {100, 0}
+#               set position of item "DBus HOWTO.txt" of container window to {200, 0}
+#               update without registering applications
+#               delay 1
+#               close
+#           end tell
+#       end tell
+#       ' | osascript
 
 
+  echo "Changing image permissions"
   chmod -Rf go-w "/Volumes/${DMG_title}"
 
   # ensure all writting operations to dmg are over
   sync
 
+  echo "Detaching image"
   hdiutil detach $device
+  echo "Compressing image"
   hdiutil convert kmymoney.temp.dmg -format ULFO -o kmymoney-out.dmg
 
   # Add git version number

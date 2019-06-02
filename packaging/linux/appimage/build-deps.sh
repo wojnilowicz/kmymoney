@@ -13,9 +13,9 @@ cd $CMAKE_BUILD_PREFIX
 export CXXFLAGS="-Os -DNDEBUG"
 export CFLAGS="-Os -DNDEBUG"
 
-du -h $DEPS_INSTALL_PREFIX/*
-du -h $DEPS_INSTALL_PREFIX/bin/*
-du -h $DEPS_INSTALL_PREFIX/lib/*
+du -h $DEPS_INSTALL_PREFIX/* | sort
+du -h $DEPS_INSTALL_PREFIX/bin/* | sort
+du -h $DEPS_INSTALL_PREFIX/lib/* | sort
 
 # Configure the dependencies for building
 cmake -G"Unix Makefiles" \
