@@ -202,10 +202,10 @@ createDMG () {
 
   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
 #   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
-#   SetFile -a C "/Volumes/${DMG_title}"
-  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/"
+  SetFile -a C "/Volumes/${DMG_title}"
+  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
 
-  cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"
+  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
   echo '
@@ -219,6 +219,7 @@ createDMG () {
               set theViewOptions to the icon view options of container window
               set arrangement of theViewOptions to not arranged
               set icon size of theViewOptions to 80
+              set background picture of theViewOptions to file ".background:'${DMG_background}'"
               set position of item "kmymoney.app" of container window to {0, 0}
               set position of item "Applications" of container window to {100, 0}
               set position of item "DBus HOWTO.txt" of container window to {200, 0}
