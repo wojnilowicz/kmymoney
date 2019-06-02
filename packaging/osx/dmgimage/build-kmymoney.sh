@@ -20,8 +20,7 @@ cmake -G "Unix Makefiles" \
       -DAPPLE_SUPPRESS_X11_WARNING=ON \
       -DCMAKE_MACOSX_RPATH=ON \
       -DKDE_SKIP_RPATH_SETTINGS=ON \
-      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12 \
-      -DDARWIN_KERNEL_VERSION=16.0.0
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=10.12
 
 # Build and Install KMyMoney (ready for the next phase)
 cmake --build . --target install -- -j${CPU_COUNT}

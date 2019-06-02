@@ -181,6 +181,9 @@ rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/Tango
 rm -f $KMYMONEY_INSTALL_PREFIX/lib/libQt5*Test*
 find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
+rsync -prul $DEPS_INSTALL_PREFIX/lib/libgpg-error* $KMYMONEY_INSTALL_PREFIX/lib
+patchelf --set-rpath '$ORIGIN/./lib' libgpg-error.so.0;
+
 # Strip libraries
 find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
 

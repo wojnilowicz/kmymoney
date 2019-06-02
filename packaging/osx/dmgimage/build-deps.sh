@@ -11,8 +11,8 @@ cd $CMAKE_BUILD_PREFIX
 # KChart produces many -Wzero-as-null-pointer-constant
 # Solid and KIO produces many -Wnonportable-include-path
 # KHtml produces many -Winconsistent-missing-override
-export CXXFLAGS="-Os -DNDEBUG"
-export CFLAGS="-Os -DNDEBUG"
+export CXXFLAGS="-Os -DNDEBUG -w"
+export CFLAGS="-Os -DNDEBUG -w"
 
 # Build ninja from source in order to avoid lenghty "brew install ninja"
 cd $CMAKE_BUILD_PREFIX
