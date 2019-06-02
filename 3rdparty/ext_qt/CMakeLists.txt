@@ -34,7 +34,7 @@ elseif(MINGW)
   set(platform_specific_patch "")
 elseif(UNIX)
   set(platform_specific_options -qt-xcb -cups
-                                                  CUPS_PREFIX=${CMAKE_INSTALL_PREFIX})
+                                                  CUPS_PREFIX=${CMAKE_INSTALL_PREFIX}
                                                   -I ${CMAKE_INSTALL_PREFIX}/include
                                                   )
   set(platform_specific_patch "")
