@@ -15,8 +15,7 @@ endif()
 
 ExternalProject_Add(
   ext_postgresql
-   DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
-   DOWNLOAD_NO_PROGRESS 1
+  ${PROJECT_GLOBAL_PROFILE}
 
   URL https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2
   URL_MD5 19d43be679cb0d55363feb8926af3a0f

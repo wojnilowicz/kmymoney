@@ -38,10 +38,6 @@ elseif(UNIX)
   set(platform_specific_patch "")
 endif()
 
-#                                                   CUPS_INCDIR=${CMAKE_INSTALL_PREFIX}/include
-#                                                   CUPS_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
-#                                                   CUPS_LIBS="-lcups"
-
 if(APPLE)
   set(install_suffix /colisionlibs)
 else()

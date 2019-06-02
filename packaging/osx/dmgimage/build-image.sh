@@ -182,7 +182,7 @@ kmymoney_findmissinglibs() {
 createDMG () {
   echo "Starting creation of dmg..."
   cd $CMAKE_BUILD_PREFIX
-  DMG_size=500
+  DMG_size=200
   DMG_title=KMyMoneyNEXT
   DMG_background=background.png
 
@@ -201,8 +201,8 @@ createDMG () {
   fi
 
   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/.VolumeIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  SetFile -a C "/Volumes/${DMG_title}"
+#   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
+#   SetFile -a C "/Volumes/${DMG_title}"
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/"
 
   cp ${KMYMONEY_SOURCES}/kmymoney/pics/${DMG_background} "/Volumes/${DMG_title}/.background/"

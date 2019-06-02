@@ -38,7 +38,6 @@ ExternalProject_Add(
   --without-perl
   --without-php
   --without-python
-  --libdir=${UNIX_INSTALL_PREFIX}/lib
   BUILD_IN_SOURCE 1
 
   ${CLEANUP_COMMAND}
