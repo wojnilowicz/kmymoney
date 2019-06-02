@@ -73,16 +73,16 @@ ExternalProject_Add(
     -nomake tools
     -pkg-config
     -no-glib
-#     -icu
-#     -ssl
-#     -openssl-runtime
-#     -dbus
-#     -dbus-runtime
-#     -no-sql-odbc
-#     -sql-psql
-#     -sql-mysql
-#     -system-sqlite
-#     -system-pcre
+    -icu
+    -ssl
+    -openssl-runtime
+    -dbus
+    -dbus-runtime
+    -no-sql-odbc
+    -sql-psql
+    -sql-mysql
+    -system-sqlite
+    -system-pcre
     -no-dtls
     -no-feature-textodfwriter
     GLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -101,7 +101,7 @@ ExternalProject_Add(
     ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
-#   DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
+  DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
 )
 
 ExternalProject_Add(
