@@ -31,8 +31,7 @@ else()
       --disable-arm-crypto-support
       --disable-neon-support
       --disable-padlock-support
-      --enable-large-data-tests
-      --disable-O-flag-munging # otherwise "error: inlining failed in call to always_inline â€˜memcpyâ€™"
+      --disable-large-data-tests
 
     ${CLEANUP_COMMAND}
 
