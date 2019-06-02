@@ -18,7 +18,6 @@ if(APPLE OR MINGW)
     DEPENDS ext_gpgerror
   )
 else()
-  set(compiler_flags "-O2 -DNDEBUG") # otherwise "error: inlining failed in call to always_inline â€˜memcpyâ€™"
   # libgcrypt-1.8 depends on libgpgerror 1.25 and version available in Ubuntu 16.04 is 1.21
   ExternalProject_Add(
     ext_gcrypt
@@ -33,8 +32,7 @@ else()
       --disable-neon-support
       --disable-padlock-support
       --enable-large-data-tests
-      CFLAGS=${compiler_flags}
-      CXXFLAGS=${compiler_flags}
+      --disable-O-flag-munging # otherwise "error: inlining failed in call to always_inline â€˜memcpyâ€™"
 
     ${CLEANUP_COMMAND}
 
