@@ -62,7 +62,8 @@ ExternalProject_Add(
 
 ExternalProject_Add(
   ext_breezeicons
-  ${PROJECT_GLOBAL_PROFILE}
+  DOWNLOAD_DIR ${EXT_DOWNLOAD_DIR}
+   DOWNLOAD_NO_PROGRESS 1
   URL http://download.kde.org/stable/frameworks/5.58/breeze-icons-5.58.0.tar.xz
   URL_MD5 551a7d46848ec758464a1cc96c68672f
   PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/breeze/breeze.diff

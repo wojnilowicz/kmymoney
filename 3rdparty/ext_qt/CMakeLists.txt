@@ -33,12 +33,14 @@ elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -recheck all -system-xcb -cups
-                                                  CUPS_INCDIR=${CMAKE_INSTALL_PREFIX}/include/cups
-                                                  CUPS_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
-                                                  CUPS_LIBS="-lcups")
+  set(platform_specific_options -qt-xcb -cups
+                                                  CUPS_PREFIX=${CMAKE_INSTALL_PREFIX})
   set(platform_specific_patch "")
 endif()
+
+#                                                   CUPS_INCDIR=${CMAKE_INSTALL_PREFIX}/include
+#                                                   CUPS_LIBDIR=${CMAKE_INSTALL_PREFIX}/lib
+#                                                   CUPS_LIBS="-lcups"
 
 if(APPLE)
   set(install_suffix /colisionlibs)
@@ -71,16 +73,16 @@ ExternalProject_Add(
     -nomake tools
     -pkg-config
     -no-glib
-    -icu
-    -ssl
-    -openssl-runtime
-    -dbus
-    -dbus-runtime
-    -no-sql-odbc
-    -sql-psql
-    -sql-mysql
-    -system-sqlite
-    -system-pcre
+#     -icu
+#     -ssl
+#     -openssl-runtime
+#     -dbus
+#     -dbus-runtime
+#     -no-sql-odbc
+#     -sql-psql
+#     -sql-mysql
+#     -system-sqlite
+#     -system-pcre
     -no-dtls
     -no-feature-textodfwriter
     GLIB_PREFIX=${CMAKE_INSTALL_PREFIX}
@@ -99,7 +101,7 @@ ExternalProject_Add(
     ${platform_specific_options}
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
+#   DEPENDS ext_dbus ext_pcre2 ext_icu ext_openssl ext_mariadb ext_postgresql ext_sqlite ext_png ext_jpeg
 )
 
 ExternalProject_Add(

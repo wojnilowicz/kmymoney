@@ -21,7 +21,6 @@ cmake -G"Unix Makefiles" \
       -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-ls -la $DEPS_INSTALL_PREFIX/lib
 cmake --build . --target ext_cups -- -j${CPU_COUNT}
 if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then
   if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
