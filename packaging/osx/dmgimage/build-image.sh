@@ -211,11 +211,13 @@ createDMG () {
   echo "Applying style"
   echo '
       tell application "Finder"
-          tell disk "KMyMoneyNEXT"
-              open
-              delay 10
-              close
-          end tell
+          with timeout of 30 seconds
+              tell disk "KMyMoneyNEXT"
+                  open
+                  delay 5
+                  close
+              end tell
+          end timeout
       end tell
       ' | osascript
 

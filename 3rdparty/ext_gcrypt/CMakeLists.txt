@@ -1,3 +1,5 @@
+set(compiler_flags "-Os -DNDEBUG") # if "-w" is given then "camellia-aesni-avx2-amd64.S:617:8: error: invalid alignment value" during build
+
 ExternalProject_Add(
   ext_gcrypt
   ${PROJECT_GLOBAL_PROFILE}
@@ -10,7 +12,9 @@ ExternalProject_Add(
     --disable-arm-crypto-support
     --disable-neon-support
     --disable-padlock-support
-    --enable-large-data-tests
+    --disable-large-data-tests
+    CXXFLAGS=${compiler_flags}
+    CFLAGS=${compiler_flags}
 
   ${CLEANUP_COMMAND}
 
