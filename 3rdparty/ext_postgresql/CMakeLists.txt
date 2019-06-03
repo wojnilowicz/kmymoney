@@ -13,7 +13,7 @@ else()
   set(platform_specific_build   BUILD_COMMAND "")
 endif()
 
-set(compiler_flags "-Os -DNDEBUG") # if "-w" is given then "compiler does not report undeclared identifiers" during configuration
+set(compiler_flags "-O2 -DNDEBUG") # if "-w" is given then "compiler does not report undeclared identifiers" during configuration
 
 ExternalProject_Add(
   ext_postgresql
