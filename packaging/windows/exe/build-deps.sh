@@ -29,8 +29,8 @@ cd $DOWNLOADS_DIR
 cd $CMAKE_BUILD_PREFIX
 
 # Those flags will be propageted to Autotools and CMake
-export CXXFLAGS="-Os -DNDEBUG"
-export CFLAGS="-Os -DNDEBUG"
+export CXXFLAGS="-Os -DNDEBUG -w"
+export CFLAGS="-Os -DNDEBUG -w"
 
 # Configure the dependencies for building
 cmake -G "MSYS Makefiles" \

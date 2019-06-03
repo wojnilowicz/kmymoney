@@ -200,10 +200,10 @@ createDMG () {
       mkdir "/Volumes/${DMG_title}/.background"
   fi
 
-  cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
-  SetFile -a C "/Volumes/${DMG_title}"
-  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
+#   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+#   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
+#   SetFile -a C "/Volumes/${DMG_title}"
+#   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
 
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/${DMG_background}"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
@@ -213,12 +213,7 @@ createDMG () {
       tell application "Finder"
           tell disk "KMyMoneyNEXT"
               open
-              set current view of container window to icon view
-              set toolbar visible of container window to false
-              set statusbar visible of container window to false
-              set the bounds of container window to {200, 200, 600, 400}
-              update without registering applications
-              delay 1
+              delay 10
               close
           end tell
       end tell

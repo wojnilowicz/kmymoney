@@ -10,8 +10,8 @@ set -eux
 cd $CMAKE_BUILD_PREFIX
 
 # Those flags will be propageted to Autotools and CMake
-export CXXFLAGS="-Os -DNDEBUG"
-export CFLAGS="-Os -DNDEBUG"
+export CXXFLAGS="-Os -DNDEBUG -w"
+export CFLAGS="-Os -DNDEBUG -w"
 
 du -h $DEPS_INSTALL_PREFIX/* | sort -h
 du -h $DEPS_INSTALL_PREFIX/bin/* | sort -h

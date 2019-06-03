@@ -35,7 +35,7 @@ elseif(MINGW)
 elseif(UNIX)
   set(platform_specific_options -qt-xcb -cups
                                                   CUPS_PREFIX=${CMAKE_INSTALL_PREFIX}
-                                                  -I ${CMAKE_INSTALL_PREFIX}/include
+                                                  -I ${CMAKE_INSTALL_PREFIX}/include #otherwise cups/ppd.h: No such file or director
                                                   )
   set(platform_specific_patch "")
 endif()
@@ -70,12 +70,14 @@ ExternalProject_Add(
     -nomake tests
     -nomake tools
     -pkg-config
+    -dbus
+    -dbus-runtime
     -no-glib
     -icu
     -ssl
     -openssl-runtime
-    -dbus
-    -dbus-runtime
+    -qt-freetype
+    -qt-harfbuzz
     -no-sql-odbc
     -sql-psql
     -sql-mysql
