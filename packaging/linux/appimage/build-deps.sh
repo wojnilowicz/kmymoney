@@ -16,6 +16,7 @@ export CFLAGS="-Os -DNDEBUG -w"
 du -h $DEPS_INSTALL_PREFIX/* | sort -h
 du -h $DEPS_INSTALL_PREFIX/bin/* | sort -h
 du -h $DEPS_INSTALL_PREFIX/lib/* | sort -h
+du -h $DEPS_INSTALL_PREFIX/include/* | sort -h
 
 # Configure the dependencies for building
 cmake -G"Unix Makefiles" \

@@ -200,26 +200,15 @@ createDMG () {
       mkdir "/Volumes/${DMG_title}/.background"
   fi
 
-#   cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
+  cp -fv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/KMyMoneyNEXTIcon.icns" "/Volumes/${DMG_title}/.VolumeIcon.icns"
 #   SetFile -c icnC "/Volumes/${DMG_title}/.VolumeIcon.icns"
-#   SetFile -a C "/Volumes/${DMG_title}"
-#   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
+  SetFile -a C "/Volumes/${DMG_title}"
+  cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/DBus HOWTO.txt" "/Volumes/${DMG_title}/DBus HOWTO.txt"
 
   cp -rv "${KMYMONEY_SOURCES}/packaging/osx/dmgimage/${DMG_background}" "/Volumes/${DMG_title}/.background/${DMG_background}"
   ln -s "/Applications" "/Volumes/${DMG_title}/Applications"
   ## Apple script to set style
   echo "Applying style"
-  echo '
-      tell application "Finder"
-          with timeout of 30 seconds
-              tell disk "KMyMoneyNEXT"
-                  open
-                  delay 5
-                  close
-              end tell
-          end timeout
-      end tell
-      ' | osascript
 
 #         echo '
 #       tell application "Finder"
