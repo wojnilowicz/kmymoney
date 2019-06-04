@@ -4,23 +4,20 @@
 # building src/common and src/port is workaround for mingw
 # fails on MacOS, Linux and MS Windows if LOG_BUILD is set to 1
 
+# otherwise "cannot find -lpgcommon"
 if(MINGW)
-  set(platform_specific_patch PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff)
   set(platform_specific_build   BUILD_COMMAND $(MAKE) -C src/common MAKELEVEL=0
                                                             COMMAND $(MAKE) -C src/port MAKELEVEL=0)
 else()
-  set(platform_specific_patch "")
   set(platform_specific_build   BUILD_COMMAND "")
 endif()
-
-set(compiler_flags "-O2 -DNDEBUG") # if "-w" is given then "compiler does not report undeclared identifiers" during configuration
 
 ExternalProject_Add(
   ext_postgresql
   ${PROJECT_GLOBAL_PROFILE}
 
-  URL https://ftp.postgresql.org/pub/source/v11.2/postgresql-11.2.tar.bz2
-  URL_MD5 19d43be679cb0d55363feb8926af3a0f
+  URL https://ftp.postgresql.org/pub/source/v11.3/postgresql-11.3.tar.bz2
+  URL_MD5 c2a729b754b8de86a969c86ec25db076
 
   ${platform_specific_patch}
   CONFIGURE_COMMAND ./configure
@@ -28,11 +25,13 @@ ExternalProject_Add(
                     --disable-nls
                     --disable-debug
                     --disable-profiling
+                    --disable-cassert
                     --disable-coverage
                     --with-icu
                     --without-tcl
                     --without-perl
                     --without-python
+                    --without-gssapi
                     --enable-thread-safety
                     --without-readline
                     --without-bonjour
@@ -44,10 +43,12 @@ ExternalProject_Add(
                     --without-libxml
                     --without-libxslt
                     --with-zlib
+                    --disable-dtrace
                     PKG_CONFIG_PATH=${UNIX_INSTALL_PREFIX}/lib/pkgconfig
-                    CXXFLAGS=${compiler_flags}
-                    CFLAGS=${compiler_flags}
+                    CXXFLAGS=${CXXFLAGS//-w/} # if "-w" is given then "compiler does not report undeclared identifiers" during configuration
+                    CFLAGS=${CFLAGS//-w/}
 
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/build-connector-only.diff
   ${platform_specific_build}
   COMMAND $(MAKE) -C src/bin MAKELEVEL=0 install
   COMMAND $(MAKE) -C src/include MAKELEVEL=0 install
@@ -56,7 +57,7 @@ ExternalProject_Add(
 
   BUILD_IN_SOURCE 1
   ${CLEANUP_COMMAND}
-  DEPENDS ext_icu ext_openssl
+ DEPENDS ext_icu ext_openssl
 )
 
 

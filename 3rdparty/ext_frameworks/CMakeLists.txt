@@ -437,6 +437,8 @@ ExternalProject_Add(
   URL http://download.kde.org/stable/frameworks/5.58/kwallet-5.58.0.tar.xz
   URL_MD5 b27baeea7c21967609a4507cf616d47a
   CMAKE_ARGS ${CMAKE_FRAMEWORKS_GLOBAL_PROFILE}
+                        -DBUILD_KWALLETD=OFF
+                        -DBUILD_KWALLET_QUERY=OFF
   ${CLEANUP_COMMAND}
   DEPENDS ext_gcrypt ext_gpgme ext_kcoreaddons ext_kconfig ext_kwindowsystem ext_ki18n ext_kconfigwidgets ext_knotifications ext_kservice ext_kwidgetsaddons ext_kiconthemes ext_kdbusaddons
 )

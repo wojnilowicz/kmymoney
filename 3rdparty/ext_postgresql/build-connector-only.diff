@@ -1,17 +1,16 @@
-diff -ruN postgresql-11.2.orig/src/bin/Makefile postgresql-11.2/src/bin/Makefile
---- postgresql-11.2.orig/src/bin/Makefile	2019-02-11 22:17:27.000000000 +0100
-+++ postgresql-11.2/src/bin/Makefile	2019-04-27 23:05:30.667217200 +0200
-@@ -14,29 +14,14 @@
- include $(top_builddir)/src/Makefile.global
+diff -ruN postgresql-11.3.orig/src/bin/Makefile postgresql-11.3/src/bin/Makefile
+--- postgresql-11.3.orig/src/bin/Makefile	2019-05-06 22:46:18.000000000 +0200
++++ postgresql-11.3/src/bin/Makefile	2019-06-03 20:31:42.617858300 +0200
+@@ -15,28 +15,14 @@
  
  SUBDIRS = \
--	initdb \
+ 	initdb \
 -	pg_archivecleanup \
 -	pg_basebackup \
 -	pg_config \
 -	pg_controldata \
 -	pg_ctl \
--	pg_dump \
+ 	pg_dump \
 -	pg_resetwal \
 -	pg_rewind \
 -	pg_test_fsync \
@@ -22,8 +21,7 @@ diff -ruN postgresql-11.2.orig/src/bin/Makefile postgresql-11.2/src/bin/Makefile
 -	pgbench \
 -	psql \
 -	scripts
-+    pg_dump \
-+    psql
++	psql
  
 -ifeq ($(PORTNAME), win32)
 -SUBDIRS += pgevent

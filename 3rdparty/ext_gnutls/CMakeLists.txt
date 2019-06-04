@@ -4,8 +4,8 @@
 ExternalProject_Add(
   ext_gnutls
   ${PROJECT_GLOBAL_PROFILE}
-  URL https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.7.1.tar.xz
-  URL_MD5 92a8049e618afa60e2c852da1884c457
+  URL https://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-3.6.8.tar.xz
+  URL_MD5 9dcf0aa45d1a42e1b3ca5d39ec7c61a8
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
@@ -14,7 +14,7 @@ ExternalProject_Add(
     --disable-manpages
     --disable-tools
     --disable-cxx
-#    --disable-tls13-interop
+    --disable-tls13-interop
     --disable-ssl3-support
     --disable-ssl2-support
     --disable-dtls-srtp-support
@@ -24,17 +24,18 @@ ExternalProject_Add(
     --disable-psk-authentication # test if ok
     --disable-anon-authentication # test if ok
     --enable-dhe
-    --enable-ecdhe
+    --disable-ecdhe
     --disable-gost
     --disable-cryptodev
     --disable-ocsp
-    --enable-openssl-compatibility
+    --disable-openssl-compatibility
     --disable-tests
     --disable-fuzzer-target
     --disable-gtk-doc
     --disable-gtk-doc-html
     --disable-gtk-doc-pdf
     --disable-nls
+    --disable-rpath
     --disable-seccomp-tests
     --disable-valgrind-tests
     --disable-full-test-suite
@@ -44,16 +45,15 @@ ExternalProject_Add(
     --disable-guile
     --without-nettle-mini
     --without-included-libtasn1
-    --without-included-unistring
+    --with-included-unistring # It's 1.4 MB for libgnutls.30.dylib with this option compared to 1,5 MB for libunistring2.dylib and 1,2 MB for libgnutls.30.dylib without it
     --without-idn
     --without-p11-kit
     --without-tpm
-    --disable-rpath
     --enable-local-libopts
     CPPFLAGS=${AT_CPPFLAGS}
     LDFLAGS=${AT_LDFLAGS}
 
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_assuan2 ext_gpgerror ext_nettle ext_tasn1 ext_unistring
+  DEPENDS ext_assuan2 ext_gpgerror ext_nettle ext_tasn1
 )
