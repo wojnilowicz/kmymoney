@@ -136,7 +136,6 @@ createNSIS () {
     mv bin/libgwen* onlinebanking/libs
     mv bin/libgnutls* onlinebanking/libs
     mv bin/libtasn* onlinebanking/libs
-    mv bin/libunistring* onlinebanking/libs
     mv bin/libxmlsec* onlinebanking/libs
     mv bin/libnettle* onlinebanking/libs
     mv bin/libhogweed* onlinebanking/libs
