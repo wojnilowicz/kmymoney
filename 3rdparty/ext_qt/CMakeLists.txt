@@ -25,7 +25,10 @@
 #     -no-feature-udpsocket
 
 if (APPLE)
-  set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share)
+
+  set(platform_specific_options -macos-additional-datadirs ${CMAKE_INSTALL_PREFIX}/share
+                                                  -qt-freetype # otherwise system's freetype gets bundled with macdeployqt and it depends on wrong libpng
+                                                  )
   set(platform_specific_patch COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/qstandardpaths-extra-dirs.patch
                                                COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_GenericDataLocation_mac.patch
         )
@@ -33,9 +36,8 @@ elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  # no font without fontconfig
   set(platform_specific_options -qt-xcb
-                                                  -fontconfig
+                                                  -fontconfig # otherwise no font
                                                   -cups
                                                   CUPS_PREFIX=${CMAKE_INSTALL_PREFIX}
                                                   -I ${CMAKE_INSTALL_PREFIX}/include #otherwise cups/ppd.h: No such file or director
@@ -79,8 +81,6 @@ ExternalProject_Add(
     -icu
     -ssl
     -openssl-runtime
-    -qt-freetype
-    -qt-harfbuzz
     -no-sql-odbc
     -sql-psql
     -sql-mysql
