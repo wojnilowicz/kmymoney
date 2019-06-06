@@ -1,3 +1,5 @@
+# xmlsec1 doesn't use exsltCryptoRegister from xslt so no gcrypt needed
+# --with-plugins requires --with-modules in libxml2
 ExternalProject_Add(
   ext_xslt
   ${PROJECT_GLOBAL_PROFILE}
@@ -7,10 +9,11 @@ ExternalProject_Add(
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
     --without-python
+    --without-crypto
     --without-debug
     --without-debugger
 
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_xml ext_gcrypt
+  DEPENDS ext_xml
 )

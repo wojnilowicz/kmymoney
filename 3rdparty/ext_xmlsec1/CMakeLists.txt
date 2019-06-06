@@ -1,22 +1,44 @@
 # aqbanking checks only for xmlsec1-gnutls >= 1.0.0 so we don't need openssl and nss
 # we need gcrypt though because xmlsec-gnutls library requires xmlsec-gcrypt
+# aqbanking needs only xmlSecTransformHmacSha1Id
 set (gcrypt_lib "-L${UNIX_INSTALL_PREFIX}/lib -lgcrypt")
 ExternalProject_Add(
   ext_xmlsec1
   ${PROJECT_GLOBAL_PROFILE}
   URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.28.tar.gz
   URL_MD5 69b8d95c009a404462e19f335e650241
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xmlsec1.diff
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
     --disable-mscrypto
     --disable-mscng
+    --disable-md5
+    --disable-ripemd160
+    --enable-sha1
+    --disable-sha224
+    --disable-sha256
+    --disable-sha384
+    --disable-sha512
+    --enable-hmac
+    --disable-dsa
+    --disable-rsa
+    --disable-x509
+    --disable-des
+    --disable-aes
+    --disable-gost
+    --disable-gost2012
+    --disable-xmldsig
+    --disable-xmlenc
+    --disable-soap
     --disable-mans
     --disable-docs
     --disable-apps
     --without-openssl
     --without-nss
     --disable-crypto-dl
+    --disable-skm
+    --disable-tmpl-tests
     LDFLAGS=${gcrypt_lib}
 
   ${CLEANUP_COMMAND}

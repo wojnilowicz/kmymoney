@@ -33,7 +33,10 @@ elseif(MINGW)
   set(platform_specific_options -platform win32-g++ -opengl desktop)
   set(platform_specific_patch "")
 elseif(UNIX)
-  set(platform_specific_options -qt-xcb -cups
+  # no font without fontconfig
+  set(platform_specific_options -qt-xcb
+                                                  -fontconfig
+                                                  -cups
                                                   CUPS_PREFIX=${CMAKE_INSTALL_PREFIX}
                                                   -I ${CMAKE_INSTALL_PREFIX}/include #otherwise cups/ppd.h: No such file or director
                                                   )

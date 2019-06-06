@@ -21,8 +21,8 @@ ExternalProject_Add(
     --disable-alpn-support
     --disable-heartbeat-support
     --disable-srp-authentication
-    --disable-psk-authentication # test if ok
-    --disable-anon-authentication # test if ok
+    --disable-psk-authentication
+    --disable-anon-authentication
     --enable-dhe
     --disable-ecdhe
     --disable-gost
@@ -44,7 +44,7 @@ ExternalProject_Add(
     --disable-libdane
     --disable-guile
     --without-nettle-mini
-    --without-included-libtasn1
+    --with-included-libtasn1
     --with-included-unistring # It's 1.4 MB for libgnutls.30.dylib with this option compared to 1,5 MB for libunistring2.dylib and 1,2 MB for libgnutls.30.dylib without it
     --without-idn
     --without-p11-kit
@@ -55,5 +55,5 @@ ExternalProject_Add(
 
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_assuan2 ext_gpgerror ext_nettle ext_tasn1
+  DEPENDS ext_assuan2 ext_gpgerror ext_nettle
 )

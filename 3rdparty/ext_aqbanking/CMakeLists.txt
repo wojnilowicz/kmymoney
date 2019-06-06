@@ -1,6 +1,7 @@
 # Without CPPFLAGS and LDFLAGS "error: GMP is required"
 # "make -j1" prevents "cannot find the library libaqhbci.la or unhandled argument libaqhbci.la"
 # "make -j1 install" is needed on Linux, otherwise it fails to find libaqhbci.so
+# xslt is required by aqebics plugin
 
 if(MINGW)
   set(platform_specific_options

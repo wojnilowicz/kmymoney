@@ -16,7 +16,7 @@ ExternalProject_Add(
 
   ${CLEANUP_COMMAND}
 
-  DEPENDS ext_assuan2 ext_gcrypt
+  DEPENDS ext_assuan2 ext_gpgerror
 )
 
 if(MINGW)
