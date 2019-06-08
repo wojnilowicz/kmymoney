@@ -81,6 +81,9 @@ fi
 if [ -d $DEPS_INSTALL_PREFIX/plugins/mariadb ]; then
   echo "Copying MariaDB plugins..."
   rsync -prul $DEPS_INSTALL_PREFIX/plugins/mariadb $PLUGINS
+  if [ -f $PLUGINS/mariadb/remote_io.so ]; then
+    rm $PLUGINS/mariadb/remote_io.so
+  fi
 fi
 
 # Step 2: Relocate x64 binaries from the architecture specific directory as required for Appimages
@@ -181,8 +184,35 @@ rm -fr $KMYMONEY_INSTALL_PREFIX/share/kmymoney/icons/Tango
 rm -f $KMYMONEY_INSTALL_PREFIX/lib/libQt5*Test*
 find . \( -type f -and \( -name *.a -or -name *.la \) \) -exec rm {} \;
 
-rsync -prul $DEPS_INSTALL_PREFIX/lib/libgpg-error* $KMYMONEY_INSTALL_PREFIX/lib
+rsync -prul $DEPS_INSTALL_PREFIX/lib/libgpg-error.so* $KMYMONEY_INSTALL_PREFIX/lib
 patchelf --set-rpath '$ORIGIN/./lib' $KMYMONEY_INSTALL_PREFIX/lib/libgpg-error.so.0
+
+rsync -prul $DEPS_INSTALL_PREFIX/lib/libmariadb.so* $KMYMONEY_INSTALL_PREFIX/lib
+patchelf --set-rpath '$ORIGIN/./lib' $KMYMONEY_INSTALL_PREFIX/lib/libmariadb.so.3
+
+if [ -f $KMYMONEY_INSTALL_PREFIX/lib/libmysqlclient.so.20 ]; then
+rm $KMYMONEY_INSTALL_PREFIX/lib/libmysqlclient.so.20
+fi
+
+if [ -f $KMYMONEY_INSTALL_PREFIX/lib/libgssapi.so.3 ]; then
+  echo "Removing curl libaries..."
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libgssapi*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libkrb5*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libasn1*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libroken*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libhx509*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libwind*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libheim*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libhcrypto*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libcurl-gnutls*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libidn*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/librtmp*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libldap*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/liblber*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libk5crypto*
+  rm $KMYMONEY_INSTALL_PREFIX/lib/libsasl*
+
+fi
 
 # Strip libraries
 find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;

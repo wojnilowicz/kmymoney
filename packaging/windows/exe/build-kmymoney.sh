@@ -16,13 +16,15 @@ else
   BUILD_TESTING=FALSE
 fi
 
+export CXXFLAGS="-Os -DNDEBUG"
+export CFLAGS="-Os -DNDEBUG"
 
 # Configure KMyMoney for building
 cmake -G"MSYS Makefiles" \
       $KMYMONEY_SOURCES \
       -DCMAKE_INSTALL_PREFIX=$KMYMONEY_INSTALL_PREFIX \
       -DCMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX \
-      -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+      -DCMAKE_BUILD_TYPE=None \
       -DBUILD_TESTING=${BUILD_TESTING} \
       -DIS_APPIMAGE=FALSE
 
