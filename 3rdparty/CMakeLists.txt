@@ -33,7 +33,7 @@ if($ENV{CI})
   # use TEST_COMMAND instead of COMMAND to ensure that it will be executed after install step
   set(CLEANUP_COMMAND TEST_COMMAND rm -fr <SOURCE_DIR> && mkdir <SOURCE_DIR> && rm -fr <BINARY_DIR> && mkdir <BINARY_DIR>)
 else()
-  set(CLEANUP_COMMAND "")
+  set(CLEANUP_COMMAND TEST_COMMAND "")
 endif()
 
 if($ENV{TRAVIS_OS_NAME} AND $ENV{TRAVIS_OS_NAME} STREQUAL "windows")

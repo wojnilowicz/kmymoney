@@ -48,5 +48,6 @@ ExternalProject_Add(
     --enable-relocatable
 
   ${CLEANUP_COMMAND}
-  DEPENDS ext_xml #ext_glib
+  COMMAND rm -fr ${CMAKE_INSTALL_PREFIX}/share/doc/gettext
+  DEPENDS ext_xml
 )

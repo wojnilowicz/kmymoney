@@ -7,7 +7,7 @@ ExternalProject_Add(
   ${PROJECT_GLOBAL_PROFILE}
   URL https://www.aleksey.com/xmlsec/download/xmlsec1-1.2.28.tar.gz
   URL_MD5 69b8d95c009a404462e19f335e650241
-  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xmlsec1.diff
+  PATCH_COMMAND ${PATCH_EXECUTABLE} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/xmlsec1.diff # otherwise GNUTLS_E_SUCCESS undefined
 
   CONFIGURE_COMMAND <SOURCE_DIR>/configure
     ${AT_GLOBAL_PROFILE}
