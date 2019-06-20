@@ -182,7 +182,7 @@ kmymoney_findmissinglibs() {
 createDMG () {
   echo "Starting creation of dmg..."
   cd $CMAKE_BUILD_PREFIX
-  DMG_size=500
+  DMG_size=150
   DMG_title=KMyMoneyNEXT
   DMG_background=background.png
 
@@ -240,6 +240,7 @@ createDMG () {
   echo "Detaching image"
   hdiutil detach $device
   echo "Compressing image"
+  hdiutil compact kmymoney.temp.dmg
   hdiutil convert kmymoney.temp.dmg -format ULFO -o kmymoney-out.dmg
 
   # Add git version number

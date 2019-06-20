@@ -155,6 +155,7 @@ cd $DOWNLOADS_DIR
 #Step 6: Download tool to create AppImage
 wget -c -nv "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
 wget -c -nv "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+wget -c -nv "https://github.com/AppImage/AppImageKit/releases/download/continuous/runtime-x86_64"
 chmod a+x linuxdeployqt-continuous-x86_64.AppImage
 chmod a+x appimagetool-x86_64.AppImage
 
@@ -219,4 +220,10 @@ find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
 
 mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
 cd $CMAKE_BUILD_PREFIX
-$DOWNLOADS_DIR/appimagetool-x86_64.AppImage --comp xz ${APPDIR} KMyMoneyNEXT-${VERSION}-x86_64.AppImage
+APPIMAGE_NAME="KMyMoneyNEXT-${VERSION}-x86_64"
+mksquashfs ${APPDIR} ${APPIMAGE_NAME}.squashfs -root-owned -noappend -b 1M
+cat $DOWNLOADS_DIR/runtime-x86_64 >> ${APPIMAGE_NAME}.AppImage
+cat ${APPIMAGE_NAME}.squashfs >> ${APPIMAGE_NAME}.AppImage
+chmod a+x ${APPIMAGE_NAME}.AppImage
+
+# $DOWNLOADS_DIR/appimagetool-x86_64.AppImage --comp xz ${APPDIR} KMyMoneyNEXT-${VERSION}-x86_64.AppImage
