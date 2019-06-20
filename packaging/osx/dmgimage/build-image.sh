@@ -240,7 +240,6 @@ createDMG () {
   echo "Detaching image"
   hdiutil detach $device
   echo "Compressing image"
-  hdiutil compact kmymoney.temp.dmg
   hdiutil convert kmymoney.temp.dmg -format ULFO -o kmymoney-out.dmg
 
   # Add git version number

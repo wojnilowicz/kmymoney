@@ -221,7 +221,7 @@ find . \( -type f -and \( -name *.so -or -name kmymoney \) \) -exec strip {} \;
 mv -f  $KMYMONEY_SOURCES/packaging/linux/appimage/AppRun ${APPDIR}
 cd $CMAKE_BUILD_PREFIX
 APPIMAGE_NAME="KMyMoneyNEXT-${VERSION}-x86_64"
-mksquashfs ${APPDIR} ${APPIMAGE_NAME}.squashfs -root-owned -noappend -b 1M
+mksquashfs ${APPDIR} ${APPIMAGE_NAME}.squashfs -root-owned -noappend -b 1M -comp xz
 cat $DOWNLOADS_DIR/runtime-x86_64 >> ${APPIMAGE_NAME}.AppImage
 cat ${APPIMAGE_NAME}.squashfs >> ${APPIMAGE_NAME}.AppImage
 chmod a+x ${APPIMAGE_NAME}.AppImage
