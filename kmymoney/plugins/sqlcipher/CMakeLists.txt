@@ -1,6 +1,13 @@
 # qsql_sqlite between Qt versions aren't necessarily compatible and can fail to compile
 # qsql_sqlite is copied from https://github.com/sjemens/qsqlcipher-qt5
-if (Qt5Core_VERSION VERSION_GREATER 5.10.99)
+
+if (Qt5Core_VERSION VERSION_GREATER 5.14.99)
+  set (QSQLITE_VERSION 5.15) #untested
+
+elseif (Qt5Core_VERSION VERSION_GREATER 5.11.99)
+  set (QSQLITE_VERSION 5.12) #untested
+
+elseif (Qt5Core_VERSION VERSION_GREATER 5.10.99)
   set (QSQLITE_VERSION 5.11) #untested
 
 elseif (Qt5Core_VERSION VERSION_GREATER 5.9.99)
