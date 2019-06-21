@@ -44,6 +44,7 @@ if ($Env:TRAVIS) {
   $Env:UPLOADTOOL_SUFFIX = "windows-appveyor"
 
   bash -c "pacman -S --needed --noconfirm mingw-w64-x86_64-ninja"
+  bash -c "pacman -R --needed --noconfirm mingw-w64-bzip2"
 #   bash -c "pip3 install meson"
 }
 

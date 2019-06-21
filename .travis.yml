@@ -61,6 +61,7 @@ matrix:
           sudo apt-get install -qq -y g++-6 cmake ninja-build wget libc6-dev zlib1g-dev pkg-config libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev libxcb1-dev libx11-xcb-dev libxcb-glx0-dev libxcb-keysyms1-dev libxkbcommon-x11-dev libxkbcommon-dev libfreetype6-dev libxml-parser-perl libfam-dev libudev-dev gperf expat flex bison fuse appstream libgl1-mesa-dev  > /dev/null
           sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
           sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
+          sudo apt-get remove -qq -y libkrb5-dev libmysqlclient-dev
 
       install:
         - CONTINUE_WITH_NEXT_STEP=true
