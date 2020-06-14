@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
   /**
    * construct and register about data
    */
-  KAboutData aboutData(QStringLiteral("kmymoney"), i18n("KMyMoney"), QStringLiteral(VERSION));
+  KAboutData aboutData(QStringLiteral("kmymoney"), i18n("KMyMoneyNEXT"), QStringLiteral(VERSION));
   aboutData.setOrganizationDomain("kde.org");
   KAboutData::setApplicationData(aboutData);
 

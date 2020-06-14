@@ -47,18 +47,18 @@ KAboutData initializeCreditsData()
   features << i18n("Holiday regions integration");
 #endif
 
-  aboutData.setShortDescription(i18n("\nKMyMoney, the Personal Finance Manager by KDE.\n\nPlease consider contributing to this project with code and/or suggestions."));
+  aboutData.setShortDescription(i18n("\nKMyMoneyNEXT, the Personal Finance Manager by KDE.\n\nPlease consider contributing to this project with code and/or suggestions."));
   aboutData.setLicense(KAboutLicense::GPL);
-  aboutData.setCopyrightStatement(i18n("(c) 2000-2019 The KMyMoney development team"));
-  aboutData.setHomepage(QStringLiteral("https://kmymoney.org/"));
+  aboutData.setCopyrightStatement(i18n("(c) 2000-2019 The KMyMoneyNEXT development team"));
+  aboutData.setHomepage(QStringLiteral("https://github.com/wojnilowicz/kmymoneynext"));
   if (!features.empty())
     aboutData.setOtherText(i18n("Compiled with the following optional features:\n%1", features.join(QLatin1Char('\n'))));
 
-  aboutData.addAuthor(i18n("Thomas Baumgart"),    i18n("Core engine, Release Manager, Project admin"), "ipwizard@users.sourceforge.net");
-  aboutData.addAuthor(i18n("Łukasz Wojniłowicz"), i18n("Developer"), "lukasz.wojnilowicz@gmail.com");
-  aboutData.addAuthor(i18n("Ralf Habacker"),      i18n("Developer"), "ralf.habacker@freenet.de");
-  aboutData.addAuthor(i18n("Cristian Oneț"),      i18n("Developer"), "onet.cristian@gmail.com");
-  aboutData.addAuthor(i18n("Christian Dávid"),    i18n("Developer"), "christian-david@web.de");
+  aboutData.addAuthor(i18n("Łukasz Wojniłowicz"), i18n("Core engine, Release Manager, Project admin"), "lukasz.wojnilowicz@gmail.com");
+  aboutData.addAuthor(i18n("Thomas Baumgart"),    i18n("KMyMoney member"), "ipwizard@users.sourceforge.net");
+  aboutData.addAuthor(i18n("Ralf Habacker"),      i18n("KMyMoney member"), "ralf.habacker@freenet.de");
+  aboutData.addAuthor(i18n("Cristian Oneț"),      i18n("KMyMoney member"), "onet.cristian@gmail.com");
+  aboutData.addAuthor(i18n("Christian Dávid"),    i18n("KMyMoney member"), "christian-david@web.de");
 
   aboutData.addAuthor(i18n("Michael Edwardes"), i18n("Inactive member. ") + i18n("Initial idea, much initial source code, Project admin"), "mte@users.sourceforge.net");
   aboutData.addAuthor(i18n("Alvaro Soliverez"), i18n("Inactive member. ") + i18n("Forecast, Reports"), "asoliverez@gmail.com");

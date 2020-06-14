@@ -191,12 +191,12 @@ if(APPLE)
     # so has to be set for all targets in this cmake file
     set(MACOSX_BUNDLE_DISPLAY_NAME KMyMoney)
     set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_GUI_IDENTIFIER "org.kde.KMyMoney")
-    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KMyMoney")
-    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_DISPLAY_NAME "KMyMoney")
-    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_INFO_STRING "KMyMoney - Personal Finances Manager")
+    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_BUNDLE_NAME "KMyMoneyNEXT")
+    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_DISPLAY_NAME "KMyMoneyNEXT")
+    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_INFO_STRING "KMyMoneyNEXT - Personal Finances Manager")
     set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_SHORT_VERSION_STRING "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
     set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_BUNDLE_VERSION "${RELEASE_SERVICE_VERSION_MAJOR}.${RELEASE_SERVICE_VERSION_MINOR}.${RELEASE_SERVICE_VERSION_MICRO}")
-    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_COPYRIGHT "© 2000-${CURRENT_YEAR} The KMyMoney Authors")
+    set_target_properties(kmymoney PROPERTIES MACOSX_BUNDLE_COPYRIGHT "© 2000-${CURRENT_YEAR} The KMyMoneyNEXT Authors")
 endif()
 
 ########### install files ###############
