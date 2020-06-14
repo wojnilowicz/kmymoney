@@ -52,7 +52,7 @@
         "Description[uk]": "Створення звітів після кожного узгодження із даними щодо процедури узгодження",
         "Description[x-test]": "xxCreates a report after each reconciliation containing data about the reconciliation processxx",
         "EnabledByDefault": true,
-        "Icon": "application-vnd.oasis.opendocument.spreadsheet",
+        "Icon": "application-vnd.oasis.opendocument.spreadsheet-template",
         "Id": "reconciliationreport",
         "License": "GPL",
         "Name": "Reconciliation report",
