@@ -6,8 +6,8 @@ add_subdirectory( gnc )
 add_subdirectory( ofx )
 add_subdirectory( icalendar )
 add_subdirectory( views )
-add_subdirectory( xml )
 add_subdirectory( xmlhelper )
+add_subdirectory( storage )
 
 if(ENABLE_RECONCILIATIONREPORT)
   add_subdirectory( reconciliationreport )
@@ -15,10 +15,6 @@ endif()
 
 if(ENABLE_CHECKPRINTING)
   add_subdirectory( checkprinting )
-endif()
-
-if(ENABLE_SQLSTORAGE)
-  add_subdirectory(sql)
 endif()
 
 if(ENABLE_IBANBICDATA)

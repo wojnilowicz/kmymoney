@@ -70,6 +70,8 @@ namespace eDialogs { enum class ScheduleResultCode; }
 namespace eMenu { enum class Action;
                   enum class Menu; }
 
+enum class FileIntent;
+
 /*! \mainpage KMyMoney Main Page for API documentation.
  *
  * \section intro Introduction
@@ -279,8 +281,8 @@ public:
 
   void writeLastUsedDir(const QString& directory);
   QString readLastUsedDir() const;
-  void writeLastUsedFile(const QString& fileName);
-  QString readLastUsedFile() const;
+  void writeLastUsedFile(const QUrl& url);
+  QUrl readLastUsedFile() const;
 
   /**
     * Returns whether there is an importer available that can handle this file
@@ -346,7 +348,7 @@ public:
     */
   bool isNativeFile();
 
-  bool fileOpen() const;
+  bool isFileOpen() const;
 
   KMyMoneyAppCallback progressCallback();
 
@@ -621,20 +623,45 @@ private:
   /// \internal d-pointer instance.
   Private* d;
 
+Q_SIGNALS:
+  void fileCreated();
+  void fileOpened();
+  void fileSaved();
+  void fileClosed();
+
 public Q_SLOTS:
-  bool slotFileNew();
-  void slotFileOpen();
-  bool slotFileOpenRecent(const QUrl &url);
-  bool slotFileSave();
-  bool slotFileSaveAs();
-  bool slotFileClose();
+  void slotFileNewClicked();
+  void slotFileOpenClicked();
+  void slotFileOpenRecentClicked(const QUrl &url);
+  void slotFileSaveClicked();
+  void slotFileSaveAsClicked();
+  void slotFileCloseClicked();
+  void slotFileQuitClicked();
+
+  void slotFileCreated();
+  void slotFileOpened(const QUrl &url);
+  void slotFileSaved(const QUrl &url);
+  void slotFileClosed();
+
+  void slotOpenUrlRequested(const QUrl &url);
+  void slotSaveUrlRequested(const QUrl &url);
+
+public:
+  void initStorageManager();
+  void warnOfMissingStorageManager(FileIntent intent);
+  void fileNew();
+  void fileOpen();
+  void fileSave();
+  void fileSaveAs();
+  void fileClose();
+
   /**
     * closes all open windows by calling close() on each memberList item
     * until the list is empty, then quits the application.
     * If queryClose() returns false because the user canceled the
     * saveModified() dialog, the closing breaks.
     */
-  void slotFileQuit();
+  void fileQuit();
 };
 
 extern KMyMoneyApp *kmymoney;

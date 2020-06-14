@@ -91,7 +91,7 @@ endif()
 # Qt's CMake configuration file doesn't handle COMPONENTS AND OPTIONAL_COMPONENTS well in one find_package command
 set(REQUIRED_QT_VERSION 5.6)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport)
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets WebEngineWidgets)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets WebEngineWidgets Qml Quick)
 
 find_package(KF5 5.2
   REQUIRED COMPONENTS
@@ -207,6 +207,11 @@ add_feature_info("Budget view" ENABLE_BUDGETVIEW "Adds possibility to plan a bud
 option(ENABLE_ONLINEJOBOUTBOXVIEW "Enable online job outbox view" ON)
 add_feature_info("Online job outbox view" ENABLE_ONLINEJOBOUTBOXVIEW "Adds outbox for sending online jobs.")
 
+cmake_dependent_option(ENABLE_XMLSTORAGE "Enable XML storage support." ON
+                       "Qt5Xml_FOUND" OFF)
+
+add_feature_info("XML Storage" ENABLE_XMLSTORAGE "Allows storing your financial data in XML file.")
+
 cmake_dependent_option(ENABLE_SQLSTORAGE "Enable SQL storage support." ON
                        "Qt5Sql_FOUND" OFF)
 
@@ -214,6 +219,11 @@ add_feature_info("SQL Storage" ENABLE_SQLSTORAGE "Allows storing your financial 
 
 cmake_dependent_option(ENABLE_SQLCIPHER "Enable SQLCipher support." ON
                        "SQLCIPHER_FOUND" OFF)
+                       
+cmake_dependent_option(ENABLE_QUICK "Enable Qt Quick user interface." ON
+                       "Qt5Quick_FOUND;Qt5Qml_FOUND;" OFF)
+
+add_feature_info("Qt Quick interface" ENABLE_QUICK "Allows having some part of UI in Qt Quick as oposed to Qt Widgets.")
 
 cmake_dependent_option(ENABLE_SQLTRACER "Dump SQL requests to console" OFF
                        "ENABLE_SQLSTORAGE" OFF)

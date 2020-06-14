@@ -61,6 +61,8 @@ namespace eKMyMoney { enum class StorageType; }
  *
  * @{
  */
+namespace Storage {class IStoragePlugin;}
+namespace Storage {class IStorageManager;}
 
 namespace KMyMoneyPlugin
 {
@@ -360,6 +362,8 @@ struct Container {
   QMap<QString, OnlinePluginExtended*> extended;  // casted standard plugin, if such interface is available
   QMap<QString, ImporterPlugin*>       importer;  // casted standard plugin, if such interface is available
   QMap<QString, StoragePlugin*>        storage;   // casted standard plugin, if such interface is available
+  QMap<QString, Storage::IStorageManager*>   newstoragemgr;   // casted standard plugin, if such interface is available
+  QMap<QString, Storage::IStoragePlugin*>          newstorage;   // casted standard plugin, if such interface is available
   QMap<QString, DataPlugin*>           data;      // casted standard plugin, if such interface is available
 };
 

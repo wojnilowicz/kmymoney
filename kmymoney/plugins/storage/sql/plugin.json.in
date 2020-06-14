@@ -1,0 +1,21 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "lukasz.wojnilowicz@gmail.com",
+                "Name": "Łukasz Wojniłowicz"
+            }
+        ],
+        "Description": "@PLUGIN_DESCRIPTION@",
+        "EnabledByDefault": true,
+        "Icon": "network-server-database",
+        "Id": "@PLUGIN_ID@",
+        "License": "GPL",
+        "Name": "@PLUGIN_NAME@",
+        "ServiceTypes": [
+            "KMyMoney/Plugin"
+        ],
+        "Version": "@PROJECT_VERSION@@PROJECT_VERSION_SUFFIX@",
+        "Website": "https://kmymoney.org/plugins.html"
+    }
+}

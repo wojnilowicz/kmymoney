@@ -1,0 +1,2 @@
+#cmakedefine ENABLE_SQLCIPHER 1
+#cmakedefine ENABLE_QUICK 1

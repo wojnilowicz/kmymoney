@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=@KCM_NAME@
+Icon=im-user
+Type=Service
+ServiceTypes=KCModule
+Exec=kcmshell5 @PLUGIN_ID@
+Categories=Qt;KDE;kmymoney;
+Keywords=@PLUGIN_ID@;kmymoney;
+X-KDE-Library=kmymoney/@KCM_ID@
+X-KDE-ParentApp=@PLUGIN_ID@
+X-KDE-ParentComponents=@PLUGIN_ID@
+Comment=@KCM_DESCRIPTION@

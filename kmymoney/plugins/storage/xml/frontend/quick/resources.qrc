@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/storage/xml">
+        <file>opensave.qml</file>
+        <file>saveasencrypted.qml</file>
+    </qresource>
+</RCC>

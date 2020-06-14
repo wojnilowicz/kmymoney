@@ -1,0 +1,7 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/storage/sql">
+        <file>opensave.qml</file>
+        <file>opensaveserver.qml</file>
+        <file>credentials.qml</file>
+    </qresource>
+</RCC>

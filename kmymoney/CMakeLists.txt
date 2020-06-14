@@ -162,6 +162,7 @@ target_link_libraries(kmymoney
   kmm_mymoney
   interfaces
   kmm_plugin
+  kmm_istorage
   Qt5::Core
   KF5::ConfigGui
   KF5::WidgetsAddons

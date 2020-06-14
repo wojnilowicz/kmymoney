@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/storage">
+        <file>questionyesno.qml</file>
+        <file>warning.qml</file>
+        <file>error.qml</file>
+        <file>detailederror.qml</file>
+        <file>informationlist.qml</file>
+        <file>information.qml</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,6 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/storage/gpg">
+        <file>unusedkeys.qml</file>
+        <file>keysselector.qml</file>
+    </qresource>
+</RCC>

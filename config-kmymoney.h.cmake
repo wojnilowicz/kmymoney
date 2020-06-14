@@ -21,6 +21,4 @@
 
 #cmakedefine MPIR_FOUND 1
 
-#cmakedefine ENABLE_GPG 1
-
 #cmakedefine IS_APPIMAGE 1

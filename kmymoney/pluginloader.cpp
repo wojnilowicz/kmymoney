@@ -36,6 +36,7 @@
 
 #include "kmymoneyplugin.h"
 #include "onlinepluginextended.h"
+#include "plugins/storage/interface/iplugin.h"
 
 namespace KMyMoneyPlugin
 {
@@ -107,6 +108,9 @@ namespace KMyMoneyPlugin
           ctnPlugins.storage.remove(it.key());
           ctnPlugins.data.remove(it.key());
 
+          ctnPlugins.newstorage.remove(it.key());
+          ctnPlugins.newstoragemgr.remove(it.key());
+
           guiFactory->removeClient(it.value());
           it.value()->unplug();
           delete it.value();
@@ -140,6 +144,8 @@ namespace KMyMoneyPlugin
             continue;
           }
 
+          plugin->setObjectName((*it).pluginId());
+
           ctnPlugins.standard.insert((*it).pluginId(), plugin);
           plugin->plug();
           guiFactory->addClient(plugin);
@@ -159,6 +165,14 @@ namespace KMyMoneyPlugin
           auto IStorage = qobject_cast<StoragePlugin *>(plugin);
           if (IStorage)
             ctnPlugins.storage.insert((*it).pluginId(), IStorage);
+
+          auto INewStorageMgr = qobject_cast<Storage::IStorageManager *>(plugin);
+          if (INewStorageMgr)
+            ctnPlugins.newstoragemgr.insert((*it).pluginId(), INewStorageMgr);
+
+          auto INewStorage = qobject_cast<Storage::IStoragePlugin *>(plugin);
+          if (INewStorage)
+            ctnPlugins.newstorage.insert((*it).pluginId(), INewStorage);
 
           auto IData = qobject_cast<DataPlugin *>(plugin);
           if (IData)

@@ -38,7 +38,7 @@ KMyMoneyPlugin::KMMAppInterface::KMMAppInterface(KMyMoneyApp* app, QObject* pare
 
 bool KMyMoneyPlugin::KMMAppInterface::fileOpen()
 {
-  return m_app->fileOpen();
+  return m_app->isFileOpen();
 }
 
 bool KMyMoneyPlugin::KMMAppInterface::isDatabase()
@@ -68,12 +68,12 @@ QUrl KMyMoneyPlugin::KMMAppInterface::lastOpenedURL()
 
 void KMyMoneyPlugin::KMMAppInterface::writeLastUsedFile(const QString& fileName)
 {
-  m_app->writeLastUsedFile(fileName);
+//  m_app->writeLastUsedFile(fileName);
 }
 
 void KMyMoneyPlugin::KMMAppInterface::slotFileOpenRecent(const QUrl &url)
 {
-  m_app->slotFileOpenRecent(url);
+  m_app->slotOpenUrlRequested(url);
 }
 
 void KMyMoneyPlugin::KMMAppInterface::addToRecentFiles(const QUrl& url)
