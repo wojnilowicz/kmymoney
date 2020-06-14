@@ -7,4 +7,5 @@ ecm_add_tests(${tests_sources}
     Qt5::Test
     kmm_testutilities
     converter
+    kmm_base_dialogs
 )

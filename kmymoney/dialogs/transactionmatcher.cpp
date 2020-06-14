@@ -61,12 +61,15 @@ TransactionMatcher::~TransactionMatcher()
 void TransactionMatcher::match(MyMoneyTransaction tm, MyMoneySplit sm, MyMoneyTransaction ti, MyMoneySplit si, bool allowImportedTransactions)
 {
   Q_D(TransactionMatcher);
-  auto sec = MyMoneyFile::instance()->security(d->m_account.currencyId());
+  const auto &file = MyMoneyFile::instance();
+  auto sec = file->security(d->m_account.currencyId());
 
   // Now match the transactions.
   //
-  // 'Matching' the transactions entails DELETING the end transaction,
-  // and MODIFYING the start transaction as needed.
+  // 'Matching' the transactions entails CREATING new transaction which
+  // has parameters of matched transactions. The matched transactions
+  // change their origin attribute and shouldn't be visible
+  // by default anywhere. Only the new transaction will be visible.
   //
   // There are a variety of ways that a transaction can conflict.
   // Post date, splits, amount are the ones that seem to matter.
@@ -105,6 +108,41 @@ void TransactionMatcher::match(MyMoneyTransaction tm, MyMoneySplit sm, MyMoneyTr
     throw MYMONEYEXCEPTION(QString::fromLatin1("Splits for %1 have conflicting values (%2,%3)").arg(d->m_account.name(), MyMoneyUtils::formatMoney(sm.shares(), d->m_account, sec), MyMoneyUtils::formatMoney(si.shares(), d->m_account, sec)));
   }
 
+  if (ti.isMatched())
+    throw MYMONEYEXCEPTION_CSTRING("Second transaction is a product of match.");
+
+  // if next match is comming, then we won't hide this transaction but update it
+  const auto isTransactionAlreadyMatched = tm.isMatched();
+  if (!isTransactionAlreadyMatched) {
+    // hide start transaction (input for matching)
+    tm.setOrigin(static_cast<eMyMoney::Transaction::Origin>(tm.origin() | eMyMoney::Transaction::Origin::MatchingInput));
+    file->modifyTransaction(tm);
+    // from now on tm is matched transaction (output of matching)
+    tm.setOrigin(eMyMoney::Transaction::Origin::MatchingOutput);
+  }
+
+  // next match has matched matched transaction and it's id is meaningless in that case
+  // so search for an ID of already matched transaction
+  QString startTransactionID;
+  if (isTransactionAlreadyMatched) {
+    for (const auto &split : tm.splits()) {
+      if (split.isMatched()) {
+        startTransactionID = split.MyMoneyKeyValueContainer::value("kmm-match-transaction").split(';').first();
+        break;
+      }
+    }
+  } else {
+    startTransactionID = tm.id();
+  }
+
+  // add details about ma
+  sm.setValue("kmm-match-transaction", QString::fromLatin1("%1;%2").arg(startTransactionID, ti.id()));
+  sm.setValue("kmm-match-split", QString::fromLatin1("%1;%2").arg(sm.id(), si.id()));
+
+  // hide end transaction (input for matching)
+  ti.setOrigin(static_cast<eMyMoney::Transaction::Origin>(ti.origin() | eMyMoney::Transaction::Origin::MatchingInput));
+  file->modifyTransaction(ti);
+
   // ipwizard: I took over the code to keep the bank id found in the endMatchTransaction
   // This might not work for QIF imports as they don't setup this information. It sure
   // makes sense for OFX and HBCI.
@@ -130,92 +168,91 @@ void TransactionMatcher::match(MyMoneyTransaction tm, MyMoneySplit sm, MyMoneyTr
 
   // if we don't have a payee assigned to the manually entered transaction
   // we use the one we found in the imported transaction
-  if (sm.payeeId().isEmpty() && !si.payeeId().isEmpty()) {
-    sm.setValue("kmm-orig-payee", sm.payeeId());
+  if (sm.payeeId().isEmpty() && !si.payeeId().isEmpty())
     sm.setPayeeId(si.payeeId());
-  }
 
   // We use the imported postdate and keep the previous one for unmatch
-  if (tm.postDate() != ti.postDate()) {
-    sm.setValue("kmm-orig-postdate", tm.postDate().toString(Qt::ISODate));
+  if (tm.postDate() != ti.postDate())
     tm.setPostDate(ti.postDate());
-  }
 
   // combine the two memos into one
   QString memo = sm.memo();
   if (!si.memo().isEmpty() && si.memo() != memo) {
-    sm.setValue("kmm-orig-memo", memo);
     if (!memo.isEmpty())
       memo += '\n';
     memo += si.memo();
   }
   sm.setMemo(memo);
 
-  // remember the split we matched
-  sm.setValue("kmm-match-split", si.id());
-
-  sm.addMatch(ti);
+  sm.addMatch();
   tm.modifySplit(sm);
 
-  ti.modifySplit(si);///
-  MyMoneyFile::instance()->modifyTransaction(tm);
-  // Delete the end transaction if it was stored in the engine
-  if (!ti.id().isEmpty())
-    MyMoneyFile::instance()->removeTransaction(ti);
+  ti.modifySplit(si);
+
+  // if matched transaction already exists then update it
+  // if not then create it
+  if (isTransactionAlreadyMatched) {
+    file->modifyTransaction(tm);
+  } else {
+    tm.clearId();
+    file->addTransaction(tm);
+  }
 }
 
 void TransactionMatcher::unmatch(const MyMoneyTransaction& _t, const MyMoneySplit& _s)
 {
-  if (_s.isMatched()) {
-    MyMoneyTransaction tm(_t);
-    MyMoneySplit sm(_s);
-    MyMoneyTransaction ti(sm.matchedTransaction());
-    MyMoneySplit si;
-    // if we don't have a split, then we don't have a memo
-    try {
-      si = ti.splitById(sm.value("kmm-match-split"));
-    } catch (const MyMoneyException &) {
-    }
-    sm.removeMatch();
+  if (!_s.isMatched())
+    return;
 
-    // restore the postdate if modified
-    if (!sm.value("kmm-orig-postdate").isEmpty()) {
-      tm.setPostDate(QDate::fromString(sm.value("kmm-orig-postdate"), Qt::ISODate));
-    }
-
-    // restore payee if modified
-    if (!sm.value("kmm-orig-payee").isEmpty()) {
-      sm.setPayeeId(sm.value("kmm-orig-payee"));
-    }
-
-    // restore memo if modified
-    if (!sm.value("kmm-orig-memo").isEmpty()) {
-      sm.setMemo(sm.value("kmm-orig-memo"));
-    }
-
-    sm.deletePair("kmm-orig-postdate");
-    sm.deletePair("kmm-orig-payee");
-    sm.deletePair("kmm-orig-memo");
-    sm.deletePair("kmm-match-split");
-    tm.modifySplit(sm);
-
-    MyMoneyFile::instance()->modifyTransaction(tm);
-    MyMoneyFile::instance()->addTransaction(ti);
+  const auto &file = MyMoneyFile::instance();
+  MyMoneyTransaction tm(_t);
+  MyMoneySplit sm(_s);
+  for (const auto &transactionID : sm.matchedTransactionIDs()) {
+    auto inputTransaction = file->transaction(transactionID);
+    // unhide start and end transaction
+    inputTransaction.setOrigin(static_cast<eMyMoney::Transaction::Origin>(inputTransaction.origin() ^ eMyMoney::Transaction::Origin::MatchingInput));
+    file->modifyTransaction(inputTransaction);
   }
+
+  // effectively remove matching information from a split
+  sm.MyMoneyKeyValueContainer::deletePair("kmm-match-transaction");
+  sm.MyMoneyKeyValueContainer::deletePair("kmm-match-split");
+  sm.removeMatch();
+
+  tm.modifySplit(sm);
+  file->modifyTransaction(tm);
+
+  // if there is no another matched split in a transaction
+  // then this transaction can be removed
+  auto isAnyMatchedSplitLeft = false;
+  for (const auto &split : tm.splits()) {
+    if (split.isMatched()) {
+      isAnyMatchedSplitLeft = true;
+      break;
+    }
+  }
+
+  if (!isAnyMatchedSplitLeft)
+    file->removeTransaction(tm);
 }
 
 void TransactionMatcher::accept(const MyMoneyTransaction& _t, const MyMoneySplit& _s)
 {
-  if (_s.isMatched()) {
-    MyMoneyTransaction tm(_t);
-    MyMoneySplit sm(_s);
-    sm.removeMatch();
-    sm.deletePair("kmm-orig-postdate");
-    sm.deletePair("kmm-orig-payee");
-    sm.deletePair("kmm-orig-memo");
-    sm.deletePair("kmm-match-split");
-    tm.modifySplit(sm);
+  if (!_s.isMatched())
+    return;
+  MyMoneyTransaction tm(_t);
+  MyMoneySplit sm(_s);
 
-    MyMoneyFile::instance()->modifyTransaction(tm);
+  const auto &file = MyMoneyFile::instance();
+  for (const auto &transactionID : sm.matchedTransactionIDs()) {
+    auto inputTransaction = file->transaction(transactionID);
+    file->removeTransaction(inputTransaction);
   }
+
+  sm.MyMoneyKeyValueContainer::deletePair("kmm-match-transaction");
+  sm.MyMoneyKeyValueContainer::deletePair("kmm-match-split");
+  sm.removeMatch();
+  tm.modifySplit(sm);
+
+  file->modifyTransaction(tm);
 }

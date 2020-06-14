@@ -499,7 +499,8 @@ public:
             for (auto& split : transaction.splits()) {
               // if the split is assigned to one of the selected payees, we need to modify it
               if (split.isMatched()) {
-                auto tm = split.matchedTransaction();
+                const auto matchedTransactionID = split.matchedTransaction();
+                auto tm = file->transaction(matchedTransactionID);
                 for (auto& sm : tm.splits()) {
                   if (payeeInList(list , sm.payeeId())) {
                     sm.setPayeeId(payee_id); // first modify payee in current split
@@ -507,7 +508,7 @@ public:
                     tm.modifySplit(sm); // this does not modify the list object 'splits'!
                   }
                 }
-                split.addMatch(tm);
+                split.addMatch();
                 transaction.modifySplit(split); // this does not modify the list object 'splits'!
               }
               if (payeeInList(list, split.payeeId())) {

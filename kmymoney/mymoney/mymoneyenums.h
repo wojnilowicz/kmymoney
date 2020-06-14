@@ -419,6 +419,14 @@ namespace eMyMoney {
     };
 
     inline uint qHash(const Action key, uint seed) { return ::qHash(static_cast<uint>(key), seed); }
+
+    enum Origin : int {
+      None = 0x0,
+      Typed = 0x1,
+      Imported = 0x2,
+      MatchingOutput = 0x4,
+      MatchingInput = 0x8,
+    };
   }
 
   namespace Money {

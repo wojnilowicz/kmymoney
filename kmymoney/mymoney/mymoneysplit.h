@@ -202,7 +202,7 @@ public:
    * added transaction will be overridden. @p t.isImported() must return true,
    * otherwise the transaction is not stored.
    */
-  void addMatch(const MyMoneyTransaction& t);
+  void addMatch();
 
   /**
    * remove the data of the imported transaction added with addMatch().
@@ -210,10 +210,12 @@ public:
   void removeMatch();
 
   /**
-   * Return the matching imported transaction. If no such transaction
-   * is available (isMatched() returns false) an empty transaction is returned.
+   * Return ID of the matching imported transaction. If no such transaction
+   * is available (isMatched() returns false) an empty string is returned.
    */
-  MyMoneyTransaction matchedTransaction() const;
+  QString matchedTransaction() const;
+
+  QStringList matchedTransactionIDs() const;
 
   /**
    * This method replaces all occurrences of id @a oldId with

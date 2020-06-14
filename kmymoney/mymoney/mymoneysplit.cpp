@@ -35,6 +35,7 @@
 #include "mymoneyutils.h"
 #include "mymoneytransaction.h"
 #include "mymoneyexception.h"
+#include "mymoneyfile.h" // TODO: move replaceID to mymoneyfile.h, as mymoneysplit.h shouldn't know anything about storage
 
 MyMoneySplit::MyMoneySplit() :
   MyMoneyObject(*new MyMoneySplitPrivate)
@@ -391,9 +392,9 @@ bool MyMoneySplit::hasReferenceTo(const QString& id) const
 {
   Q_D(const MyMoneySplit);
   auto rc = false;
-  if (isMatched()) {
-    rc = matchedTransaction().hasReferenceTo(id);
-  }
+  if (isMatched())
+    rc = matchedTransactionIDs().contains(id);
+
   for (int i = 0; i < d->m_tagList.size(); i++)
     if (id == d->m_tagList[i])
       return true;
@@ -406,7 +407,10 @@ QSet<QString> MyMoneySplit::referencedObjects() const
 
   QSet<QString> ids;
   if (isMatched()) {
-    ids.unite(matchedTransaction().referencedObjects());
+    auto matchedTransactionID = matchedTransaction();
+    const auto file = MyMoneyFile::instance();
+    auto matchedTransaction = file->transaction(matchedTransactionID);
+    ids.unite(matchedTransaction.referencedObjects());
   }
   for (int i = 0; i < d->m_tagList.size(); i++) {
     ids.insert(d->m_tagList[i]);
@@ -423,29 +427,33 @@ bool MyMoneySplit::isMatched() const
   return d->m_isMatched;
 }
 
-void MyMoneySplit::addMatch(const MyMoneyTransaction& _t)
+void MyMoneySplit::addMatch()
 {
   Q_D(MyMoneySplit);
-  //  now we allow matching of two manual transactions
-  d->m_matchedTransaction = _t;
-  d->m_matchedTransaction.clearId();
   d->m_isMatched = true;
 }
 
 void MyMoneySplit::removeMatch()
 {
   Q_D(MyMoneySplit);
-  d->m_matchedTransaction = MyMoneyTransaction();
   d->m_isMatched = false;
 }
 
-MyMoneyTransaction MyMoneySplit::matchedTransaction() const
+QString MyMoneySplit::matchedTransaction() const
 {
   Q_D(const MyMoneySplit);
   if (d->m_isMatched)
-    return d->m_matchedTransaction;
+    return MyMoneyKeyValueContainer::value("kmm-match-transaction").split(';').last();
 
-  return MyMoneyTransaction();
+  return QString();
+}
+
+QStringList MyMoneySplit::matchedTransactionIDs() const
+{
+  Q_D(const MyMoneySplit);
+  if (d->m_isMatched)
+    return MyMoneyKeyValueContainer::value("kmm-match-transaction").split(';');
+  return QStringList();
 }
 
 bool MyMoneySplit::replaceId(const QString& newId, const QString& oldId)
@@ -465,10 +473,39 @@ bool MyMoneySplit::replaceId(const QString& newId, const QString& oldId)
   }
 
   if (isMatched()) {
-    MyMoneyTransaction t = matchedTransaction();
-    if (t.replaceId(newId, oldId)) {
-      removeMatch();
-      addMatch(t);
+    const auto file = MyMoneyFile::instance();
+    auto oldList = MyMoneyKeyValueContainer::value("kmm-match-transaction").split(';');
+    auto newList = oldList;
+    for (auto &item : newList) {
+      try {
+        auto oldTransaction = file->transaction(item);
+        if (oldTransaction.replaceId(newId, oldId)) {
+          MyMoneyFileTransaction ft;
+          file->modifyTransaction(oldTransaction);
+          ft.commit();
+          changed = true;
+        }
+      } catch (MyMoneyException &e) {
+      }
+
+      item = item.replace(oldId, newId);
+    }
+
+    if (newList != oldList) {
+      for (auto &item : newList) {
+        try {
+          auto newTransaction = file->transaction(item);
+          if (newTransaction.replaceId(newId, oldId)) {
+            MyMoneyFileTransaction ft;
+            file->modifyTransaction(newTransaction);
+            ft.commit();
+            changed = true;
+          }
+        } catch (MyMoneyException &e) {
+        }
+      }
+
+      MyMoneyKeyValueContainer::setValue("kmm-match-transaction", newList.join(';'));
       changed = true;
     }
   }

@@ -1859,6 +1859,7 @@ QMap<QString, MyMoneyTransaction> MyMoneyStorageSql::fetchTransactions(const QSt
   int entryDateCol = t.fieldNumber("entryDate");
   int currencyIdCol = t.fieldNumber("currencyId");
   int bankIdCol = t.fieldNumber("bankId");
+  auto originIdCol = t.fieldNumber("origin");
 
   while (query.next()) {
     MyMoneyTransaction tx;
@@ -1868,6 +1869,7 @@ QMap<QString, MyMoneyTransaction> MyMoneyStorageSql::fetchTransactions(const QSt
     tx.setEntryDate(GETDATE_D(entryDateCol));
     tx.setCommodity(GETSTRING(currencyIdCol));
     tx.setBankID(GETSTRING(bankIdCol));
+    tx.setOrigin(static_cast<eMyMoney::Transaction::Origin>(GETINT(originIdCol)));
 
     // skip all splits while the transaction id of the split is less than
     // the transaction id of the current transaction. Don't forget to check

@@ -98,8 +98,12 @@ void StdTransactionMatched::registerCellText(QString& txt, Qt::Alignment& align,
       font.setItalic(true);
       painter->setFont(font);
     }
+    const auto& file = MyMoneyFile::instance();
+    const auto matchedTransactionID = d->m_split.matchedTransaction();
+    auto matchedTransaction = matchedTransactionID.isEmpty() ?
+          MyMoneyTransaction() :
+          file->transaction(matchedTransactionID);
 
-    MyMoneyTransaction matchedTransaction = d->m_split.matchedTransaction();
     MyMoneySplit matchedSplit;
     try {
       matchedSplit = matchedTransaction.splitById(d->m_split.value("kmm-match-split"));

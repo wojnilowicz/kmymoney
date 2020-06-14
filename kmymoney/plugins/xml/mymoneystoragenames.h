@@ -149,6 +149,7 @@ namespace Attribute {
     EntryDate,
     Commodity,
     BankID,
+    Origin,
     // insert new entries above this line
     LastAttribute
   };

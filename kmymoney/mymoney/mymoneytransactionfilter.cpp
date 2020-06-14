@@ -54,7 +54,9 @@ public:
     , m_treatTransfersAsIncomeExpense(false)
     , m_matchingSplitsCount(0)
     , m_invertText(false)
+    , m_origin({eMyMoney::Transaction::Origin::MatchingInput}) // most of the time we don't want transactions that served as an input for creating matched transaction
   {
+    m_filterSet.setFlag(MyMoneyTransactionFilter::originFilterActive); // because of m_origin being set
   }
 
   MyMoneyTransactionFilter::FilterSet m_filterSet;
@@ -75,6 +77,7 @@ public:
   QHash<int, QString>      m_states;
   QHash<int, QString>      m_types;
   QHash<int, QString>      m_validity;
+  QSet<eMyMoney::Transaction::Origin> m_origin;
   QString             m_fromNr, m_toNr;
   QDate               m_fromDate, m_toDate;
   MyMoneyMoney        m_fromAmount, m_toAmount;
@@ -117,6 +120,7 @@ void MyMoneyTransactionFilter::clear()
   d->m_types.clear();
   d->m_states.clear();
   d->m_validity.clear();
+  d->m_origin.clear();
   d->m_fromDate = QDate();
   d->m_toDate = QDate();
 }
@@ -255,6 +259,13 @@ void MyMoneyTransactionFilter::addValidity(const int type)
   d->m_validity.insert(type, QString());
 }
 
+void MyMoneyTransactionFilter::removeOrigin(eMyMoney::Transaction::Origin origin)
+{
+  Q_D(MyMoneyTransactionFilter);
+  d->m_origin.insert(origin);
+  d->m_filterSet.setFlag(originFilterActive);
+}
+
 void MyMoneyTransactionFilter::setNumberFilter(const QString& from, const QString& to)
 {
   Q_D(MyMoneyTransactionFilter);
@@ -323,6 +334,17 @@ QVector<MyMoneySplit> MyMoneyTransactionFilter::matchingSplits(const MyMoneyTran
   const auto filter = d->m_filterSet;
 
   // perform checks on the MyMoneyTransaction object first
+
+  if (filter & originFilterActive) {
+    const auto transactionOrigin = transaction.origin();
+    for (const auto &filterOrigin : d->m_origin) {
+      if (filterOrigin & transactionOrigin) {
+        d->m_matchingSplitsCount = 0;
+        matchingSplits.clear();
+        return matchingSplits;
+      }
+    }
+  }
 
   // check the date range
   if (filter & dateFilterActive) {

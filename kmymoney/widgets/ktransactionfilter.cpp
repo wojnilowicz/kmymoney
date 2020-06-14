@@ -267,6 +267,7 @@ MyMoneyTransactionFilter KTransactionFilter::setupFilter()
 {
   Q_D(KTransactionFilter);
   d->m_filter.clear();
+  d->m_filter.removeOrigin(eMyMoney::Transaction::Origin::MatchingInput);
 
   // Text tab
   if (!d->ui->m_textEdit->text().isEmpty()) {

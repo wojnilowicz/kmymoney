@@ -46,6 +46,7 @@ class MyMoneyAccount;
 namespace eMyMoney { namespace TransactionFilter { enum class Date;
                                                    enum class Validity; } }
 
+namespace eMyMoney { namespace Transaction { enum Origin : int; } }
 /**
   * @author Thomas Baumgart
   * @author Łukasz Wojniłowicz
@@ -72,7 +73,8 @@ public:
     amountFilterActive   = 0x0080,
     typeFilterActive     = 0x0100,
     stateFilterActive    = 0x0200,
-    validityFilterActive = 0x0400
+    validityFilterActive = 0x0400,
+    originFilterActive   = 0x0800
   };
   Q_DECLARE_FLAGS(FilterSet, FilterFlags)
 
@@ -213,6 +215,10 @@ public:
   /**
     */
   void addValidity(const int type);
+
+  /**
+    */
+  void removeOrigin(eMyMoney::Transaction::Origin origin);
 
   /**
     */

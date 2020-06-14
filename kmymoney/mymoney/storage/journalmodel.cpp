@@ -271,7 +271,9 @@ struct JournalModel::Private
     for (int row = 0; row < rows; ++row)  {
       const auto journalEntry = static_cast<TreeItem<JournalEntry>*>(q->index(startRow, 0).internalPointer())->constDataRef();
       balanceChangedSet.insert(journalEntry.split().accountId());
-      if (Q_UNLIKELY(journalEntry.transaction().isStockSplit())) {
+      if (journalEntry.transaction().origin() & eMyMoney::Transaction::Origin::MatchingInput) {
+        // intentainally do nothing, because this transaction wasn't considered before in balance calculation
+      } else if (Q_UNLIKELY(journalEntry.transaction().isStockSplit())) {
         fullBalanceRecalc.insert(journalEntry.split().accountId());
       } else {
         balanceCache[journalEntry.split().accountId()] -= journalEntry.split().shares();
@@ -285,7 +287,9 @@ struct JournalModel::Private
     for (int row = 0; row < rows; ++row)  {
       const auto journalEntry = static_cast<TreeItem<JournalEntry>*>(q->index(startRow, 0).internalPointer())->constDataRef();
       balanceChangedSet.insert(journalEntry.split().accountId());
-      if (Q_UNLIKELY(journalEntry.transaction().isStockSplit())) {
+      if (journalEntry.transaction().origin() & eMyMoney::Transaction::Origin::MatchingInput) {
+        // intentainally do nothing, because this transaction wasn't considered before in balance calculation
+      } else if (Q_UNLIKELY(journalEntry.transaction().isStockSplit())) {
         fullBalanceRecalc.insert(journalEntry.split().accountId());
       } else {
         balanceCache[journalEntry.split().accountId()] += journalEntry.split().shares();
@@ -1089,6 +1093,8 @@ void JournalModel::updateBalances()
   qDebug() << "Start calculating balances:" << rows << "splits";
   for (int row = 0; row < rows; ++row) {
     const JournalEntry& journalEntry = static_cast<TreeItem<JournalEntry>*>(index(row, 0).internalPointer())->constDataRef();
+    if (journalEntry.transaction().origin() & eMyMoney::Transaction::Origin::MatchingInput)
+      continue;
     if (journalEntry.transaction().isStockSplit()) {
       d->balanceCache[journalEntry.split().accountId()] *= journalEntry.split().shares();
     } else {
@@ -1115,6 +1121,9 @@ MyMoneyMoney JournalModel::balance(const QString& accountId, const QDate& date) 
       if (lastIdx.row() < rowCount()/2) {
         for (int row = 0; row < lastIdx.row(); ++row) {
           const JournalEntry& journalEntry = static_cast<TreeItem<JournalEntry>*>(index(row, 0).internalPointer())->constDataRef();
+          // don't count transactions that served as input for matching
+          if (journalEntry.transaction().origin() & eMyMoney::Transaction::Origin::MatchingInput)
+            continue;
           if (journalEntry.split().accountId() == accountId) {
             if (journalEntry.transaction().isStockSplit()) {
               balance *= journalEntry.split().shares();
@@ -1131,6 +1140,9 @@ MyMoneyMoney JournalModel::balance(const QString& accountId, const QDate& date) 
         balance = d->balanceCache.value(accountId);
         for (int row = rowCount()-1; row >= lastIdx.row(); --row) {
           const JournalEntry& journalEntry = static_cast<TreeItem<JournalEntry>*>(index(row, 0).internalPointer())->constDataRef();
+          // don't count transactions that served as input for matching
+          if (journalEntry.transaction().origin() & eMyMoney::Transaction::Origin::MatchingInput)
+            continue;
           if (journalEntry.split().accountId() == accountId) {
             if (journalEntry.transaction().isStockSplit()) {
               balance /= journalEntry.split().shares();

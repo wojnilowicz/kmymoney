@@ -23,7 +23,7 @@ target_link_libraries(converter
     alkimia
     KF5::KIOWidgets
     kmm_csvimportercore
-    # kmm_dialogs
+    kmm_base_dialogs
   PRIVATE
     KF5::I18n
     kmymoney_common

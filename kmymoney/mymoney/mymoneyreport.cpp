@@ -850,6 +850,7 @@ void MyMoneyReport::clearTransactionFilter()
   d->m_accountGroups.clear();
 
   MyMoneyTransactionFilter::clear();
+  removeOrigin(eMyMoney::Transaction::Origin::MatchingInput);
 }
 
 void MyMoneyReport::assignFilter(const MyMoneyTransactionFilter& filter)

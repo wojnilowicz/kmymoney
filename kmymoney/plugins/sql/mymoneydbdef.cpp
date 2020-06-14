@@ -36,7 +36,7 @@
 #include <alkimia/alkvalue.h>
 
 //***************** THE CURRENT VERSION OF THE DATABASE LAYOUT ****************
-unsigned int MyMoneyDbDef::m_currentVersion = 12;
+unsigned int MyMoneyDbDef::m_currentVersion = 13;
 
 // ************************* Build table descriptions ****************************
 MyMoneyDbDef::MyMoneyDbDef()
@@ -243,6 +243,7 @@ void MyMoneyDbDef::Transactions()
   appendField(MyMoneyDbDatetimeColumn("entryDate"));
   appendField(MyMoneyDbColumn("currencyId", "char(3)"));
   appendField(MyMoneyDbTextColumn("bankId"));
+  appendField(MyMoneyDbIntColumn("origin", MyMoneyDbIntColumn::TINY, UNSIGNED, false, false, 13));
   MyMoneyDbTable t("kmmTransactions", fields);
   t.buildSQLStrings();
   m_tables[t.name()] = t;

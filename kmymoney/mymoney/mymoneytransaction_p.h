@@ -36,12 +36,14 @@
 
 #include "mymoneyobject_p.h"
 #include "mymoneysplit.h"
+#include "mymoneyenums.h"
 
 using namespace eMyMoney;
 
 class MyMoneyTransactionPrivate : public MyMoneyObjectPrivate
 {
 public:
+  MyMoneyTransactionPrivate();
   /**
     * This method returns the next id to be used for a split
     */
@@ -99,6 +101,14 @@ public:
     */
   QString m_bankID;
 
+  eMyMoney::Transaction::Origin m_origin;
 };
+
+MyMoneyTransactionPrivate::MyMoneyTransactionPrivate() :
+  MyMoneyObjectPrivate(),
+  m_origin(eMyMoney::Transaction::Origin::Typed)
+{
+}
+
 
 #endif

@@ -4,6 +4,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/xmlstorage.json.cmake ${CMAKE_CURRENT
 
 set(xmlstorage_SOURCES
   xmlstorage.cpp
+  xmlstorageupdater.cpp
   mymoneystoragexml.cpp
   mymoneystoragenames.cpp
   mymoneystorageanon.cpp
