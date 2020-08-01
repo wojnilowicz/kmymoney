@@ -36,5 +36,5 @@ target_link_libraries(gncimporter
     kmm_models
     KF5::Completion
     KF5::Archive
-    Alkimia::alkimia
+    alkimia
 )

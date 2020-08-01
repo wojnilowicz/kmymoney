@@ -22,7 +22,7 @@ target_link_libraries( onlinetask_interfaces
   PUBLIC
     kmm_payeeidentifier
     Qt5::Widgets
-    Alkimia::alkimia
+    alkimia
 )
 
 set_target_properties(onlinetask_interfaces PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR})

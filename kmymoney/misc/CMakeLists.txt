@@ -62,7 +62,7 @@ target_link_libraries( kmm_webconnect
     KF5::Codecs
     KF5::KIOCore
     KF5::KIOWidgets
-    Alkimia::alkimia
+    alkimia
     kmm_mymoney
     kmm_csvimportercore
   PRIVATE

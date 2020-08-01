@@ -37,7 +37,7 @@ target_link_libraries(settings PUBLIC
   KF5::Completion
   KF5::KCMUtils
   KF5::ItemViews
-  Alkimia::alkimia
+  alkimia
   kmm_oldregister
 )
 

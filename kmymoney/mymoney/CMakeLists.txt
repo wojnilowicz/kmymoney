@@ -113,7 +113,7 @@ target_link_libraries(kmm_mymoney
                       KF5::Service
                       KF5::I18n
                       KF5::ItemModels
-                      Alkimia::alkimia
+                      alkimia
                       kmm_payeeidentifier
                       kmm_plugin
                       # TODO: fix this

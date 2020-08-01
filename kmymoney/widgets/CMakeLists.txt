@@ -144,7 +144,7 @@ target_link_libraries(kmm_base_widgets PUBLIC
 #  Qt5::Core
 #  Qt5::Widgets
 #  Qt5::Xml
-  Alkimia::alkimia
+  alkimia
   kmm_mymoney
   kmm_settings
   kmm_models
@@ -181,7 +181,7 @@ target_link_libraries(kmm_widgets PUBLIC
   Qt5::Core
   Qt5::Widgets
   Qt5::Xml
-  Alkimia::alkimia
+  alkimia
   converter
   kmm_mymoney
   kmm_models

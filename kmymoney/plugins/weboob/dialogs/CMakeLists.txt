@@ -21,5 +21,5 @@ target_link_libraries (
   Qt5::Widgets
   KF5::WidgetsAddons
   KF5::I18n
-  Alkimia::alkimia
+  alkimia
   )

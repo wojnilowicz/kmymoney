@@ -21,7 +21,7 @@ target_link_libraries(wizardpages
     KF5::KIOWidgets
     KF5::TextWidgets
     KF5::ItemModels
-    Alkimia::alkimia
+    alkimia
     Qt5::Xml
 )
 

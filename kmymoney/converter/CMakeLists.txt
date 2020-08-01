@@ -20,7 +20,7 @@ target_link_libraries(converter
     KF5::Completion
     KF5::TextWidgets
     KF5::WidgetsAddons
-    Alkimia::alkimia
+    alkimia
     KF5::KIOWidgets
     kmm_csvimportercore
     # kmm_dialogs

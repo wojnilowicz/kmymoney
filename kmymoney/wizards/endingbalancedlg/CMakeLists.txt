@@ -26,7 +26,7 @@ target_link_libraries(endingbalancedlg
         KF5::Completion
         Qt5::Widgets
         Qt5::Xml
-        Alkimia::alkimia
+        alkimia
         kmm_base_widgets
     )
 

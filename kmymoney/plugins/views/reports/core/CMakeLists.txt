@@ -19,7 +19,7 @@ add_library(reports STATIC ${libreports_a_SOURCES})
 target_link_libraries(reports
   PUBLIC
     KChart
-    Alkimia::alkimia
+    alkimia
     Qt5::PrintSupport
     kmymoney_common
     kmm_settings

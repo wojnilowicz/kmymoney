@@ -67,7 +67,7 @@ target_link_libraries(kmm_base_dialogs
     KF5::TextWidgets
     KF5::Completion
     Qt5::Widgets
-    Alkimia::alkimia
+    alkimia
     kmm_mymoney
     onlinetask_interfaces
     kmm_base_widgets
@@ -114,7 +114,7 @@ target_link_libraries(kmm_extended_dialogs
     KF5::TextWidgets
     KF5::Completion
     Qt5::Widgets
-    Alkimia::alkimia
+    alkimia
     kmm_mymoney
     onlinetask_interfaces
     kmm_base_widgets

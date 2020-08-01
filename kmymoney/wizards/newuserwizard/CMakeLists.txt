@@ -33,7 +33,7 @@ target_link_libraries(newuserwizard
     KF5::ConfigWidgets
     Qt5::Widgets
     Qt5::Xml
-    Alkimia::alkimia
+    alkimia
     kmm_mymoney
     kmm_wizard
     kmm_templates
