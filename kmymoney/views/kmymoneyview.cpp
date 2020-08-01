@@ -57,7 +57,6 @@
 #include "kmymoneytitlelabel.h"
 #include "kcurrencyeditdlg.h"
 #include "mymoneyexception.h"
-#include "khomeview.h"
 #include "kaccountsview.h"
 #include "kcategoriesview.h"
 #include "kinstitutionsview.h"
@@ -122,7 +121,7 @@ KMyMoneyView::KMyMoneyView()
 
   m_model = new KPageWidgetModel(this); // cannot be parentless, otherwise segfaults at exit
 
-  viewBases[View::Home] = new KHomeView;
+//  viewBases[View::Home] = new KHomeView;
   viewBases[View::Institutions] = new KInstitutionsView;
   viewBases[View::Accounts] = new KAccountsView;
   viewBases[View::Schedules] = new KScheduledView;
@@ -142,7 +141,7 @@ KMyMoneyView::KMyMoneyView()
 
   const QVector<viewInfo> viewsInfo
   {
-    {View::Home,            i18n("Home"),                         Icon::Home},
+//     {View::Home,            i18n("Home"),                         Icon::Home},
     {View::Institutions,    i18n("Institutions"),                 Icon::Institutions},
     {View::Accounts,        i18n("Accounts"),                     Icon::Accounts},
     {View::Schedules,       i18n("Scheduled\ntransactions"),      Icon::Schedule},
@@ -180,7 +179,7 @@ KMyMoneyView::KMyMoneyView()
 
   //set the model
   setModel(m_model);
-  setCurrentPage(viewFrames[View::Home]);
+//  setCurrentPage(viewFrames[View::Home]);
   connect(this, SIGNAL(currentPageChanged(QModelIndex,QModelIndex)), this, SLOT(slotCurrentPageChanged(QModelIndex,QModelIndex)));
 
   updateViewType();
@@ -336,6 +335,9 @@ void KMyMoneyView::addView(KMyMoneyViewBase* view, const QString& name, View idV
 
   auto icon = Icon::Forecast;
   switch (idView) {
+    case View::Home:
+      icon = Icon::Home;
+      break;
     case View::Reports:
       icon = Icon::Reports;
       break;

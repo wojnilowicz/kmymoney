@@ -41,12 +41,6 @@
 #include <QPrintDialog>
 #include <QVBoxLayout>
 #include <QPrinter>
-#ifdef ENABLE_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <KWebView>
-#include <QWebFrame>
-#endif
 
 // ----------------------------------------------------------------------------
 // KDE Includes
@@ -73,7 +67,7 @@
 #include "mymoneysplit.h"
 #include "mymoneytransaction.h"
 #include "icons.h"
-#include "kmymoneywebpage.h"
+#include "kmymoneyhtmlrenderer.h"
 #include "mymoneyschedule.h"
 #include "mymoneysecurity.h"
 #include "mymoneyexception.h"
@@ -155,25 +149,12 @@ public:
     q->setLayout(vbox);
     vbox->setSpacing(6);
     vbox->setMargin(0);
-
-  #ifdef ENABLE_WEBENGINE
-    m_view = new QWebEngineView(q);
-  #else
-    m_view = new KWebView(q);
-  #endif
+    m_view = KMyMoneyHtmlRenderer::Create(nullptr);
     m_view->installEventFilter(q);
-    m_view->setPage(new MyQWebEnginePage(m_view));
 
-    vbox->addWidget(m_view);
-
-  #ifdef ENABLE_WEBENGINE
-    q->connect(m_view->page(), &QWebEnginePage::urlChanged,
-            q, &KHomeView::slotOpenUrl);
-  #else
-    m_view->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-    q->connect(m_view->page(), &KWebPage::linkClicked,
-            q, &KHomeView::slotOpenUrl);
-  #endif
+    vbox->addWidget(m_view->widget());
+    q->connect(m_view, &KMyMoneyHtmlRenderer::urlChanged,
+               q, &KHomeView::slotOpenUrl);
 
     q->connect(MyMoneyFile::instance(), &MyMoneyFile::dataChanged, q, &KHomeView::refresh);
   }
@@ -431,9 +412,7 @@ public:
 
       // keep current location on page
       m_scrollBarPos = 0;
-#ifndef ENABLE_WEBENGINE
-      m_scrollBarPos = m_view->page()->mainFrame()->scrollBarValue(Qt::Vertical);
-#endif
+      m_scrollBarPos = m_view->scrollBarValue(Qt::Vertical);
 
       //clear the forecast flag so it will be reloaded
       m_forecast.setForecastDone(false);
@@ -510,11 +489,9 @@ public:
 
       m_view->setHtml(m_html, QUrl("file://"));
 
-#ifndef ENABLE_WEBENGINE
       if (m_scrollBarPos) {
         QMetaObject::invokeMethod(q, "slotAdjustScrollPos", Qt::QueuedConnection);
       }
-#endif
     }
   }
 
@@ -1838,17 +1815,12 @@ public:
    */
   typedef QMap<QDate, MyMoneyMoney> dailyBalances;
 
-  #ifdef ENABLE_WEBENGINE
-  QWebEngineView   *m_view;
-  #else
-  KWebView         *m_view;
-  #endif
-
-  QString           m_html;
-  bool              m_showAllSchedules;
-  bool              m_needLoad;
-  MyMoneyForecast   m_forecast;
-  MyMoneyMoney      m_total;
+  KMyMoneyHtmlRenderer *m_view;
+  QString               m_html;
+  bool                  m_showAllSchedules;
+  bool                  m_needLoad;
+  MyMoneyForecast       m_forecast;
+  MyMoneyMoney          m_total;
   /**
     * Hold the last valid size of the net worth graph
     * for the times when the needed size can't be computed.

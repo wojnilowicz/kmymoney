@@ -48,11 +48,7 @@
 #include <QMenu>
 #include <QPointer>
 #include <QWheelEvent>
-#ifdef ENABLE_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <KWebView>
-#endif
+#include <QPainter>
 
 // ----------------------------------------------------------------------------
 // KDE Includes
@@ -75,7 +71,7 @@
 #include "querytable.h"
 #include "objectinfotable.h"
 #include "icons/icons.h"
-#include <kmymoneywebpage.h>
+#include <kmymoneyhtmlrenderer.h>
 #include "tocitem.h"
 #include "tocitemgroup.h"
 #include "tocitemreport.h"
@@ -107,11 +103,7 @@ using namespace Icons;
 class KReportTab: public QWidget
 {
 private:
-  #ifdef ENABLE_WEBENGINE
-  QWebEngineView            *m_tableView;
-  #else
-  KWebView                  *m_tableView;
-  #endif
+  KMyMoneyHtmlRenderer      *m_tableView;
   reports::KReportChartView *m_chartView;
   ReportControl             *m_control;
   QVBoxLayout               *m_layout;
@@ -203,11 +195,7 @@ public:
   */
 KReportTab::KReportTab(QTabWidget* parent, const MyMoneyReport& report, const KReportsView* eventHandler):
     QWidget(parent),
-    #ifdef ENABLE_WEBENGINE
-    m_tableView(new QWebEngineView(this)),
-    #else
-    m_tableView(new KWebView(this)),
-    #endif
+    m_tableView(KMyMoneyHtmlRenderer::Create(this)),
     m_chartView(new KReportChartView(this)),
     m_control(new ReportControl(this)),
     m_layout(new QVBoxLayout(this)),
@@ -221,7 +209,6 @@ KReportTab::KReportTab(QTabWidget* parent, const MyMoneyReport& report, const KR
     m_table(0)
 {
   m_layout->setSpacing(6);
-  m_tableView->setPage(new MyQWebEnginePage(m_tableView));
   m_tableView->setZoomFactor(KMyMoneySettings::zoomFactor());
 
   //set button icons
@@ -235,9 +222,9 @@ KReportTab::KReportTab(QTabWidget* parent, const MyMoneyReport& report, const KR
 
   m_chartView->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
   m_chartView->hide();
-  m_tableView->hide();
+  m_tableView->widget()->hide();
   m_layout->addWidget(m_control);
-  m_layout->addWidget(m_tableView);
+  m_layout->addWidget(m_tableView->widget());
   m_layout->addWidget(m_chartView);
   m_layout->setStretch(1, 10);
   m_layout->setStretch(2, 10);
@@ -263,14 +250,8 @@ KReportTab::KReportTab(QTabWidget* parent, const MyMoneyReport& report, const KR
   connect(m_control->ui->buttonClose, &QAbstractButton::clicked,
           eventHandler, &KReportsView::slotCloseCurrent);
 
-  #ifdef ENABLE_WEBENGINE
-  connect(m_tableView->page(), &QWebEnginePage::urlChanged,
+  connect(m_tableView, &KMyMoneyHtmlRenderer::urlChanged,
           eventHandler, &KReportsView::slotOpenUrl);
-  #else
-  m_tableView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-  connect(m_tableView->page(), &KWebPage::linkClicked,
-          eventHandler, &KReportsView::slotOpenUrl);
-  #endif
 
   // if this is a default report, then you can't delete it!
   if (report.id().isEmpty())
@@ -330,11 +311,7 @@ void KReportTab::print()
           painter.drawText(0, painter.window().height(), file.toLocalFile());
         }
       } else {
-    #ifdef ENABLE_WEBENGINE
-        m_tableView->page()->print(printer, [=] (bool) {});
-    #else
         m_tableView->print(printer);
-    #endif
       }
     }
   }
@@ -426,7 +403,7 @@ void KReportTab::toggleChart()
                                                QUrl("file://")); // workaround for access permission to css file
     }
     m_isTableViewValid = true;
-    m_tableView->show();
+    m_tableView->widget()->show();
     m_chartView->hide();
 
     m_control->ui->buttonChart->setText(i18n("Chart"));
@@ -436,7 +413,7 @@ void KReportTab::toggleChart()
     if (!m_isChartViewValid)
       m_table->drawChart(*m_chartView);
     m_isChartViewValid = true;
-    m_tableView->hide();
+    m_tableView->widget()->hide();
     m_chartView->show();
 
     m_control->ui->buttonChart->setText(i18n("Report"));

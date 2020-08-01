@@ -23,31 +23,24 @@
 
 // Qt includes
 #include <QFrame>
-#ifdef ENABLE_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <KWebView>
-#endif
 
 // KDE includes
 #include <KPluginFactory>
 #include <KAboutData>
 
+// Project Includes
 #include "pluginsettings.h"
+#include "kmymoneyhtmlrenderer.h"
 
 PluginSettingsWidget::PluginSettingsWidget(QWidget* parent) :
     QWidget(parent)
 {
   setupUi(this);
-  #ifdef ENABLE_WEBENGINE
-  m_checkTemplatePreviewHTMLPart = new QWebEngineView(m_previewFrame);
-  #else
-  m_checkTemplatePreviewHTMLPart = new KWebView(m_previewFrame);
-  #endif
+  m_checkTemplatePreviewHTMLPart = KMyMoneyHtmlRenderer::Create(m_previewFrame);
 
   QVBoxLayout *layout = new QVBoxLayout;
   m_previewFrame->setLayout(layout);
-  layout->addWidget(m_checkTemplatePreviewHTMLPart);
+  layout->addWidget(m_checkTemplatePreviewHTMLPart->widget());
 
   connect(kcfg_checkTemplateFile, SIGNAL(urlSelected(QUrl)),
           this, SLOT(urlSelected(QUrl)));

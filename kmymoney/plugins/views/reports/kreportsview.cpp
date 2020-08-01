@@ -44,11 +44,6 @@
 #include <QLocale>
 #include <QTextCodec>
 #include <QMenu>
-#ifdef ENABLE_WEBENGINE
-#include <QWebEngineView>
-#else
-#include <KWebView>
-#endif
 
 // ----------------------------------------------------------------------------
 // KDE Includes
@@ -71,7 +66,6 @@
 #include "kreportconfigurationfilterdlg.h"
 #include "icons/icons.h"
 #include "kbalancechartdlg.h"
-#include <kmymoneywebpage.h>
 #include "tocitem.h"
 #include "tocitemgroup.h"
 #include "tocitemreport.h"

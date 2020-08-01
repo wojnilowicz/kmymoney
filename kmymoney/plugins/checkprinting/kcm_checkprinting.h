@@ -26,11 +26,7 @@
 #include <QWidget>
 #include "ui_pluginsettingsdecl.h"
 
-#ifdef ENABLE_WEBENGINE
-class QWebEngineView;
-#else
-class KWebView;
-#endif
+class KMyMoneyHtmlRenderer;
 
 class PluginSettingsWidget : public QWidget, public Ui::PluginSettingsDecl
 {
@@ -44,11 +40,7 @@ public Q_SLOTS:
   void returnPressed(const QString& url);
 
 private:
-  #ifdef ENABLE_WEBENGINE
-  QWebEngineView *m_checkTemplatePreviewHTMLPart;
-  #else
-  KWebView       *m_checkTemplatePreviewHTMLPart;
-  #endif
+  KMyMoneyHtmlRenderer *m_checkTemplatePreviewHTMLPart;
 };
 
 class KCMCheckPrinting : public KCModule

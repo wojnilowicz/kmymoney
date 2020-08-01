@@ -1,7 +1,7 @@
 /***************************************************************************
-                          kmymoneywebpage.h
+                          kmymoneykdewebkit.h
                              -------------------
-        copyright            : (C) 2017 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+        copyright            : (C) 2019 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
                                
  ***************************************************************************/
 
@@ -14,10 +14,8 @@
  *                                                                         *
  ***************************************************************************/
 
-#ifndef KMYMONEYWEBPAGE_H
-#define KMYMONEYWEBPAGE_H
-
-#include <config-kmymoney.h>
+#ifndef KMYMONEYKDEWEBKIT_H
+#define KMYMONEYKDEWEBKIT_H
 
 // ----------------------------------------------------------------------------
 // QT Includes
@@ -25,37 +23,35 @@
 // ----------------------------------------------------------------------------
 // KDE Includes
 
-#ifdef ENABLE_WEBENGINE
-#include <QWebEnginePage>
-#else
 #include <KWebPage>
-#endif
 
 // ----------------------------------------------------------------------------
 // Project Includes
 
+#include "kmymoneyhtmlrenderer.h"
 
-#ifdef ENABLE_WEBENGINE
-class MyQWebEnginePage : public QWebEnginePage
-#else
-class MyQWebEnginePage : public KWebPage
-#endif
+class KWebView;
+
+class KMyMoneyKDEWebKit : public KMyMoneyHtmlRenderer
 {
-  Q_OBJECT
+  public:
+    explicit KMyMoneyKDEWebKit(QWidget *parent = nullptr);
 
-public:
-#ifdef ENABLE_WEBENGINE
-  explicit MyQWebEnginePage(QObject* parent = nullptr) : QWebEnginePage(parent){}
-#else
-  explicit MyQWebEnginePage(QObject* parent = nullptr) : KWebPage(parent){}
-#endif
+    void setHtml(const QString &html, const QUrl &baseUrl = QUrl()) override final;
 
-protected:
-#ifdef ENABLE_WEBENGINE
-  bool acceptNavigationRequest(const QUrl &url, NavigationType type, bool) final override;
-#else
-  bool acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type) final override;
-#endif
+    qreal zoomFactor() const override final;
+    void setZoomFactor(qreal factor) override final;
+    void print(QPrinter *printer) override final;
+    void setScrollBarValue(Qt::Orientation orientation, int value) override final;
+    int scrollBarValue(Qt::Orientation orientation) const override final;
+    void load(const QUrl &url) override final;
 
+    QWidget *widget() const override final;
+
+  protected:
+    bool acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, KWebPage::NavigationType type);
+
+  private:
+    KWebView *m_view;
 };
 #endif

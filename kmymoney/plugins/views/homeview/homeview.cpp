@@ -1,7 +1,9 @@
 /***************************************************************************
-                          kmymoneywebpage.cpp
+                            homeview.cpp
                              -------------------
-        copyright            : (C) 2017 by Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+
+    copyright            : (C) 2018 by Łukasz Wojniłowicz
+    email                : lukasz.wojnilowicz@gmail.com
  ***************************************************************************/
 
 /***************************************************************************
@@ -13,9 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include <config-kmymoney.h>
-
-#include "kmymoneywebpage.h"
+#include "homeview.h"
 
 // ----------------------------------------------------------------------------
 // QT Includes
@@ -23,27 +23,41 @@
 // ----------------------------------------------------------------------------
 // KDE Includes
 
+#include <KPluginFactory>
+#include <KLocalizedString>
+
 // ----------------------------------------------------------------------------
 // Project Includes
 
-#ifdef ENABLE_WEBENGINE
-bool MyQWebEnginePage::acceptNavigationRequest(const QUrl &url, NavigationType type, bool)
+#include "viewinterface.h"
+#include "khomeview.h"
+
+HomeView::HomeView(QObject *parent, const QVariantList &args) :
+  KMyMoneyPlugin::Plugin(parent, "homeview"/*must be the same as X-KDE-PluginInfo-Name*/),
+  m_view(nullptr)
 {
-  if (type == NavigationTypeLinkClicked) {
-    emit urlChanged(url);
-    return false;
-  }
-  return true;
+  Q_UNUSED(args)
+  setComponentName("homeview", i18n("Home view"));
+  // For information, announce that we have been loaded.
+  qDebug("Plugins: homeview loaded");
 }
-#else
-#include <QNetworkRequest>
-bool MyQWebEnginePage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, NavigationType type)
+
+HomeView::~HomeView()
 {
-  Q_UNUSED(frame);
-  if (type == NavigationTypeLinkClicked) {
-    emit linkClicked(request.url());
-    return false;
-  }
-  return true;
+  qDebug("Plugins: homeview unloaded");
 }
-#endif
+
+void HomeView::plug()
+{
+  m_view = new KHomeView;
+  viewInterface()->addView(m_view, i18n("Home"), View::Home);
+}
+
+void HomeView::unplug()
+{
+  viewInterface()->removeView(View::Budget);
+}
+
+K_PLUGIN_FACTORY_WITH_JSON(HomeViewFactory, "homeview.json", registerPlugin<HomeView>();)
+
+#include "homeview.moc"

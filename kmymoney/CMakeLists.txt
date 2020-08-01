@@ -34,6 +34,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR}/menus/
                     ${CMAKE_CURRENT_SOURCE_DIR}/misc/
                     ${CMAKE_CURRENT_BINARY_DIR}/misc/
+                    ${CMAKE_CURRENT_SOURCE_DIR}/htmlrenderer/
+                    ${CMAKE_CURRENT_BINARY_DIR}/htmlrenderer/
                     )
 
 add_subdirectory( alkimia )
@@ -53,6 +55,8 @@ add_subdirectory( misc )
 add_subdirectory( icons )
 add_subdirectory( menus )
 add_subdirectory( oldregister )
+add_subdirectory( htmlrenderer )
+
 if(BUILD_TESTING)
   add_subdirectory( tests )
 endif()

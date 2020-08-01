@@ -44,12 +44,10 @@ KHomeView::~KHomeView()
 
 void KHomeView::slotAdjustScrollPos()
 {
-#ifndef ENABLE_WEBENGINE
   Q_D(KHomeView);
-  if (d && d->m_view && d->m_view->page() && d->m_view->page()->mainFrame()) {
-    d->m_view->page()->mainFrame()->setScrollBarValue(Qt::Vertical, d->m_scrollBarPos);
+  if (d && d->m_view) {
+    d->m_view->setScrollBarValue(Qt::Vertical, d->m_scrollBarPos);
   }
-#endif
 }
 
 bool KHomeView::eventFilter(QObject* o, QEvent* e)
@@ -133,13 +131,9 @@ void KHomeView::slotPrintView()
   if (d->m_view) {
     auto printer = KMyMoneyPrinter::startPrint();
     if (printer != nullptr) {
-    #ifdef ENABLE_WEBENGINE
-      d->m_view->page()->print(printer, [=] (bool) {});
-    #else
-      d->m_view->print(printer);
-    #endif
+    d->m_view->print(printer);
     }
-  }
+}
 }
 
 void KHomeView::slotOpenUrl(const QUrl &url)

@@ -74,7 +74,7 @@ include(KMyMoneyMacros)
 
 find_package(PkgConfig)
 
-set (OPT_KF5_COMPONENTS DocTools Holidays Contacts Akonadi IdentityManagement Activities)
+set (OPT_KF5_COMPONENTS DocTools Holidays Contacts Akonadi IdentityManagement Activities WebKit KHtml)
 find_package(Gpgmepp)
 if (Gpgmepp_FOUND)
   set(GPG_FOUND TRUE)
@@ -88,13 +88,16 @@ if (PkgConfig_FOUND)
   pkg_check_modules(LIBOFX libofx IMPORTED_TARGET)
 endif()
 
-find_package(Qt5 5.6 REQUIRED
-  COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport
-  OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets)
+# Qt's CMake configuration file doesn't handle COMPONENTS AND OPTIONAL_COMPONENTS well in one find_package command
+set(REQUIRED_QT_VERSION 5.6)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS Core DBus Widgets Svg Xml Test PrintSupport)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG OPTIONAL_COMPONENTS Sql Concurrent QuickWidgets WebEngineWidgets)
 
-find_package(KF5 5.2 REQUIRED
-  COMPONENTS Archive CoreAddons Config ConfigWidgets I18n Completion KCMUtils ItemModels ItemViews Service Wallet IconThemes XmlGui TextWidgets Notifications KIO
-  OPTIONAL_COMPONENTS ${OPT_KF5_COMPONENTS}
+find_package(KF5 5.2
+  REQUIRED COMPONENTS
+  Archive CoreAddons Config ConfigWidgets I18n Completion KCMUtils ItemModels ItemViews Service Wallet IconThemes XmlGui TextWidgets Notifications KIO
+  OPTIONAL_COMPONENTS
+  ${OPT_KF5_COMPONENTS}
 )
 
 option(ENABLE_ALKIMIA "Enable Alkimia" OFF)
@@ -124,7 +127,7 @@ endif()
 
 # Recent changes to LibAlkimia should allow us to remove this construct
 #if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-#  include_directories(${GMP_INCLUDE_DIR})
+ include_directories(${GMP_INCLUDE_DIR})
 #endif()
 
 find_package(KChart 2.6.0)
@@ -199,9 +202,6 @@ cmake_dependent_option(ENABLE_ACTIVITIES "Enable activities support." ON
 
 option(ENABLE_FORECASTVIEW "Enable forecast view" ON)
 add_feature_info("Forecast view" ENABLE_FORECASTVIEW "Adds possibility to calculate forecasts.")
-cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON
-                       "KChart_FOUND" OFF)
-add_feature_info("Reports view" ENABLE_REPORTSVIEW "Adds possibility to display chart and table reports.")
 option(ENABLE_BUDGETVIEW "Enable budget view" ON)
 add_feature_info("Budget view" ENABLE_BUDGETVIEW "Adds possibility to plan a budget.")
 option(ENABLE_ONLINEJOBOUTBOXVIEW "Enable online job outbox view" ON)
@@ -220,8 +220,8 @@ cmake_dependent_option(ENABLE_SQLTRACER "Dump SQL requests to console" OFF
 
 # Otherwise compilers halt on something like that:
 # ld: library not found for -lsqlcipher
-# on MS Windows, FreeBSD, macOS, and Ubuntu 14.04 (Ubuntu has CMake 3.5.1 but I'm not sure if it's the one to blame).
-if(ENABLE_SQLCIPHER AND (NOT CMAKE_SYSTEM_NAME MATCHES "Linux" OR CMAKE_VERSION VERSION_LESS 3.5.2))
+# on MS Windows, FreeBSD, macOS, and Ubuntu 16.04
+if(ENABLE_SQLCIPHER)
   link_directories(${SQLCIPHER_LIBRARY_DIRS})
 endif()
 
@@ -234,16 +234,57 @@ cmake_dependent_option(ENABLE_IBANBICDATA "Enable IBAN/BIC data support." OFF
 
 add_feature_info("IBAN/BIC data" ENABLE_IBANBICDATA "Adds predefined IBAN/BIC numbers to KMyMoney (note: doesn't work yet).")
 
-# check for optional QWebEngine
-option(ENABLE_WEBENGINE "Enable QWebEngine" OFF)
-if(ENABLE_WEBENGINE)
-  find_package(Qt5WebEngineWidgets 5.8 REQUIRED)
-  if(Qt5WebEngineWidgets_VERSION VERSION_GREATER 5.8.99 AND Qt5WebEngineWidgets_VERSION VERSION_LESS 5.9.3)
-    message(WARNING "QWebEngine version ${Qt5WebEngineWidgets_VERSION} is known to be unstable with KMyMoney")
+if(Qt5WebEngineWidgets_FOUND)
+  if(ENABLE_KDEWEBKIT OR ENABLE_KHTML)
+    set(TEMP_VAR OFF)
+  else()
+    set(TEMP_VAR ON)
   endif()
-else(ENABLE_WEBENGINE)
-  find_package(KF5WebKit REQUIRED)
-endif(ENABLE_WEBENGINE)
+
+  set(ENABLE_QTWEBENGINE ${TEMP_VAR} CACHE BOOL "First choice HTML renderer.")
+else()
+  unset(ENABLE_QTWEBENGINE CACHE)
+endif()
+
+if(KF5WebKit_FOUND)
+    if(ENABLE_QTWEBENGINE OR ENABLE_KHTML)
+      set(TEMP_VAR OFF)
+    else()
+      set(TEMP_VAR ON)
+    endif()
+
+    set(ENABLE_KDEWEBKIT ${TEMP_VAR} CACHE BOOL "Second choice HTML renderer.")
+else()
+  unset(ENABLE_KDEWEBKIT CACHE)
+endif()
+
+if(KF5KHtml_FOUND)
+    if(ENABLE_QTWEBENGINE OR ENABLE_KDEWEBKIT)
+      set(TEMP_VAR OFF)
+    else()
+      set(TEMP_VAR ON)
+    endif()
+
+  set(ENABLE_KHTML ${TEMP_VAR} CACHE BOOL "Last choice HTML renderer.")
+else()
+  unset(ENABLE_KHTML CACHE)
+endif()
+
+if(ENABLE_QTWEBENGINE OR ENABLE_KDEWEBKIT OR ENABLE_KHTML)
+  set(ENABLE_HTML_RENDERING ON)
+endif()
+
+cmake_dependent_option(ENABLE_HOMEVIEW "Enable home view." ON "ENABLE_HTML_RENDERING" OFF)
+add_feature_info("Home view" ENABLE_HOMEVIEW "Adds home view.")
+
+cmake_dependent_option(ENABLE_REPORTSVIEW "Enable reports view." ON "KChart_FOUND;ENABLE_HTML_RENDERING" OFF)
+add_feature_info("Reports view" ENABLE_REPORTSVIEW "Adds possibility to display chart and table reports.")
+
+cmake_dependent_option(ENABLE_CHECKPRINTING "Enable check printing." ON "ENABLE_HTML_RENDERING" OFF)
+add_feature_info("Check printing" ENABLE_CHECKPRINTING "Adds possibility to print checks.")
+
+cmake_dependent_option(ENABLE_RECONCILIATIONREPORT "Enable reconciliation report." ON "ENABLE_HTML_RENDERING" OFF)
+add_feature_info("Reconciliation report" ENABLE_RECONCILIATIONREPORT "Adds possibility to report reconciliation.")
 
 add_feature_info("QWebEngine" ENABLE_WEBENGINE "A next-gen QT Web Engine.")
 

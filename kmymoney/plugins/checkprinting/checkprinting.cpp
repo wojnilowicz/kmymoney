@@ -28,14 +28,9 @@
 #include <QAction>
 #include <QFile>
 #include <QDialog>
-#ifdef ENABLE_WEBENGINE
-  #include <QWebEngineView>
-#else
-  #include <KWebView>
-#endif
-#ifdef IS_APPIMAGE
-  #include <QCoreApplication>
-#endif
+
+#include <QPrintDialog>
+#include <QPrinter>
 #include <QStandardPaths>
 
 // KDE includes
@@ -55,12 +50,16 @@
 #include "mymoneyutils.h"
 #include "viewinterface.h"
 #include "selectedtransactions.h"
+#include "kmymoneyhtmlrenderer.h"
 
 #include "numbertowords.h"
 #include "pluginsettings.h"
 #include "mymoneyenums.h"
 
 #include "kmm_printer.h"
+
+#include <QCoreApplication>
+#include <QStandardPaths>
 
 struct CheckPrinting::Private {
   QAction* m_action;
@@ -77,16 +76,7 @@ CheckPrinting::CheckPrinting(QObject *parent, const QVariantList &args) :
   const auto componentName = QLatin1String("checkprinting");
   const auto rcFileName = QLatin1String("checkprinting.rc");
   setComponentName(componentName, i18nc("It's about printing bank checks", "Check printing"));
-
-#ifdef IS_APPIMAGE
-  const QString rcFilePath = QString("%1/../share/kxmlgui5/%2/%3").arg(QCoreApplication::applicationDirPath(), componentName, rcFileName);
-  setXMLFile(rcFilePath);
-
-  const QString localRcFilePath = QStandardPaths::standardLocations(QStandardPaths::GenericDataLocation).first() + QLatin1Char('/') + componentName + QLatin1Char('/') + rcFileName;
-  setLocalXMLFile(localRcFilePath);
-#else
   setXMLFile(rcFileName);
-#endif
 
   // For ease announce that we have been loaded.
   qDebug("Plugins: checkprinting loaded");
@@ -164,11 +154,7 @@ void CheckPrinting::slotPrintCheck()
 {
   MyMoneyFile* file = MyMoneyFile::instance();
   MyMoneyMoneyToWordsConverter converter;
-  #ifdef ENABLE_WEBENGINE
-  auto htmlPart = new QWebEngineView();
-  #else
-  auto htmlPart = new KWebView();
-  #endif
+  auto htmlPart = KMyMoneyHtmlRenderer::Create();
 
   KMyMoneyRegister::SelectedTransactions::const_iterator it;
   for (it = d->m_transactions.constBegin(); it != d->m_transactions.constEnd(); ++it) {
@@ -225,19 +211,15 @@ void CheckPrinting::slotPrintCheck()
     // print the check
     htmlPart->setHtml(checkHTML, QUrl("file://"));
     auto printer = KMyMoneyPrinter::startPrint();
-    if (printer != nullptr) {
-      #ifdef ENABLE_WEBENGINE
-        htmlPart->page()->print(printer, [=] (bool) {});
-      #else
+    if (printer)
         htmlPart->print(printer);
-      #endif
-    }
 
     // mark the transaction as printed
     markAsPrinted(*it);
   }
 
   PluginSettings::setPrintedChecks(d->m_printedTransactionIdList);
+  delete htmlPart->widget();
   delete htmlPart;
 }
 

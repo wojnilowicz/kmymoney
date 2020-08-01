@@ -1,3 +1,7 @@
+if(ENABLE_HOMEVIEW)
+  add_subdirectory(homeview)
+endif()
+
 if(ENABLE_FORECASTVIEW)
   add_subdirectory(forecast)
 endif()
