@@ -1,0 +1,33 @@
+diff -ruN postgresql-12.2.orig/src/bin/Makefile postgresql-12.2/src/bin/Makefile
+--- postgresql-12.2.orig/src/bin/Makefile	2020-02-10 23:14:51 +0000
++++ postgresql-12.2/src/bin/Makefile	2020-04-25 00:31:43 +0000
+@@ -15,28 +15,8 @@
+ 
+ SUBDIRS = \
+ 	initdb \
+-	pg_archivecleanup \
+-	pg_basebackup \
+-	pg_checksums \
+-	pg_config \
+-	pg_controldata \
+-	pg_ctl \
+ 	pg_dump \
+-	pg_resetwal \
+-	pg_rewind \
+-	pg_test_fsync \
+-	pg_test_timing \
+-	pg_upgrade \
+-	pg_waldump \
+-	pgbench \
+-	psql \
+-	scripts
+-
+-ifeq ($(PORTNAME), win32)
+-SUBDIRS += pgevent
+-else
+-ALWAYS_SUBDIRS += pgevent
+-endif
++	psql
+ 
+ $(recurse)
+ $(recurse_always)

@@ -1,0 +1,11 @@
+diff -ruN mariadb-connector-c-3.0.9-src.orig/CMakeLists.txt mariadb-connector-c-3.0.9-src/CMakeLists.txt
+--- mariadb-connector-c-3.0.9-src.orig/CMakeLists.txt	2019-02-08 16:36:35.000000000 +0100
++++ mariadb-connector-c-3.0.9-src/CMakeLists.txt	2019-04-26 20:16:37.353698200 +0200
+@@ -394,7 +394,7 @@
+ INCLUDE(${CC_SOURCE_DIR}/plugins/CMakeLists.txt)
+ ADD_SUBDIRECTORY(include)
+ ADD_SUBDIRECTORY(libmariadb)
+-IF(NOT WIN32)
++IF(NOT WIN32 OR MSYS)
+   ADD_SUBDIRECTORY(mariadb_config)
+ ENDIF()

@@ -1,0 +1,12 @@
+diff -ruN breeze-icons-5.58.0.orig/CMakeLists.txt breeze-icons-5.58.0/CMakeLists.txt
+--- breeze-icons-5.58.0.orig/CMakeLists.txt	2019-05-05 00:41:27.000000000 +0200
++++ breeze-icons-5.58.0/CMakeLists.txt	2019-05-26 21:50:30.999068492 +0200
+@@ -44,7 +44,7 @@
+     add_custom_target(breeze-${target}-mkdir
+         COMMAND ${CMAKE_COMMAND} -E make_directory ${RESOURCES_WORKING_DIR}
+     )
+-    add_custom_command(OUTPUT ${RESOURCE_FILE}
++    add_custom_target(breeze-${target}-preprocess
+         COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR} ${RESOURCES_WORKING_DIR}
+         COMMAND ${CMAKE_COMMAND} -E remove
+             ${RESOURCE_FILE}

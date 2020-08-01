@@ -1,0 +1,59 @@
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "${0}")")"
+export XDG_DATA_DIRS=${HERE}/usr/share:$XDG_DATA_DIRS
+## test for an existing bus daemon, just to be safe
+if test -z "$DBUS_SESSION_BUS_ADDRESS" ; then
+    ## if not found, launch a new one
+    ${HERE}/usr/bin/dbus-daemon --fork --config-file=${HERE}/usr/share/dbus-1/session.conf
+    echo "D-BUS per-session daemon address is: $DBUS_SESSION_BUS_ADDRESS"
+fi
+
+if [ -z "$MYSQL_UNIX_PORT" ]; then
+  # search for socket in configuration files or directories
+  MY_CNF_CANDIDATES=(
+    "/etc/my.cnf"
+    "/etc/mysql/my.cnf"
+    "~/.my.cnf"
+    "/etc/my.cnf.d"
+    "/usr/etc/my.cnf"
+    "/usr/local/etc/my.cnf"
+  )
+
+  for i in ${MY_CNF_CANDIDATES[@]}; do
+    if [ -d "$i" ]; then
+      i+=/*
+    elif [ ! -f "$i" ]; then
+      continue
+    fi
+    # search for something like "socket=/path/to/mysql.sock"
+    MYSQL_UNIX_PORT_DETECTED=($(grep socket $i | cut -d'=' -f2 | sed 's/^[[:space:]]*//' | sed 's/*[[:space:]]$//'))
+    if [ -n "$MYSQL_UNIX_PORT_DETECTED" ]; then
+      break
+    fi
+  done
+  
+  if [ -z "$MYSQL_UNIX_PORT_DETECTED" ]; then
+    # search for socket in hardcoded paths
+    MYSQL_UNIX_PORT_CANDIDATES+=(
+      "/tmp/mysql.sock" # Ubuntu
+      "/var/lib/mysql/mysql.sock" # Fedora
+      "/var/run/mysqld/mysqld.sock" # OpenSUSE
+      "/run/mysqld/mysqld.sock" # Manjaro
+    )
+    
+    for i in ${MYSQL_UNIX_PORT_CANDIDATES[@]}; do
+      if [ -f "$i" ]; then
+        MYSQL_UNIX_PORT_DETECTED="$i"
+        break
+      fi
+    done
+  fi
+  
+  # set MYSQL_UNIX_PORT as advised on
+  # https://dev.mysql.com/doc/refman/8.0/en/problems-with-mysql-sock.html
+  if [ -n "$MYSQL_UNIX_PORT_DETECTED" ]; then
+    export MYSQL_UNIX_PORT="$MYSQL_UNIX_PORT_DETECTED"
+  fi
+fi
+
+exec "${HERE}/usr/bin/kmymoney" "$@"

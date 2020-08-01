@@ -1,0 +1,72 @@
+diff -ruN knotifications-5.69.0.orig/CMakeLists.txt knotifications-5.69.0/CMakeLists.txt
+--- knotifications-5.69.0.orig/CMakeLists.txt	2020-04-05 01:02:39 +0000
++++ knotifications-5.69.0/CMakeLists.txt	2020-04-25 12:40:53 +0000
+@@ -71,7 +71,7 @@
+ if(APPLE)
+    find_package(Qt5MacExtras ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE)
+ endif()
+-if (WIN32)
++if (WIN32 AND NOT MSYS)
+     find_package(LibSnoreToast REQUIRED)
+     set_package_properties(LibSnoreToast PROPERTIES TYPE REQUIRED
+                             PURPOSE     "for the Windows Toast Notifications"
+@@ -90,7 +90,7 @@
+ find_package(KF5Config ${KF5_DEP_VERSION} REQUIRED)
+ find_package(KF5CoreAddons ${KF5_DEP_VERSION} REQUIRED)
+ 
+-if (NOT WIN32 AND NOT ANDROID)
++if ((NOT WIN32 AND NOT ANDROID) OR MSYS)
+     find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED DBus)
+     find_package(Canberra)
+     set_package_properties(Canberra PROPERTIES
+diff -ruN knotifications-5.69.0.orig/src/CMakeLists.txt knotifications-5.69.0/src/CMakeLists.txt
+--- knotifications-5.69.0.orig/src/CMakeLists.txt	2020-04-05 01:02:39 +0000
++++ knotifications-5.69.0/src/CMakeLists.txt	2020-04-25 12:01:09 +0000
+@@ -43,7 +43,7 @@
+     list(APPEND knotifications_SRCS notifybyandroid.cpp knotifications.qrc)
+ endif()
+ 
+-if (WIN32)
++if (WIN32 AND NOT MSYS)
+   list(APPEND knotifications_SRCS notifybysnore.cpp)
+ endif ()
+ 
+diff -ruN knotifications-5.69.0.orig/src/config-knotifications.h.cmake knotifications-5.69.0/src/config-knotifications.h.cmake
+--- knotifications-5.69.0.orig/src/config-knotifications.h.cmake	2020-04-05 01:02:39 +0000
++++ knotifications-5.69.0/src/config-knotifications.h.cmake	2020-04-25 12:45:17 +0000
+@@ -7,3 +7,5 @@
+ #cmakedefine01 HAVE_DBUSMENUQT
+ 
+ #cmakedefine01 HAVE_KWINDOWSYSTEM
++
++#cmakedefine MSYS
+diff -ruN knotifications-5.69.0.orig/src/knotificationmanager.cpp knotifications-5.69.0/src/knotificationmanager.cpp
+--- knotifications-5.69.0.orig/src/knotificationmanager.cpp	2020-04-05 01:02:39 +0000
++++ knotifications-5.69.0/src/knotificationmanager.cpp	2020-04-25 12:47:01 +0000
+@@ -21,6 +21,8 @@
+ #include "knotificationmanager_p.h"
+ #include "knotification.h"
+ 
++#include <config-knotifications.h> 
++
+ #include <QHash>
+ #include <QFileInfo>
+ #include <KPluginLoader>
+@@ -42,7 +44,7 @@
+ #include "notifybyandroid.h"
+ #elif defined(Q_OS_MACOS)
+ #include "notifybymacosnotificationcenter.h"
+-#elif defined(Q_OS_WIN)
++#elif defined(Q_OS_WIN) && !defined(MSYS)
+ #include "notifybysnore.h"
+ #else
+ #include "notifybypopup.h"
+@@ -137,7 +139,7 @@
+     if (action == QLatin1String("Popup")) {
+ #if defined(Q_OS_ANDROID)
+             plugin = new NotifyByAndroid(this);
+-#elif defined(Q_OS_WIN)
++#elif defined(Q_OS_WIN) && !defined(MSYS)
+             plugin = new NotifyBySnore(this);
+ #elif defined(Q_OS_MACOS)
+             plugin = new NotifyByMacOSNotificationCenter(this);

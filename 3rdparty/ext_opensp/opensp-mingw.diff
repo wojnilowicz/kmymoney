@@ -1,0 +1,80 @@
+diff -ruN OpenSP-1.5.2.orig/include/OutputCharStream.h OpenSP-1.5.2/include/OutputCharStream.h
+--- OpenSP-1.5.2.orig/include/OutputCharStream.h	2005-07-21 16:04:39.000000000 +0200
++++ OpenSP-1.5.2/include/OutputCharStream.h	2019-04-28 10:41:21.122993900 +0200
+@@ -31,6 +31,7 @@
+   OutputCharStream &operator<<(const char *);
+   OutputCharStream &operator<<(const StringC &);
+   OutputCharStream &operator<<(unsigned long);
++  OutputCharStream &operator<<(unsigned long long);
+   OutputCharStream &operator<<(int);
+   OutputCharStream &operator<<(Newline);
+ private:
+diff -ruN OpenSP-1.5.2.orig/lib/Makefile.am OpenSP-1.5.2/lib/Makefile.am
+--- OpenSP-1.5.2.orig/lib/Makefile.am	2005-12-15 14:13:16.000000000 +0100
++++ OpenSP-1.5.2/lib/Makefile.am	2019-04-28 12:05:48.827753400 +0200
+@@ -76,7 +76,8 @@
+ 	splibpch.h token.h app_inst.cxx arc_inst.cxx entmgr_inst.cxx \
+ 	parser_inst.cxx xentmgr_inst.cxx SubstTable.cxx \
+ 	UTF16CodingSystem.cxx Fixed4CodingSystem.cxx \
+-	memcmp.c memmove.c strerror.c
++    memcmp.c memmove.c strerror.c \
++    Win32CodingSystem.cxx Win32CodingSystem.h
+ 
+ INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/generic
+ 
+diff -ruN OpenSP-1.5.2.orig/lib/Makefile.in OpenSP-1.5.2/lib/Makefile.in
+--- OpenSP-1.5.2.orig/lib/Makefile.in	2005-12-23 15:15:59.000000000 +0100
++++ OpenSP-1.5.2/lib/Makefile.in	2019-04-28 12:06:25.451419200 +0200
+@@ -102,7 +102,8 @@
+ 	parseInstance.lo parseMode.lo parseParam.lo parseSd.lo \
+ 	splib.lo app_inst.lo arc_inst.lo entmgr_inst.lo parser_inst.lo \
+ 	xentmgr_inst.lo SubstTable.lo UTF16CodingSystem.lo \
+-	Fixed4CodingSystem.lo memcmp.lo memmove.lo strerror.lo
++    Fixed4CodingSystem.lo memcmp.lo memmove.lo strerror.lo \
++    Win32CodingSystem.lo
+ libosp_la_OBJECTS = $(am_libosp_la_OBJECTS)
+ DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+ depcomp = $(SHELL) $(top_srcdir)/depcomp
+@@ -321,7 +322,8 @@
+ 	splibpch.h token.h app_inst.cxx arc_inst.cxx entmgr_inst.cxx \
+ 	parser_inst.cxx xentmgr_inst.cxx SubstTable.cxx \
+ 	UTF16CodingSystem.cxx Fixed4CodingSystem.cxx \
+-	memcmp.c memmove.c strerror.c
++    memcmp.c memmove.c strerror.c \
++    Win32CodingSystem.cxx Win32CodingSystem.h
+ 
+ INCLUDES = -I$(top_srcdir)/include -I$(top_srcdir)/generic
+ EXTRA_DIST = ArcEngineMessages.msg ArcEngineMessages.rc \
+diff -ruN OpenSP-1.5.2.orig/lib/MessageReporter.cxx OpenSP-1.5.2/lib/MessageReporter.cxx
+--- OpenSP-1.5.2.orig/lib/MessageReporter.cxx	2005-07-21 16:05:17.000000000 +0200
++++ OpenSP-1.5.2/lib/MessageReporter.cxx	2019-04-28 10:28:15.043970600 +0200
+@@ -123,7 +123,11 @@
+     os() << ':';
+   }
+   if (options_ & messageNumbers)
+-    os() << (unsigned long)message.type->module() << "." 
++#ifdef _WIN64
++    os() << (unsigned long long)message.type->module() << "."
++#else
++    os() << (unsigned long)message.type->module() << "."
++#endif
+       << (unsigned long)message.type->number() << ":";
+   switch (message.type->severity()) {
+   case MessageType::info:
+diff -ruN OpenSP-1.5.2.orig/lib/OutputCharStream.cxx OpenSP-1.5.2/lib/OutputCharStream.cxx
+--- OpenSP-1.5.2.orig/lib/OutputCharStream.cxx	2005-07-21 16:05:17.000000000 +0200
++++ OpenSP-1.5.2/lib/OutputCharStream.cxx	2019-04-28 10:29:44.687836500 +0200
+@@ -61,6 +61,13 @@
+   return *this << buf;
+ }
+ 
++OutputCharStream &OutputCharStream::operator<<(unsigned long long n)
++{
++  char buf[sizeof(unsigned long long)*3 + 1];
++  sprintf(buf, "%I64u", n);
++  return *this << buf;
++}
++
+ OutputCharStream &OutputCharStream::operator<<(int n)
+ {
+   char buf[sizeof(int)*3 + 2];

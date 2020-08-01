@@ -1,0 +1,25 @@
+version: '{build}'
+
+branches:
+  only:
+    - master
+
+skip_tags: true
+os: Visual Studio 2015
+
+cache:
+  - c:\deps-build
+  - c:\deps-install
+
+build: off
+
+install:
+  #- ps: Remove-Item "C:/deps-build/ext_qt/ext_qtquickcontrols-prefix" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-build/ext_qt/ext_qtquickcontrols2-prefix" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-build/ext_qt/ext_qtdeclarative-prefix" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-build" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-install" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-build/ext_gnutls" -Force  -Recurse -ErrorAction SilentlyContinue
+  #- ps: Remove-Item "C:/deps-build/ext_kdiagram" -Force  -Recurse -ErrorAction SilentlyContinue
+  - ps: $env:APPVEYOR_CACHE_ENTRY_ZIP_ARGS="-t7z -m0=lzma2 -mx=1 -mtc -mtm -mta"
+  - cmd: powershell -ExecutionPolicy Bypass -File %APPVEYOR_BUILD_FOLDER%\packaging\windows\exe\build-from-ci.ps1 50 "/c" "%APPVEYOR_BUILD_FOLDER%"

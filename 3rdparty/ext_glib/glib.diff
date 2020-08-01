@@ -1,0 +1,12 @@
+diff -ruN glib-2.60.0.orig/meson.build glib-2.60.0/meson.build
+--- glib-2.60.0.orig/meson.build	2019-03-04 21:06:14.000000000 +0100
++++ glib-2.60.0/meson.build	2019-04-14 15:28:31.684578100 +0200
+@@ -1762,7 +1762,7 @@
+ libz_dep = dependency('zlib', required : false)
+ if not libz_dep.found()
+   if cc.get_id() != 'msvc'
+-    libz_dep = cc.find_library('z', required : false)
++    libz_dep = cc.find_library('zlib1', required : true, dirs : ['@myprefix/bin'] )
+   else
+     libz_dep = cc.find_library('zlib1', required : false)
+     if not libz_dep.found()

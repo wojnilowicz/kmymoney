@@ -1,0 +1,14 @@
+diff -ruN icu.orig/source/python/icutools/databuilder/__main__.py icu/source/python/icutools/databuilder/__main__.py
+--- icu.orig/source/python/icutools/databuilder/__main__.py	2020-04-22 22:04:20 +0000
++++ icu/source/python/icutools/databuilder/__main__.py	2020-04-22 22:04:20 +0000
+@@ -267,8 +267,8 @@
+ 
+     if args.mode == "gnumake":
+         makefile_vars = {
+-            "SRC_DIR": "$(srcdir)",
+-            "IN_DIR": "$(srcdir)",
++            "SRC_DIR": "$(srcdir)/",
++            "IN_DIR": "$(srcdir)/",
+             "INDEX_NAME": "res_index"
+         }
+         makefile_env = ["ICUDATA_CHAR", "OUT_DIR", "TMP_DIR"]

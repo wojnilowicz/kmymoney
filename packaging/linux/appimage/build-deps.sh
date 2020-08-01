@@ -1,83 +1,82 @@
 #!/bin/bash
-#
-# Build all KMyMoney's dependencies on Ubuntu 14.04.
+
+#  *
+#  * Copyright 2020  Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+#  *
+#  * This program is free software; you can redistribute it and/or
+#  * modify it under the terms of the GNU General Public License as
+#  * published by the Free Software Foundation; either version 2 of
+#  * the License, or (at your option) any later version.
+#  *
+#  * This program is distributed in the hope that it will be useful,
+#  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  * GNU General Public License for more details.
+#  *
+#  * You should have received a copy of the GNU General Public License
+#  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  *
+
+
+# Build all KMyMoney's dependencies on Ubuntu 16.04.
 #
 # Prerequisites: cmake git build-essential libxcb-keysyms1-dev plus all deps for Qt5
 #
+set -eux
 
-# Halt on errors and be verbose about what we are doing
-set -e
-set -x
+# Switch directory in order to put all build files in the right place
+cd $CMAKE_BUILD_PREFIX
 
-# Read in our parameters
-export BUILD_PREFIX=$1
-export KMYMONEY_SOURCES=$2
+# Those flags will be propageted to Autotools and CMake
+export CXXFLAGS="-Os -DNDEBUG -w"
+export CFLAGS="-Os -DNDEBUG -w"
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
-# That's not always the case, so make sure it is
-export LC_ALL=en_US.UTF-8
-export LANG=en_us.UTF-8
-
-# We want to use $prefix/deps/usr/ for all our dependencies
-export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr
-export DOWNLOADS_DIR=$BUILD_PREFIX/downloads
-
-# Setup variables needed to help everything find what we build
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$DEPS_INSTALL_PREFIX/openssl/lib:$LD_LIBRARY_PATH
-export PATH=$DEPS_INSTALL_PREFIX/bin:$DEPS_INSTALL_PREFIX/openssl/bin:$PATH
-export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:$DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
-
-# A kmymoney build layout looks like this:
-# kmymoney/ -- the source directory
-# downloads/ -- downloads of the dependencies from files.kde.org
-# deps-build/ -- build directory for the dependencies
-# deps/ -- the location for the built dependencies
-# build/ -- build directory for kmymoney itself
-# kmymoney.appdir/ -- install directory for kmymoney and the dependencies
-
-# Make sure our downloads directory exists
-if [ ! -d $DOWNLOADS_DIR ] ; then
-    mkdir -p $DOWNLOADS_DIR
-fi
-
-# Make sure our build directory exists
-if [ ! -d $BUILD_PREFIX/deps-build/ ] ; then
-    mkdir -p $BUILD_PREFIX/deps-build/
-fi
-
-# The 3rdparty dependency handling in KMyMoney also requires the install directory to be pre-created
-if [ ! -d $DEPS_INSTALL_PREFIX ] ; then
-    mkdir -p $DEPS_INSTALL_PREFIX
-fi
-
-# Switch to our build directory as we're basically ready to start building...
-cd $BUILD_PREFIX/deps-build/
+# du -h $DEPS_INSTALL_PREFIX/* | sort -h
+# du -h $DEPS_INSTALL_PREFIX/bin/* | sort -h
+# du -h $DEPS_INSTALL_PREFIX/lib/* | sort -h
+# du -h $DEPS_INSTALL_PREFIX/include/* | sort -h
 
 # Configure the dependencies for building
-cmake $KMYMONEY_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DEXT_INSTALL_DIR=$DEPS_INSTALL_PREFIX -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
+cmake -G"Unix Makefiles" \
+      $KMYMONEY_SOURCES/3rdparty \
+      -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX \
+      -DCMAKE_BUILD_TYPE=None \
+      -DEXT_DOWNLOAD_DIR=$DOWNLOADS_DIR
 
 # Now start building everything we need, in the appropriate order
-cmake --build . --target ext_iconv
-cmake --build . --target ext_lzma
-cmake --build . --target ext_xml
-cmake --build . --target ext_gettext
-cmake --build . --target ext_xslt
-cmake --build . --target ext_png
-# cmake --build . --target ext_jpeg #this causes build failures in Qt 5.10
-cmake --build . --target ext_qt
-cmake --build . --target ext_boost
-cmake --build . --target ext_kcmutils
-cmake --build . --target ext_kactivities
-cmake --build . --target ext_kitemmodels
-cmake --build . --target ext_kitemviews
-cmake --build . --target ext_kholidays
-cmake --build . --target ext_kidentitymanagement
-cmake --build . --target ext_kcontacts
-cmake --build . --target ext_akonadi
-cmake --build . --target ext_alkimia
-cmake --build . --target ext_kdiagram
-cmake --build . --target ext_aqbanking
-cmake --build . --target ext_gpgme
-cmake --build . --target ext_sqlcipher
-cmake --build . --target ext_ofx
-cmake --build . --target ext_ical
+cmake --build . --target ext_cups -- -j${CPU_COUNT}
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Core.so ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+  cmake --build . --target ext_qtbase -- -j${CPU_COUNT}
+fi
+
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libQt5Qml.so ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..4};do sleep 9m; echo \"Still building\"; done;" & fi;
+  cmake --build . --target ext_qtdeclarative -- -j${CPU_COUNT}
+fi
+
+cmake --build . --target ext_qttools -- -j${CPU_COUNT}
+cmake --build . --target ext_qtspeech -- -j${CPU_COUNT}
+cmake --build . --target ext_qtx11extras -- -j${CPU_COUNT}
+cmake --build . --target ext_qtquickcontrols -- -j${CPU_COUNT} # required for QtQuick Dialogs
+cmake --build . --target ext_qtquickcontrols2 -- -j${CPU_COUNT}
+
+cmake --build . --target ext_kcmutils -- -j${CPU_COUNT}
+cmake --build . --target ext_kactivities -- -j${CPU_COUNT}
+cmake --build . --target ext_kitemmodels -- -j${CPU_COUNT}
+cmake --build . --target ext_kinit -- -j${CPU_COUNT}
+if [ ! -f $DEPS_INSTALL_PREFIX/lib/libKF5KHtml.so.5 ]; then
+  if [ ! -z ${TRAVIS+x} ]; then bash -c "for i in {1..2};do sleep 9m; echo \"Still building\"; done;" & fi;
+    cmake --build . --target ext_khtml -- -j${CPU_COUNT}
+fi
+cmake --build . --target ext_kholidays -- -j${CPU_COUNT}
+cmake --build . --target ext_kidentitymanagement -- -j${CPU_COUNT}
+cmake --build . --target ext_kcontacts -- -j${CPU_COUNT}
+cmake --build . --target ext_kdiagram -- -j${CPU_COUNT}
+cmake --build . --target ext_aqbanking -- -j${CPU_COUNT}
+cmake --build . --target ext_sqlcipher -- -j${CPU_COUNT}
+cmake --build . --target ext_ofx -- -j${CPU_COUNT}
+cmake --build . --target ext_ical -- -j${CPU_COUNT}
+cmake --build . --target ext_breezeicons -- -j${CPU_COUNT}
+cmake --build . --target ext_patchelf -- -j${CPU_COUNT}

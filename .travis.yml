@@ -1,0 +1,243 @@
+language: cpp
+git:
+  depth: 3
+  quiet: true
+
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)$/
+    - /^(?i:continuous-linux)$/
+    - /^(?i:continuous-osx)$/
+    - /^(?i:continuous-windows-appveyor)$/
+    - /^(?i:continuous-windows-travis)$/
+    - /^(?i:continuous).*$/
+    - appveyor-builds
+  only:
+    - master
+
+matrix:
+  include:
+    - os: linux
+      dist: xenial
+      compiler: g++
+      sudo: required
+      cache:
+        ccache: false
+        timeout: 1000
+        directories:
+          - $TRAVIS_BUILD_DIR/workaround
+
+      before_install:
+        - START_TIMESTAMP=$(date +%s)
+        - MAX_TIME=50
+        - cd $TRAVIS_BUILD_DIR
+        - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
+        - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_breezeicons-prefix
+        #- rm -f $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtbase-prefix/src/ext_qtbase-build/config.cache
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/libQt5Qml.so
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtquickcontrols-prefix
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_kdiagram
+        - |
+          CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
+          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
+          SAFETY_TIME=4
+          CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=46; fi;
+          echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
+          echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
+          echo "CUTOFF_TIME ${CUTOFF_TIME}"
+
+        - |
+          sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+          sudo apt-get update -qq
+          # libharfbuzz-dev isn't detected by Qt, so don't install it
+          # libc contains intl.h and iconv
+          # gperf is required by KCodecs
+          # expat is required by DBus
+          # libgtk-3-dev is for icon
+          # don't use apt-get in scripts bacause that hangs them
+          # Ubuntu 16.04 by default uses g++-5, so if g++-9 is installed then libgpgmepp requires GLIBCXX_3.4.26 and that wouldn't be available
+          sudo apt-get install -qq -y g++-6 cmake wget libc6-dev zlib1g-dev pkg-config libx11-dev libxext-dev libxfixes-dev libxi-dev libxrender-dev '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev libxcb1-dev libx11-xcb-dev libxkbcommon-x11-dev libxkbcommon-dev libfreetype6-dev libxml-parser-perl libfam-dev libudev-dev gperf expat flex bison fuse appstream libgl1-mesa-dev  > /dev/null
+          sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-6 10
+          sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-6 10
+          sudo apt-get remove -qq -y libkrb5-dev libmysqlclient-dev
+
+      install:
+        - CONTINUE_WITH_NEXT_STEP=true
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+
+      script:
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh kmymoney $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              timeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/linux/appimage/build.sh image $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+
+      after_success:
+        - |
+          REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+            IMAGE_FILE=$(find $TRAVIS_BUILD_DIR/image-build -type f -and -iname "*.AppImage" -and -maxdepth 2)
+            bash $TRAVIS_BUILD_DIR/packaging/common/upload.sh "KMyMoneyNEXT%20for%20Linux" "${IMAGE_FILE}"
+            
+            #cd $TRAVIS_BUILD_DIR/downloads
+            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            #export UPLOADTOOL_SUFFIX="linux"
+            #bash upload.sh $TRAVIS_BUILD_DIR/image-build/*.AppImage*
+            
+            cd $TRAVIS_BUILD_DIR/kmymoney-build
+            export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/deps-install/lib:${LD_LIBRARY_PATH}
+            ctest -V -E reports-chart-test
+          fi
+
+      before_cache:
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and -executable -and \( -name "*.so" -o ! -name "*.*" \) -and \( ! -name "*-config" \) \) -exec strip {} \+
+        - find $TRAVIS_BUILD_DIR/deps-build \( -type f -and -name "ext*build-out.log" \) -exec rm {} \+
+        - cd $TRAVIS_BUILD_DIR
+        - |
+            travis_wait tar cf workaround/deps-install.tar deps-install
+            echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/deps-build.tar deps-build
+            echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+
+    - os: osx
+      osx_image: xcode10.2
+      compiler: clang
+      sudo: required
+      cache:
+        timeout: 1000
+        directories:
+          - $TRAVIS_BUILD_DIR/workaround
+
+      before_install:
+        - START_TIMESTAMP=$(date +%s)
+        - MAX_TIME=50
+        - cd $TRAVIS_BUILD_DIR
+        - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
+        - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks/ext_breezeicons-prefix
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_frameworks
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtdeclarative-prefix
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-install/lib/libQt5Qml.dydl
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtdeclarative-prefix
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_qt/ext_qtquickcontrols-prefix
+        #- rm -fr $TRAVIS_BUILD_DIR/deps-build/ext_kdiagram
+        - |
+          CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 15 ) / 10 ))
+          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=2; fi;
+          SAFETY_TIME=4
+          CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
+          if [ ! -f "$TRAVIS_BUILD_DIR/workaround/deps-install.tar" ]; then CUTOFF_TIME=46; fi;
+          echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
+          echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
+          echo "CUTOFF_TIME ${CUTOFF_TIME}"
+
+      install:
+        - CONTINUE_WITH_NEXT_STEP=true
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh deps $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+
+      script:
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh kmymoney $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+        - |
+            REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+            if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+              gtimeout ${REMAINING_TIME}m $TRAVIS_BUILD_DIR/packaging/osx/dmgimage/build.sh image $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR || CONTINUE_WITH_NEXT_STEP=false
+            fi
+
+      after_success:
+        - |
+          REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ] && [ ${CONTINUE_WITH_NEXT_STEP} == true ]; then
+            cd $TRAVIS_BUILD_DIR/downloads
+            #wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+            #export UPLOADTOOL_SUFFIX="osx"
+            #bash upload.sh $TRAVIS_BUILD_DIR/image-build/*.dmg*
+            cd $TRAVIS_BUILD_DIR/kmymoney-build
+            export LD_LIBRARY_PATH=${TRAVIS_BUILD_DIR}/deps-install/lib:${LD_LIBRARY_PATH}
+            ctest -V -E reports-chart-test
+          fi
+
+      before_cache:
+        - find $TRAVIS_BUILD_DIR/deps-install \( -type f -and  \( -name "*.dylib" -o -name "*.so" -o \( -perm +111 -and  ! -name "*.*" \) \) \) -exec strip -S -x {} \+
+        - find $TRAVIS_BUILD_DIR/deps-build \( -type f -and -name "ext*build-out.log" \) -exec rm {} \+
+        - cd $TRAVIS_BUILD_DIR
+        - |
+            travis_wait tar cf workaround/deps-install.tar deps-install
+            echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/deps-build.tar deps-build
+            echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"
+  exclude:
+    - os: windows
+      filter_secrets: false
+      cache:
+        timeout: 2000
+        directories:
+          - /c/workaround
+
+      before_install:
+        - START_TIMESTAMP=$(date +%s)
+        - MAX_TIME=50
+        - cd /c
+        - if [ -f workaround/deps-install.tar ]; then travis_wait tar xf workaround/deps-install.tar; fi;
+        - if [ -f workaround/deps-build.tar ]; then travis_wait tar xf workaround/deps-build.tar; fi;
+        #- rm -fr /c/deps-build/ext_frameworks/ext_breezeicons-prefix
+        #- rm -fr /c/deps-build/ext_dbus
+        - |
+          CACHE_UNCOMPRESS_TIME=$(( ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          CACHE_COMPRESS_TIME=$(( ( $CACHE_UNCOMPRESS_TIME * 10 ) / 10 ))
+          if [ $CACHE_COMPRESS_TIME -eq 0 ]; then CACHE_COMPRESS_TIME=5; fi;
+          SAFETY_TIME=5
+          # it helps in cases whre qtbase is build, cache is small, and qtdeclarative is going to be built
+          if [ ! -f "/c/deps-install/bin/Qt5Qml.dll" ] && [ $CACHE_UNCOMPRESS_TIME -lt 3 ]; then CACHE_COMPRESS_TIME=5; fi;
+          CUTOFF_TIME=$(( $MAX_TIME - $CACHE_COMPRESS_TIME - $SAFETY_TIME ))
+          if [ ! -f "/c/workaround/deps-install.tar" ]; then CUTOFF_TIME=43; fi;
+          echo "CACHE_UNCOMPRESS_TIME ${CACHE_UNCOMPRESS_TIME}"
+          echo "CACHE_COMPRESS_TIME ${CACHE_COMPRESS_TIME}"
+          echo "CUTOFF_TIME ${CUTOFF_TIME}"
+
+      install: true
+
+      script:
+        - |
+          REMAINING_TIME=$(( $CUTOFF_TIME - ( $(date +%s) - $START_TIMESTAMP ) / 60 ))
+          if [ ${REMAINING_TIME} -gt 0 ]; then
+            powershell -ExecutionPolicy Bypass -File $TRAVIS_BUILD_DIR/packaging/windows/exe/build-from-ci.ps1 ${REMAINING_TIME} /c $TRAVIS_BUILD_DIR
+          fi
+
+      before_cache:
+        - find /c/deps-install \( -type f \( -name "*.dll" -o -name "*.exe" \) \) -exec strip {} \+
+        - find /c/deps-build \( -type f -and -name "ext*build-out.log" \) -exec rm {} \+
+        - cd /c
+        - |
+            travis_wait tar cf workaround/deps-install.tar deps-install
+            echo "Cache size (uncompressed) $(du -h workaround/deps-install.tar | cut -f1)"
+        - |
+            travis_wait tar cf workaround/deps-build.tar deps-build
+            echo "Cache size (uncompressed) $(du -h workaround/deps-build.tar | cut -f1)"

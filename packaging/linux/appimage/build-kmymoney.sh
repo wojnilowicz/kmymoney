@@ -1,46 +1,41 @@
 #!/bin/bash
 
+#  *
+#  * Copyright 2020  Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>
+#  *
+#  * This program is free software; you can redistribute it and/or
+#  * modify it under the terms of the GNU General Public License as
+#  * published by the Free Software Foundation; either version 2 of
+#  * the License, or (at your option) any later version.
+#  *
+#  * This program is distributed in the hope that it will be useful,
+#  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  * GNU General Public License for more details.
+#  *
+#  * You should have received a copy of the GNU General Public License
+#  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#  *
+
+# Build KMyMoney on Ubuntu 16.04.
+
 # Halt on errors and be verbose about what we are doing
-set -e
-set -x
+set -eux
 
-# Read in our parameters
-export BUILD_PREFIX=$1
-export KMYMONEY_SOURCES=$2
+# Switch directory in order to put all build files in the right place
+cd $CMAKE_BUILD_PREFIX
 
-# qjsonparser, used to add metadata to the plugins needs to work in a en_US.UTF-8 environment.
-# That's not always the case, so make sure it is
-export LC_ALL=en_US.UTF-8
-export LANG=en_us.UTF-8
+export CXXFLAGS="-O1 -DNDEBUG"
+export CFLAGS="-O1 -DNDEBUG"
 
-# We want to use $prefix/deps/usr/ for all our dependencies
-export DEPS_INSTALL_PREFIX=$BUILD_PREFIX/deps/usr/
-export DOWNLOADS_DIR=$BUILD_PREFIX/downloads/
-
-# Setup variables needed to help everything find what we build
-export LD_LIBRARY_PATH=$DEPS_INSTALL_PREFIX/lib:$DEPS_INSTALL_PREFIX/openssl/lib:$LD_LIBRARY_PATH
-export PATH=$DEPS_INSTALL_PREFIX/bin:$DEPS_INSTALL_PREFIX/openssl/bin:$PATH
-export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:$DEPS_INSTALL_PREFIX/openssl/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
-export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:${DEPS_INSTALL_PREFIX}/openssl:$CMAKE_PREFIX_PATH
-
-# Make sure our build directory exists
-if [ ! -d $BUILD_PREFIX/kmymoney-build/ ] ; then
-    mkdir -p $BUILD_PREFIX/kmymoney-build/
-fi
-
-# Now switch to it
-cd $BUILD_PREFIX/kmymoney-build/
-
-# Determine how many CPUs we have
-CPU_COUNT=`nproc`
-
-# Configure KMyMoney
-cmake $KMYMONEY_SOURCES \
-    -DCMAKE_INSTALL_PREFIX:PATH=$BUILD_PREFIX/kmymoney.appdir/usr \
-    -DCMAKE_BUILD_TYPE=RelWithDebInfo \
-    -DBUILD_TESTING=FALSE \
-    -DENABLE_WEBENGINE=TRUE \
-    -DIS_APPIMAGE=TRUE
+# Configure KMyMoney for building
+cmake -G"Unix Makefiles" \
+      $KMYMONEY_SOURCES \
+      -DCMAKE_INSTALL_PREFIX=$KMYMONEY_INSTALL_PREFIX \
+      -DCMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX \
+      -DCMAKE_BUILD_TYPE=None \
+      -DBUILD_TESTING=TRUE \
+      -DIS_APPIMAGE=TRUE
 
 # Build and Install KMyMoney (ready for the next phase)
-make -j$CPU_COUNT install
+cmake --build . --target install -- -j${CPU_COUNT}

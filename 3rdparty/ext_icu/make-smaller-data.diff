@@ -1,0 +1,12 @@
+diff -ruN icu.orig/source/data/BUILDRULES.py icu/source/data/BUILDRULES.py
+--- icu.orig/source/data/BUILDRULES.py	2020-04-22 22:04:20 +0000
++++ icu/source/data/BUILDRULES.py	2020-04-22 22:04:20 +0000
+@@ -163,7 +163,7 @@
+             input_files = input_files,
+             output_files = output_files,
+             tool = IcuTool("makeconv"),
+-            args = "-s {IN_DIR} -d {OUT_DIR} -c {INPUT_FILE_PLACEHOLDER}",
++            args = "--small -s {IN_DIR} -d {OUT_DIR} -c {INPUT_FILE_PLACEHOLDER}",
+             format_with = {},
+             repeat_with = {
+                 "INPUT_FILE_PLACEHOLDER": utils.SpaceSeparatedList(file.filename for file in input_files)

@@ -1,0 +1,45 @@
+diff -ruN gettext-0.20.orig/configure gettext-0.20/configure
+--- gettext-0.20.orig/configure	2019-05-08 19:24:10 +0000
++++ gettext-0.20/configure	2020-04-25 16:34:20 +0000
+@@ -738,7 +738,7 @@
+ EMACS
+ EMACSLOADPATH
+ CXXCPP'
+-ac_subdirs_all='gettext-runtime libtextstyle gettext-tools'
++ac_subdirs_all='libtextstyle gettext-tools'
+ 
+ # Initialize some variables set by options.
+ ac_init_help=
+@@ -2623,7 +2623,7 @@
+ 
+ 
+ 
+-subdirs="$subdirs gettext-runtime libtextstyle gettext-tools"
++subdirs="$subdirs libtextstyle gettext-tools"
+ 
+ 
+ 
+diff -ruN gettext-0.20.orig/gettext-tools/Makefile.in gettext-0.20/gettext-tools/Makefile.in
+--- gettext-0.20.orig/gettext-tools/Makefile.in	2019-05-08 19:24:06 +0000
++++ gettext-0.20/gettext-tools/Makefile.in	2020-04-25 16:36:15 +0000
+@@ -2017,7 +2017,7 @@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = 1.5 gnu no-dependencies
+ ACLOCAL_AMFLAGS = -I m4 -I ../gettext-runtime/m4 -I ../m4 -I gnulib-m4 -I libgrep/gnulib-m4 -I libgettextpo/gnulib-m4
+-SUBDIRS = intl gnulib-lib libgrep src libgettextpo po its projects styles emacs misc man m4 tests system-tests gnulib-tests examples doc
++SUBDIRS = intl gnulib-lib libgrep src libgettextpo its projects styles emacs misc m4
+ 
+ # Allow users to use "gnulib-tool --update".
+ 
+diff -ruN gettext-0.20.orig/Makefile.in gettext-0.20/Makefile.in
+--- gettext-0.20.orig/Makefile.in	2019-05-08 19:16:00 +0000
++++ gettext-0.20/Makefile.in	2020-04-25 16:33:37 +0000
+@@ -308,7 +308,7 @@
+ top_srcdir = @top_srcdir@
+ AUTOMAKE_OPTIONS = 1.5 gnu no-dependencies
+ ACLOCAL_AMFLAGS = -I m4
+-SUBDIRS = gnulib-local gettext-runtime libtextstyle gettext-tools
++SUBDIRS = gnulib-local libtextstyle gettext-tools
+ changelog_etc = \
+   gettext-runtime/ChangeLog.0 \
+   gettext-runtime/doc/ChangeLog.0 \
